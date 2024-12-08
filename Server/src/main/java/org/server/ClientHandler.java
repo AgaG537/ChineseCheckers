@@ -4,13 +4,16 @@ package org.server;
 import java.io.*;
 import java.net.Socket;
 
+/**
+ * Handles communication with a single client in the game.
+ * Each instance of this class manages one client connection,
+ * including receiving input and sending messages.
+ */
 public class ClientHandler implements Runnable {
   private final Socket socket;
   private final BufferedReader bufferedReader;
   private final BufferedWriter bufferedWriter;
-  private final String username;
   private final GameManager gameManager;
-  private final UserManager userManager;
   private final int userNum;
 
   /**
@@ -18,26 +21,29 @@ public class ClientHandler implements Runnable {
    *
    * @param socket       The socket connected to the client.
    * @param gameManager  The game manager managing the game state.
-   * @param userManager  The user manager managing the connected users.
    * @param userNum      The user's position in the game.
    * @throws IOException If an I/O error occurs when creating the input or output streams.
    */
-  public ClientHandler(Socket socket, GameManager gameManager, UserManager userManager, int userNum) throws IOException {
+  public ClientHandler(Socket socket, GameManager gameManager, int userNum) throws IOException {
     this.socket = socket;
     this.gameManager = gameManager;
-    this.userManager = userManager;
     this.userNum = userNum;
 
     this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
-    this.username = bufferedReader.readLine();
-
-    System.out.println("User " + username + " has joined.");
-    userManager.addUser(this);
+    gameManager.addUser(this);
+    System.out.println("User number " + userNum + " has joined.");
+    gameManager.broadcastUserJoined(userNum);
 
     if (userNum == 0) {
       requestMaxUsers();
+      int randomStartUser = (int) ((Math.random() * (gameManager.getMaxUsers())));
+      gameManager.setCurrTurn(randomStartUser);
+    }
+
+    if (gameManager.getMaxUsers() != gameManager.getClientHandlers().size()) {
+      gameManager.broadcastNumOfUsers();
     }
   }
 
@@ -47,9 +53,17 @@ public class ClientHandler implements Runnable {
    * @throws IOException If an I/O error occurs when reading from the client.
    */
   private void requestMaxUsers() throws IOException {
-    sendMessage("Enter max number of users: ");
-    int maxUsers = Integer.parseInt(bufferedReader.readLine());
-    userManager.setMaxUsers(maxUsers);
+    int maxUsers = 0;
+    do {
+      try {
+        sendMessage("Enter max number of users (2, 3, 4 or 6): ");
+        maxUsers = Integer.parseInt(bufferedReader.readLine());
+        gameManager.setMaxUsers(maxUsers);
+      } catch (NumberFormatException e) {
+        sendMessage("Wrong number of users!");
+      }
+    } while (maxUsers != 2 && maxUsers != 3 && maxUsers != 4 && maxUsers != 6);
+
   }
 
   /**
@@ -60,17 +74,16 @@ public class ClientHandler implements Runnable {
   public void run() {
     try {
       while (socket.isConnected()) {
-        String message = bufferedReader.readLine();
-
-        if (gameManager.isGameStarted()) {
-          if (userNum == gameManager.getCurrTurn()) {
-            gameManager.broadcastMove(userManager.getClientHandlers(), username, message);
-            gameManager.advanceTurn(userManager.getClientHandlers().size());
-          } else {
-            sendMessage("Wait for your turn.");
+        if (gameManager.isGameStarted() && userNum == gameManager.getCurrTurn()) {
+          sendMessage("It's your turn! Type your move: ");
+          String message = bufferedReader.readLine();
+          gameManager.broadcastMove(userNum, message);
+          gameManager.advanceTurn(gameManager.getClientHandlers().size());
+        }
+        else {
+          if (bufferedReader.ready()) {
+            bufferedReader.readLine();
           }
-        } else {
-          sendMessage("Game has not started yet.");
         }
       }
     } catch (IOException e) {
@@ -91,6 +104,15 @@ public class ClientHandler implements Runnable {
   }
 
   /**
+   * Returns the user number of the client.
+   *
+   * @return The user number.
+   */
+  public int getUserNum () {
+    return userNum;
+  }
+
+  /**
    * Closes all the resources (socket, bufferedReader, and bufferedWriter).
    */
   public void closeEverything() {
@@ -101,6 +123,6 @@ public class ClientHandler implements Runnable {
     } catch (IOException e) {
       e.printStackTrace();
     }
-    userManager.removeUser(this);
+    gameManager.removeUser(this);
   }
 }

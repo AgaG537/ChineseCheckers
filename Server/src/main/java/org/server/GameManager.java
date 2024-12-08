@@ -1,9 +1,18 @@
 package org.server;
 
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+/**
+ * Manages the state of the game, including player turns, broadcasting messages,
+ * and ensuring synchronization between connected clients.
+ * Acts as a central hub for game-related logic.
+ */
 public class GameManager {
+  private final List<ClientHandler> clientHandlers;
+  private int maxUsers;
   private int currTurn;
   private boolean gameStarted;
 
@@ -11,8 +20,55 @@ public class GameManager {
    * Constructs a GameManager.
    */
   public GameManager() {
+    this.clientHandlers = new ArrayList<>();
+    this.maxUsers = 0;
     this.currTurn = 0;
     this.gameStarted = false;
+  }
+
+  /**
+   * Adds a client handler to the user manager.
+   *
+   * @param clientHandler The client handler to add.
+   */
+  public synchronized void addUser(ClientHandler clientHandler) {
+    clientHandlers.add(clientHandler);
+  }
+
+  /**
+   * Removes a client handler from the user manager.
+   *
+   * @param clientHandler The client handler to remove.
+   */
+  public synchronized void removeUser(ClientHandler clientHandler) {
+    clientHandlers.remove(clientHandler);
+  }
+
+  /**
+   * Returns the list of all connected client handlers.
+   *
+   * @return A list of client handlers.
+   */
+  public synchronized List<ClientHandler> getClientHandlers() {
+    return new ArrayList<>(clientHandlers);
+  }
+
+  /**
+   * Sets the maximum number of users allowed.
+   *
+   * @param maxUsers The maximum number of users.
+   */
+  public synchronized void setMaxUsers(int maxUsers) {
+    this.maxUsers = maxUsers;
+  }
+
+  /**
+   * Returns the maximum number of users allowed.
+   *
+   * @return The maximum number of users.
+   */
+  public synchronized int getMaxUsers() {
+    return maxUsers;
   }
 
   /**
@@ -42,6 +98,13 @@ public class GameManager {
   }
 
   /**
+   * Sets the current player's turn index.
+   *
+   * @param turn The index of the current player's turn.
+   */
+  public synchronized void setCurrTurn(int turn) { currTurn = turn; }
+
+  /**
    * Returns the current player's turn index.
    *
    * @return The index of the current player's turn.
@@ -51,18 +114,67 @@ public class GameManager {
   }
 
   /**
+   * Broadcasts a message to all players that a new user has joined.
+   *
+   * @param userNum The number of the new user.
+   */
+  public void broadcastUserJoined(int userNum) {
+    for (ClientHandler clientHandler : clientHandlers) {
+      try {
+        if (clientHandler.getUserNum() != userNum) {
+          clientHandler.sendMessage("User number " + userNum + " has joined.");
+        }
+        else {
+          clientHandler.sendMessage("You have successfully joined.");
+        }
+      } catch (Exception e) {
+        clientHandler.closeEverything();
+      }
+    }
+  }
+
+  /**
+   * Broadcasts a message about the number of users still needed.
+   */
+  public void broadcastNumOfUsers() {
+    for (ClientHandler clientHandler : clientHandlers) {
+      try {
+        int missingNumOfUsers = maxUsers - clientHandlers.size();
+        clientHandler.sendMessage("Still waiting for " + missingNumOfUsers + " more user(s).");
+      } catch (Exception e) {
+        clientHandler.closeEverything();
+      }
+    }
+  }
+
+  /**
+   * Broadcasts a message that the game has started.
+   */
+  public void broadcastGameStarted() {
+    for (ClientHandler clientHandler : clientHandlers) {
+      try {
+        clientHandler.sendMessage("Starting the game! Wait for an announcement about your turn.");
+      } catch (Exception e) {
+        clientHandler.closeEverything();
+      }
+    }
+  }
+
+
+  /**
    * Broadcasts a move made by a player to all clients.
    *
-   * @param clientHandlers The list of all connected client handlers.
-   * @param username       The username of the player making the move.
+   * @param userNum       The username of the player making the move.
    * @param move           The move made by the player.
    */
-  public void broadcastMove(List<ClientHandler> clientHandlers, String username, String move) {
+  public void broadcastMove(Integer userNum, String move) {
     if (!gameStarted) return;
 
     for (ClientHandler clientHandler : clientHandlers) {
       try {
-        clientHandler.sendMessage(username + ": " + move);
+        if (!Objects.equals(clientHandler.getUserNum(), userNum)) {
+          clientHandler.sendMessage("User number " + userNum + " moved: " + move);
+        }
       } catch (Exception e) {
         clientHandler.closeEverything();
       }
