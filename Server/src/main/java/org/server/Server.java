@@ -5,10 +5,14 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * The main server class responsible for accepting client connections
+ * and managing the overall lifecycle of the game. It listens for client connections,
+ * creates client handlers, and starts the game once all players are connected.
+ */
 public class Server {
   private final ServerSocket serverSocket;
   private final GameManager gameManager;
-  private final UserManager userManager;
 
   /**
    * Constructs a Server with the specified server socket.
@@ -18,7 +22,6 @@ public class Server {
   public Server(ServerSocket serverSocket) {
     this.serverSocket = serverSocket;
     this.gameManager = new GameManager();
-    this.userManager = new UserManager();
   }
 
   /**
@@ -28,14 +31,15 @@ public class Server {
     try {
       System.out.println("Server is running...");
       while (!serverSocket.isClosed()) {
-        if (userManager.getClientHandlers().size() < userManager.getMaxUsers() || userManager.getMaxUsers() == 0) {
+        if (gameManager.getClientHandlers().size() < gameManager.getMaxUsers() || gameManager.getMaxUsers() == 0) {
           Socket socket = serverSocket.accept();
-          int userNum = userManager.getClientHandlers().size();
-          ClientHandler clientHandler = new ClientHandler(socket, gameManager, userManager, userNum);
+          int userNum = gameManager.getClientHandlers().size();
+          ClientHandler clientHandler = new ClientHandler(socket, gameManager, userNum);
           new Thread(clientHandler).start();
 
-          if (userManager.getClientHandlers().size() == userManager.getMaxUsers()) {
+          if (gameManager.getClientHandlers().size() == gameManager.getMaxUsers()) {
             gameManager.startGame();
+            gameManager.broadcastGameStarted();
           }
         }
       }
