@@ -17,7 +17,7 @@ public class ClientHandler implements Runnable {
   private final int userNum;
 
   /**
-   * Constructs a ClientHandler with the specified socket, game manager, user manager, and user number.
+   * Constructs a ClientHandler with the specified socket, game manager and user number.
    *
    * @param socket       The socket connected to the client.
    * @param gameManager  The game manager managing the game state.
@@ -38,8 +38,8 @@ public class ClientHandler implements Runnable {
 
     if (userNum == 0) {
       requestMaxUsers();
-      int randomStartUser = (int) ((Math.random() * (gameManager.getMaxUsers())));
-      gameManager.setCurrTurn(randomStartUser);
+      gameManager.setRandomTurn();
+      System.out.println(gameManager.getCurrTurn());
     }
 
     if (gameManager.getMaxUsers() != gameManager.getClientHandlers().size()) {
@@ -79,8 +79,7 @@ public class ClientHandler implements Runnable {
           String message = bufferedReader.readLine();
           gameManager.broadcastMove(userNum, message);
           gameManager.advanceTurn(gameManager.getClientHandlers().size());
-        }
-        else {
+        } else {
           if (bufferedReader.ready()) {
             bufferedReader.readLine();
           }
@@ -108,7 +107,7 @@ public class ClientHandler implements Runnable {
    *
    * @return The user number.
    */
-  public int getUserNum () {
+  public int getUserNum() {
     return userNum;
   }
 

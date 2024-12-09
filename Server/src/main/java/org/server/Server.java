@@ -53,7 +53,9 @@ public class Server {
    */
   public void closeServerSocket() {
     try {
-      if (serverSocket != null) serverSocket.close();
+      if (serverSocket != null) {
+        serverSocket.close();
+      }
     } catch (IOException e) {
       e.printStackTrace();
     }
