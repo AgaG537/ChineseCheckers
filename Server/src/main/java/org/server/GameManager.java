@@ -98,11 +98,12 @@ public class GameManager {
   }
 
   /**
-   * Sets the current player's turn index.
+   * Sets the current player's turn index to random one.
    *
-   * @param turn The index of the current player's turn.
    */
-  public synchronized void setCurrTurn(int turn) { currTurn = turn; }
+  public synchronized void setRandomTurn() {
+    currTurn = (int) ((Math.random() * getMaxUsers()));
+  }
 
   /**
    * Returns the current player's turn index.
@@ -118,13 +119,12 @@ public class GameManager {
    *
    * @param userNum The number of the new user.
    */
-  public void broadcastUserJoined(int userNum) {
+  public synchronized void broadcastUserJoined(int userNum) {
     for (ClientHandler clientHandler : clientHandlers) {
       try {
         if (clientHandler.getUserNum() != userNum) {
           clientHandler.sendMessage("User number " + userNum + " has joined.");
-        }
-        else {
+        } else {
           clientHandler.sendMessage("You have successfully joined.");
         }
       } catch (Exception e) {
@@ -136,7 +136,7 @@ public class GameManager {
   /**
    * Broadcasts a message about the number of users still needed.
    */
-  public void broadcastNumOfUsers() {
+  public synchronized void broadcastNumOfUsers() {
     for (ClientHandler clientHandler : clientHandlers) {
       try {
         int missingNumOfUsers = maxUsers - clientHandlers.size();
@@ -150,7 +150,7 @@ public class GameManager {
   /**
    * Broadcasts a message that the game has started.
    */
-  public void broadcastGameStarted() {
+  public synchronized void broadcastGameStarted() {
     for (ClientHandler clientHandler : clientHandlers) {
       try {
         clientHandler.sendMessage("Starting the game! Wait for an announcement about your turn.");
@@ -167,8 +167,10 @@ public class GameManager {
    * @param userNum       The username of the player making the move.
    * @param move           The move made by the player.
    */
-  public void broadcastMove(Integer userNum, String move) {
-    if (!gameStarted) return;
+  public synchronized void broadcastMove(Integer userNum, String move) {
+    if (!gameStarted) {
+      return;
+    }
 
     for (ClientHandler clientHandler : clientHandlers) {
       try {
