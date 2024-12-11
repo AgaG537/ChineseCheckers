@@ -15,14 +15,14 @@ Wroclaw University of Science and Technology group project for Programming Techn
 2. Navigate to Server folder
 3. Open the folder in command line
 4. Run commands
-- mvn clean
-- mvn install
+  - mvn clean
+  - mvn install
 6. Navigate to the newly created target folder and run the created .jar file by typing "java -jar <file-name>.jar"
 7. Information about server starting should appear
 8. Navigate to the Client folder
 9. Run commands
-- mvn clean
-- mvn install
+  - mvn clean
+  - mvn install
 10. Navigate to the newly created target folder and run the created .jar file by typing "java -jar <file-name>.jar"
 11. Information about client connecting to the server should appear
 12. You can run the .jar file in the Client/target folder from multiple command lines in order to create multiple clients
