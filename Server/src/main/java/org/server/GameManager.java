@@ -15,15 +15,17 @@ public class GameManager {
   private int maxUsers;
   private int currTurn;
   private boolean gameStarted;
+  private Board currentBoard;
 
   /**
    * Constructs a GameManager.
    */
-  public GameManager() {
+  public GameManager(Board board) {
     this.clientHandlers = new ArrayList<>();
     this.maxUsers = 0;
     this.currTurn = 0;
     this.gameStarted = false;
+    this.currentBoard = board;
   }
 
   /**
@@ -165,13 +167,14 @@ public class GameManager {
    * Broadcasts a move made by a player to all clients.
    *
    * @param userNum       The username of the player making the move.
-   * @param move           The move made by the player.
+   * @param input           The input made by the player.
    */
-  public synchronized void broadcastMove(Integer userNum, String move) {
+  public synchronized void broadcastMove(int userNum, String input) {
     if (!gameStarted) {
       return;
     }
 
+    String move = currentBoard.makeMove(userNum, input);
     for (ClientHandler clientHandler : clientHandlers) {
       try {
         if (!Objects.equals(clientHandler.getUserNum(), userNum)) {
