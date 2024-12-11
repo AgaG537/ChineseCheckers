@@ -35,4 +35,6 @@ Wroclaw University of Science and Technology group project for Programming Techn
 5. Another client will be prompted to make a move, inputs will be handled in an analogous way to the way that the first user's move was handled
 6. Each user will be asked to make a move before coming back to the first user where the cycle repeats
 
-
+## Authors
+Agnieszka Głuszkiewicz (AgaG537)
+Jędrzej Sajnóg (JinerX)
