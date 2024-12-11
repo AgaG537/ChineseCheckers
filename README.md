@@ -36,5 +36,5 @@ Wroclaw University of Science and Technology group project for Programming Techn
 6. Each user will be asked to make a move before coming back to the first user where the cycle repeats
 
 ## Authors
-Agnieszka Głuszkiewicz (AgaG537)
-Jędrzej Sajnóg (JinerX)
+- Agnieszka Głuszkiewicz (AgaG537)
+- Jędrzej Sajnóg (JinerX)
