@@ -21,7 +21,7 @@ public class Server {
    */
   public Server(ServerSocket serverSocket) {
     this.serverSocket = serverSocket;
-    this.gameManager = new GameManager();
+    this.gameManager = new GameManager(new BoardManager());
   }
 
   /**
