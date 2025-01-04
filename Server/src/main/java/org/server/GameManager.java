@@ -1,6 +1,8 @@
 package org.server;
 
 
+import org.server.board.Board;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
