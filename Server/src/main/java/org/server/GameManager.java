@@ -116,24 +116,6 @@ public class GameManager {
     return currTurn;
   }
 
-  /**
-   * Broadcasts a message to all players that a new user has joined.
-   *
-   * @param userNum The number of the new user.
-   */
-  public synchronized void broadcastUserJoined(int userNum) {
-    for (ClientHandler clientHandler : clientHandlers) {
-      try {
-        if (clientHandler.getUserNum() != userNum) {
-          clientHandler.sendMessage("User number " + userNum + " has joined.");
-        } else {
-          clientHandler.sendMessage("You have successfully joined.");
-        }
-      } catch (Exception e) {
-        clientHandler.closeEverything();
-      }
-    }
-  }
 
   /**
    * Broadcasts a message about the number of users still needed.
