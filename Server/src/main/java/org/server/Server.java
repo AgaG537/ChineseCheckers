@@ -1,6 +1,8 @@
 package org.server;
 
 
+import org.server.board.BoardManager;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
