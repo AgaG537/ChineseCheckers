@@ -44,7 +44,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>org.client.Client</mainClass>
+              <mainClass>org.client.ClientGUI</mainClass>
             </manifest>
           </archive>
         </configuration>

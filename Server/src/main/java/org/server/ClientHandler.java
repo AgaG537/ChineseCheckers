@@ -32,15 +32,16 @@ public class ClientHandler implements Runnable {
     this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
-    gameManager.addUser(this);
-    System.out.println("User number " + userNum + " has joined.");
-    gameManager.broadcastUserJoined(userNum);
+    sendMessage(String.valueOf(userNum));
 
     if (userNum == 0) {
       requestMaxUsers();
       gameManager.setRandomTurn();
       System.out.println(gameManager.getCurrTurn());
     }
+
+    gameManager.addUser(this);
+    sendMessage("You have successfully joined.");
 
     if (gameManager.getMaxUsers() != gameManager.getClientHandlers().size()) {
       gameManager.broadcastNumOfUsers();
@@ -56,8 +57,8 @@ public class ClientHandler implements Runnable {
     int maxUsers = 0;
     do {
       try {
-        sendMessage("Enter max number of users (2, 3, 4 or 6): ");
-        maxUsers = Integer.parseInt(bufferedReader.readLine());
+        String[] message = (bufferedReader.readLine()).split(",");
+        maxUsers = Integer.parseInt(message[0]);
         gameManager.setMaxUsers(maxUsers);
       } catch (NumberFormatException e) {
         sendMessage("Wrong number of users!");
@@ -75,7 +76,7 @@ public class ClientHandler implements Runnable {
     try {
       while (socket.isConnected()) {
         if (gameManager.isGameStarted() && userNum == gameManager.getCurrTurn()) {
-          sendMessage("It's your turn! Type your move: ");
+          sendMessage("It's your turn!");
           String message = bufferedReader.readLine();
           gameManager.broadcastMove(userNum, message);
           gameManager.advanceTurn(gameManager.getClientHandlers().size());

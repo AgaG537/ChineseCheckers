@@ -3,7 +3,6 @@ package org.client;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.Scanner;
 
 /**
  * Represents a client connecting to the server.
@@ -12,31 +11,34 @@ public class Client {
   private Socket socket;
   private BufferedReader bufferedReader;
   private BufferedWriter bufferedWriter;
+  ClientGUI clientGUI;
 
   /**
-   * Constructs a Client with the specified socket.
+   * Constructs a Client with the specified socket and GUI.
    *
-   * @param socket The socket to connect to the server.
+   * @param socket    The socket to connect to the server.
+   * @param clientGUI The GUI associated with this client.
    */
-  public Client(Socket socket) {
+  public Client(Socket socket,ClientGUI clientGUI) {
     try {
       this.socket = socket;
       this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
       this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+      this.clientGUI = clientGUI;
     } catch (IOException e) {
       closeEverything();
     }
   }
 
   /**
-   * Sends messages from the client to the server.
+   * Sends a message from the client to the server.
+   *
+   * @param message The message to send.
    */
-  public void sendMessage() {
+  public void sendMessage(String message) {
     try {
-      Scanner scanner = new Scanner(System.in);
-      while (socket.isConnected()) {
-        String messageToSend = scanner.nextLine();
-        bufferedWriter.write(messageToSend);
+      if (socket.isConnected()) {
+        bufferedWriter.write(message);
         bufferedWriter.newLine();
         bufferedWriter.flush();
       }
@@ -45,21 +47,48 @@ public class Client {
     }
   }
 
+
+  /**
+   * Retrieves the user's number from the server.
+   *
+   * @return The user number assigned by the server.
+   */
+  public int getUserNumFromServer() {
+    int userNum = -1;
+    if (socket.isConnected()) {
+      try {
+        String userNumString = bufferedReader.readLine();
+        userNum = Integer.parseInt(userNumString);
+        System.out.println(userNum);
+      } catch (IOException e) {
+        closeEverything();
+      }
+    }
+    return userNum;
+  }
+
+
   /**
    * Listens for messages from the server.
    */
   public void listenForMessages() {
-    new Thread(() -> {
-      String messageFromServer;
+    new Thread(new Runnable() {
 
-      while (socket.isConnected()) {
-        try {
-          messageFromServer = bufferedReader.readLine();
-          System.out.println(messageFromServer);
-        } catch (IOException e) {
-          closeEverything();
+      @Override
+      public void run() {
+        String messageFromServer;
+
+        while (socket.isConnected()) {
+          try {
+            messageFromServer = bufferedReader.readLine();
+            clientGUI.showMessageFromServer(messageFromServer);
+            System.out.println(messageFromServer);
+          } catch (IOException e) {
+            closeEverything();
+          }
         }
       }
+
     }).start();
   }
 
@@ -76,16 +105,4 @@ public class Client {
     }
   }
 
-  /**
-   * The entry point of the application to start the client.
-   *
-   * @param args Command-line arguments.
-   * @throws IOException If an I/O error occurs when creating the client socket.
-   */
-  public static void main(String[] args) throws IOException {
-    Socket socket = new Socket("localhost", 1234);
-    Client client = new Client(socket);
-    client.listenForMessages();
-    client.sendMessage();
-  }
 }
