@@ -20,14 +20,17 @@ public class GameViewManager {
   private final VBox boardBox;
   private final VBox sideBox;
 
-  private static final int cellRadius = 15;
-  private Board board;
+  private final int cellRadius; //15
+  private final int constraintSize;
+  private final Board board;
 
   public GameViewManager(Client client, VBox boardBox, VBox sideBox) {
     this.client = client;
     this.boardBox = boardBox;
     this.sideBox = sideBox;
-    board = new Board();
+    board = new Board(10);
+    cellRadius = 15;
+    constraintSize = 20;
   }
 
   public void setGamePanes() {
@@ -47,10 +50,10 @@ public class GameViewManager {
       gridPane.setAlignment(Pos.CENTER);
 
       for (int i = 0; i < board.getBoardHeight(); i++) {
-        gridPane.getRowConstraints().add(new RowConstraints(20));
+        gridPane.getRowConstraints().add(new RowConstraints(constraintSize));
         for (int j = 0; j < board.getBoardWidth(); j++) {
           if (i == 0) {
-            gridPane.getColumnConstraints().add(new ColumnConstraints(20));
+            gridPane.getColumnConstraints().add(new ColumnConstraints(constraintSize));
           }
           Cell cell = board.getCell(i,j);
 
