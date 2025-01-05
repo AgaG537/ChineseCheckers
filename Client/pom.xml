@@ -44,7 +44,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>org.client.ClientGUI</mainClass>
+              <mainClass>org.client.ClientApp</mainClass>
             </manifest>
           </archive>
         </configuration>
@@ -54,7 +54,7 @@
         <artifactId>javafx-maven-plugin</artifactId>
         <version>${javafx.maven.plugin.version}</version>
         <configuration>
-          <mainClass>org.client.ClientGUI</mainClass>
+          <mainClass>org.client.ClientApp</mainClass>
         </configuration>
       </plugin>
     </plugins>

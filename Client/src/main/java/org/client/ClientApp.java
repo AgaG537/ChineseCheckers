@@ -9,6 +9,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import org.client.GUI.ClientGUIManager;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -16,10 +17,10 @@ import java.net.Socket;
 /**
  * Represents the graphical user interface for the client.
  */
-public class ClientGUI extends Application {
+public class ClientApp extends Application {
 
   private Client client;
-  private ClientGUISetup setup;
+  private ClientGUIManager guiManager;
 
   @Override
   public void start(Stage stage) {
@@ -33,7 +34,7 @@ public class ClientGUI extends Application {
 
     BorderPane root = new BorderPane();
     Scene scene = new Scene(root, 1000, 600);
-    setup = new ClientGUISetup(root, client);
+    guiManager = new ClientGUIManager(root, client);
 
     stage.setTitle("CHINESE CHECKERS");
     stage.setScene(scene);
@@ -57,10 +58,11 @@ public class ClientGUI extends Application {
       @Override
       public void run() {
 
-        if (messageFromServer.getText().startsWith("Starting the game")) {
-          setup.setHexagonCentralPane();
+        if (messageFromServer.getText().equals("Game options correct.")) {
+          guiManager.setGamePanes();
         }
-        setup.addLabel(messageFromServer);
+
+        guiManager.addLabel(messageFromServer);
 
       }
     });
