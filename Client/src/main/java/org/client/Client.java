@@ -11,20 +11,20 @@ public class Client {
   private Socket socket;
   private BufferedReader bufferedReader;
   private BufferedWriter bufferedWriter;
-  ClientGUI clientGUI;
+  private ClientApp clientApp;
 
   /**
    * Constructs a Client with the specified socket and GUI.
    *
    * @param socket    The socket to connect to the server.
-   * @param clientGUI The GUI associated with this client.
+   * @param clientApp The GUI associated with this client.
    */
-  public Client(Socket socket,ClientGUI clientGUI) {
+  public Client(Socket socket, ClientApp clientApp) {
     try {
       this.socket = socket;
       this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
       this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-      this.clientGUI = clientGUI;
+      this.clientApp = clientApp;
     } catch (IOException e) {
       closeEverything();
     }
@@ -81,7 +81,7 @@ public class Client {
         while (socket.isConnected()) {
           try {
             messageFromServer = bufferedReader.readLine();
-            clientGUI.showMessageFromServer(messageFromServer);
+            clientApp.showMessageFromServer(messageFromServer);
             System.out.println(messageFromServer);
           } catch (IOException e) {
             closeEverything();

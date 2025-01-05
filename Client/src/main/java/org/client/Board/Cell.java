@@ -1,4 +1,4 @@
-package org.server.board;
+package org.client.Board;
 
 /**
  * Represents a single cell on the game board.
@@ -67,3 +67,4 @@ public class Cell {
   }
 
 }
+

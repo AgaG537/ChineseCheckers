@@ -38,6 +38,7 @@ public class ClientHandler implements Runnable {
       requestMaxUsers();
       gameManager.setRandomTurn();
       System.out.println(gameManager.getCurrTurn());
+      sendMessage("Game options correct.");
     }
 
     gameManager.addUser(this);
