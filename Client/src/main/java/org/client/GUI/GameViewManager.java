@@ -13,6 +13,12 @@ import org.client.Board.Board;
 import org.client.Board.Cell;
 import org.client.Client;
 
+/**
+ * Handles the layout and functionality
+ * of the game view during play.
+ * Manages the central game board and
+ * the side pane for updates/messages.
+ */
 public class GameViewManager {
 
   private final Client client;
@@ -22,29 +28,42 @@ public class GameViewManager {
 
   private final int cellRadius; //15
   private final int constraintSize;
+  private final int vGapSize;
+
   private final Board board;
 
+  /**
+   * Constructor for the GameViewManager class.
+   *
+   * @param client The client responsible for server communication.
+   * @param boardBox The VBox for displaying the central game board.
+   * @param sideBox The VBox for displaying the side panel.
+   */
   public GameViewManager(Client client, VBox boardBox, VBox sideBox) {
     this.client = client;
     this.boardBox = boardBox;
     this.sideBox = sideBox;
-    board = new Board(10); //10, 15
-    cellRadius = 15;       //15, 10
-    constraintSize = 20;   //20, 15
+    board = new Board(10);
+
+    constraintSize = board.getConstraintSize();
+    cellRadius = (constraintSize * 3) / 4;
+    vGapSize = (constraintSize * 2) / 3;
   }
 
+  /**
+   * Initializes the game panes (central board and side panel).
+   */
   public void setGamePanes() {
     setGameCentralPane();
     setGameSidePane();
   }
 
   /**
-   * Sets up the center pane for the
-   * game board once the game starts.
+   * Sets up the central pane to display the game board.
    */
   private void setGameCentralPane() {
       GridPane gridPane = new GridPane();
-      gridPane.setVgap(13);
+      gridPane.setVgap(vGapSize);
       gridPane.setPadding(new Insets(10, 10, 10, 10));
       gridPane.setStyle("-fx-background-color: #1C2541");
       gridPane.setAlignment(Pos.CENTER);
@@ -82,8 +101,8 @@ public class GameViewManager {
   }
 
   /**
-   * Prepares the side pane for the
-   * messages received from server.
+   * Sets up the side pane to display
+   * messages received from the server.
    */
   private void setGameSidePane() {
     sideBox.setSpacing(10);

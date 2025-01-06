@@ -4,7 +4,8 @@ import javafx.scene.paint.Color;
 
 /**
  * Represents the game board for Chinese Checkers.
- * The board is initialized with specific dimensions and divided into zones for players.
+ * The board is initialized with specific dimensions
+ * and divided into zones for players.
  */
 public class Board {
 
@@ -13,19 +14,38 @@ public class Board {
   private final int boardWidth; //25
   private final Cell[][] cells;
 
+  private final int constraintSize;
+
   /**
-   * Constructor for the Board class. Initializes the board and player zones.
+   * Constructor for the Board class.
+   *
+   * @param marblesPerPlayer The number of marbles per player.
    */
   public Board(int marblesPerPlayer) {
     playerZoneHeight = countPlayerZoneHeight(marblesPerPlayer);
     boardHeight = playerZoneHeight * 4 + 1;
     boardWidth = (playerZoneHeight * 6) + 1;
+    constraintSize = (1000 / boardWidth) / 2;
 
     cells = new Cell[boardHeight][boardWidth];
     initializeBoard();
     initializePlayerZonesAndPawns();
   }
 
+  /**
+   * @return The size constraint used
+   * for cell rendering in the GUI.
+   */
+  public int getConstraintSize() {
+    return constraintSize;
+  }
+
+  /**
+   * Calculates the height of a player's triangular zone.
+   *
+   * @param marblesPerPlayer Number of marbles a player has.
+   * @return The height of the triangular player zone.
+   */
   private int countPlayerZoneHeight(int marblesPerPlayer) {
     int sum = 0;
     int heightCounter = 0;
@@ -40,7 +60,8 @@ public class Board {
   }
 
   /**
-   * Initializes the board structure by marking valid positions inside the board.
+   * Initializes the board structure by marking
+   * valid positions inside the board.
    */
   private void initializeBoard() {
     int i, j, k;
@@ -69,7 +90,8 @@ public class Board {
   }
 
   /**
-   * Assigns specific zones of the board to different players.
+   * Assigns specific zones of the board to different
+   * players and initializes their pawns.
    */
   private void initializePlayerZonesAndPawns() {
     int[][] playerZonesStartPoints = {
@@ -88,7 +110,7 @@ public class Board {
 
       int k = 0;
       if (i == 0 || i == 2 || i == 4) {
-        for (int row = rowStart; row < rowStart + 4; row++) {
+        for (int row = rowStart; row < rowStart + playerZoneHeight; row++) {
           for (int col = colStart - k; col <= colStart + k; col += 2) {
             int playerNum = i + 1;
             cells[row][col].setInitialPlayerNum(playerNum);
@@ -106,7 +128,7 @@ public class Board {
           k++;
         }
       } else {
-        for (int row = rowStart; row > rowStart - 4; row--) {
+        for (int row = rowStart; row > rowStart - playerZoneHeight; row--) {
           for (int col = colStart - k; col <= colStart + k; col += 2) {
             int playerNum = i + 1;
             cells[row][col].setInitialPlayerNum(playerNum);
@@ -128,15 +150,27 @@ public class Board {
     }
   }
 
-
+  /**
+   * @return The width of the board.
+   */
   public int getBoardWidth() {
     return boardWidth;
   }
 
+  /**
+   * @return The height of the board.
+   */
   public int getBoardHeight() {
     return boardHeight;
   }
 
+  /**
+   * Retrieves a specific cell from the board.
+   *
+   * @param i Row index of the cell.
+   * @param j Column index of the cell.
+   * @return The cell at the specified position.
+   */
   public Cell getCell(int i, int j) {
     return cells[i][j];
   }
