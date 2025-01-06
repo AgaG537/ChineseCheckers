@@ -1,5 +1,7 @@
 package org.client.Board;
 
+import javafx.scene.paint.Color;
+
 /**
  * Represents a single cell on the game board.
  */
@@ -7,7 +9,10 @@ public class Cell {
   private final int row;
   private final int col;
   private boolean insideBoard;
-  private int userNum;
+  private int initialPlayerNum;
+  private Color initialColor;
+  private int currentPlayerNum;
+  private Color currentColor;
 
   /**
    * Constructor for the Cell class.
@@ -18,8 +23,9 @@ public class Cell {
   public Cell(int row, int col) {
     this.row = row;
     this.col = col;
-    this.insideBoard = false;
-    this.userNum = 0;
+    insideBoard = false;
+    initialPlayerNum = currentPlayerNum = 0;
+    initialColor = currentColor = Color.TRANSPARENT;
   }
 
   /**
@@ -53,17 +59,50 @@ public class Cell {
   /**
    * @return The player number assigned to the cell (0 if unoccupied).
    */
-  public int getUserNum() {
-    return userNum;
+  public int getInitialPlayerNum() {
+    return initialPlayerNum;
   }
 
   /**
    * Assigns a player number to the cell.
    *
-   * @param userNum The player number to assign.
+   * @param playerNum The player number to assign.
    */
-  public void setUserNum(int userNum) {
-    this.userNum = userNum;
+  public void setInitialPlayerNum(int playerNum) {
+    initialPlayerNum = playerNum;
+  }
+
+
+  /**
+   * @return The player number assigned to the cell (0 if unoccupied).
+   */
+  public int getCurrentPlayerNum() {
+    return currentPlayerNum;
+  }
+
+  /**
+   * Assigns a player number to the cell.
+   *
+   * @param playerNum The player number to assign.
+   */
+  public void setCurrentPlayerNum(int playerNum) {
+    currentPlayerNum = playerNum;
+  }
+
+  public Color getInitialColor() {
+    return initialColor;
+  }
+
+  public void setInitialColor(Color color) {
+    initialColor = color;
+  }
+
+  public Color getCurrentColor() {
+    return currentColor;
+  }
+
+  public void setCurrentColor(Color color) {
+    currentColor = color;
   }
 
 }

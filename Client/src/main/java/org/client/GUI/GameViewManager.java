@@ -3,11 +3,11 @@ package org.client.GUI;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import org.client.Board.Board;
 import org.client.Board.Cell;
@@ -28,9 +28,9 @@ public class GameViewManager {
     this.client = client;
     this.boardBox = boardBox;
     this.sideBox = sideBox;
-    board = new Board(10);
-    cellRadius = 15;
-    constraintSize = 20;
+    board = new Board(10); //10, 15
+    cellRadius = 15;       //15, 10
+    constraintSize = 20;   //20, 15
   }
 
   public void setGamePanes() {
@@ -44,7 +44,7 @@ public class GameViewManager {
    */
   private void setGameCentralPane() {
       GridPane gridPane = new GridPane();
-      gridPane.setVgap(10);
+      gridPane.setVgap(13);
       gridPane.setPadding(new Insets(10, 10, 10, 10));
       gridPane.setStyle("-fx-background-color: #1C2541");
       gridPane.setAlignment(Pos.CENTER);
@@ -59,24 +59,16 @@ public class GameViewManager {
 
           if (cell.isInsideBoard()){
             Circle circ = new Circle(cellRadius);
-            circ.setFill(Color.TRANSPARENT);
-            circ.setStyle("-fx-stroke-width: 2");
+            circ.setStyle("-fx-stroke-width: 1");
+            circ.setCursor(Cursor.HAND);
 
-            switch (cell.getUserNum()) {
-              case 0: circ.setStroke(Color.web("#ffa64d")); break;
-              case 1: circ.setStroke(Color.RED); break;
-              case 2: circ.setStroke(Color.BLACK); break;
-              case 3: circ.setStroke(Color.BLUE); break;
-              case 4: circ.setStroke(Color.GREEN); break;
-              case 5: circ.setStroke(Color.WHITE); break;
-              case 6: circ.setStroke(Color.YELLOW); break;
-              default: circ.setStroke(Color.TRANSPARENT);
-            }
+            circ.setStroke(cell.getInitialColor());
+            circ.setFill(cell.getCurrentColor());
 
             circ.setOnMouseClicked(event -> {
               if (cell.isInsideBoard()) {
                 System.out.printf("Clicked on cell: row=%d, col=%d, user=%d%n",
-                    cell.getRow(), cell.getCol(), cell.getUserNum());
+                    cell.getRow(), cell.getCol(), cell.getInitialPlayerNum());
               }
             });
 
