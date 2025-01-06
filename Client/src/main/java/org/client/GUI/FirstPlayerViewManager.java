@@ -10,6 +10,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import org.client.Client;
 
+/**
+ * Manages the view for the first player
+ * to configure game options.
+ * Handles UI elements for selecting game
+ * settings like variant and player count.
+ */
 public class FirstPlayerViewManager {
 
   private final Client client;
@@ -22,6 +28,13 @@ public class FirstPlayerViewManager {
   private String chosenVariant;
   private Integer numOfPlayers;
 
+  /**
+   * Constructor for the FirstPlayerViewManager class.
+   *
+   * @param client The client responsible for server communication.
+   * @param boardBox The VBox for displaying the central pane.
+   * @param sideBox The VBox for displaying the side panel.
+   */
   public FirstPlayerViewManager(Client client, VBox boardBox, VBox sideBox) {
     this.client = client;
     this.boardBox = boardBox;
@@ -31,14 +44,16 @@ public class FirstPlayerViewManager {
     numOfPlayers = 2;
   }
 
+  /**
+   * Initializes the panes for the first player setup screen.
+   */
   public void setFirstPlayerPanes() {
     setFirstPlayerCenterPane();
     setFirstPlayerSidePane();
   }
 
   /**
-   * Sets up the center pane for the first
-   * user to configure game options.
+   * Sets up the central pane with an informational label.
    */
   private void setFirstPlayerCenterPane() {
     Label infoLabel = new Label("Provide necessary game options on the left.");
@@ -48,10 +63,8 @@ public class FirstPlayerViewManager {
     boardBox.getChildren().add(infoLabel);
   }
 
-
   /**
-   * Sets up the side pane for the first
-   * user to configure game settings.
+   * Sets up the side pane for game settings configuration.
    */
   private void setFirstPlayerSidePane() {
     Label titleLabel = new Label("GAME SETUP");

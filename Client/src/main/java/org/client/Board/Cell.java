@@ -1,13 +1,19 @@
 package org.client.Board;
 
+import javafx.scene.paint.Color;
+
 /**
  * Represents a single cell on the game board.
+ * Tracks the state, position, and ownership of the cell.
  */
 public class Cell {
   private final int row;
   private final int col;
   private boolean insideBoard;
-  private int userNum;
+  private int initialPlayerNum;
+  private Color initialColor;
+  private int currentPlayerNum;
+  private Color currentColor;
 
   /**
    * Constructor for the Cell class.
@@ -18,8 +24,9 @@ public class Cell {
   public Cell(int row, int col) {
     this.row = row;
     this.col = col;
-    this.insideBoard = false;
-    this.userNum = 0;
+    insideBoard = false;
+    initialPlayerNum = currentPlayerNum = 0;
+    initialColor = currentColor = Color.TRANSPARENT;
   }
 
   /**
@@ -37,33 +44,86 @@ public class Cell {
   }
 
   /**
-   * @return True if the cell is inside the playable area of the board.
+   * @return True if the cell is inside
+   * the playable area of the board.
    */
   public boolean isInsideBoard() {
     return insideBoard;
   }
 
   /**
-   * Marks the cell as being inside the playable area of the board.
+   * Marks the cell as being inside
+   * the playable area of the board.
    */
   public void setInsideBoard() {
     insideBoard = true;
   }
 
   /**
-   * @return The player number assigned to the cell (0 if unoccupied).
+   * @return The player number initially
+   * assigned to the cell (0 if unoccupied).
    */
-  public int getUserNum() {
-    return userNum;
+  public int getInitialPlayerNum() {
+    return initialPlayerNum;
   }
 
   /**
-   * Assigns a player number to the cell.
+   * Assigns an initial player number to the cell.
    *
-   * @param userNum The player number to assign.
+   * @param playerNum The player number to assign.
    */
-  public void setUserNum(int userNum) {
-    this.userNum = userNum;
+  public void setInitialPlayerNum(int playerNum) {
+    initialPlayerNum = playerNum;
+  }
+
+
+  /**
+   * @return The current player number
+   * assigned to the cell (0 if unoccupied).
+   */
+  public int getCurrentPlayerNum() {
+    return currentPlayerNum;
+  }
+
+  /**
+   * Updates the current player number for the cell.
+   *
+   * @param playerNum The new player number.
+   */
+  public void setCurrentPlayerNum(int playerNum) {
+    currentPlayerNum = playerNum;
+  }
+
+  /**
+   * @return The initial color of the cell.
+   */
+  public Color getInitialColor() {
+    return initialColor;
+  }
+
+  /**
+   * Sets the initial color of the cell.
+   *
+   * @param color The color to assign.
+   */
+  public void setInitialColor(Color color) {
+    initialColor = color;
+  }
+
+  /**
+   * @return The current color of the cell (represents pawn).
+   */
+  public Color getCurrentColor() {
+    return currentColor;
+  }
+
+  /**
+   * Updates the current color of the cell (represents pawn).
+   *
+   * @param color The new color to assign.
+   */
+  public void setCurrentColor(Color color) {
+    currentColor = color;
   }
 
 }
