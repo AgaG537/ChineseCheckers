@@ -46,7 +46,7 @@ public class ClientGUIManager {
     if (userNum == 0) {
       setFirstPlayerPanes();
     } else {
-      setGamePanes();
+      setWaitingPanes();
     }
   }
 
@@ -55,8 +55,13 @@ public class ClientGUIManager {
     manager.setFirstPlayerPanes();
   }
 
-  public void setGamePanes() {
-    GameViewManager manager = new GameViewManager(client, boardBox, sideBox);
+  public void setWaitingPanes() {
+    WaitingViewManager manager = new WaitingViewManager(boardBox, sideBox);
+    manager.setWaitingPanes();
+  }
+
+  public void setGamePanes(int numOfPlayers, String variant) {
+    GameViewManager manager = new GameViewManager(client, boardBox, sideBox, numOfPlayers, variant);
     manager.setGamePanes();
   }
 
@@ -84,13 +89,7 @@ public class ClientGUIManager {
     mainPane.setCenter(boardPane);
     mainPane.setLeft(sidePane);
 
-    Label chineseCheckersLabel = new Label("Chinese Checkers");
-    chineseCheckersLabel.setTextFill(Color.WHITE);
-    chineseCheckersLabel.setFont(new Font("Verdana",50));
-    chineseCheckersLabel.setStyle("-fx-font-weight: bold");
-
     boardBox.setSpacing(20);
-    boardBox.getChildren().add(chineseCheckersLabel);
     boardBox.setPadding(new Insets(15));
     boardBox.setAlignment(Pos.CENTER);
 

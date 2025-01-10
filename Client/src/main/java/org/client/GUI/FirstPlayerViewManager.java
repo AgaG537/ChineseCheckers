@@ -56,11 +56,16 @@ public class FirstPlayerViewManager {
    * Sets up the central pane with an informational label.
    */
   private void setFirstPlayerCenterPane() {
+    Label chineseCheckersLabel = new Label("Chinese Checkers");
+    chineseCheckersLabel.setTextFill(Color.WHITE);
+    chineseCheckersLabel.setFont(new Font("Verdana",50));
+    chineseCheckersLabel.setStyle("-fx-font-weight: bold");
+
     Label infoLabel = new Label("Provide necessary game options on the left.");
     infoLabel.setTextFill(Color.WHITE);
     infoLabel.setFont(new Font("Verdana",23));
 
-    boardBox.getChildren().add(infoLabel);
+    boardBox.getChildren().addAll(chineseCheckersLabel, infoLabel);
   }
 
   /**

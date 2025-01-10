@@ -21,7 +21,7 @@ public class Board {
    *
    * @param marblesPerPlayer The number of marbles per player.
    */
-  public Board(int marblesPerPlayer) {
+  public Board(int marblesPerPlayer, int numOfPlayers, String variant) {
     playerZoneHeight = countPlayerZoneHeight(marblesPerPlayer);
     boardHeight = playerZoneHeight * 4 + 1;
     boardWidth = (playerZoneHeight * 6) + 1;
@@ -30,7 +30,7 @@ public class Board {
     cells = new Cell[boardHeight][boardWidth];
     initializeBoard();
 
-    cells = PlayerZoneFactory.addPlayerZones(6,boardWidth,boardHeight,playerZoneHeight,cells);
+    cells = PlayerZoneFactory.addPlayerZones(numOfPlayers,boardWidth,boardHeight,playerZoneHeight,cells);
   }
 
   /**

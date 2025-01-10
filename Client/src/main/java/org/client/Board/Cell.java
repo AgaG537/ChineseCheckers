@@ -170,7 +170,7 @@ public class Cell {
    */
   public void setCircle(Circle circle) {
     this.circle = circle;
-    circle.setStyle("-fx-stroke-width: 1");
+    circle.setStyle("-fx-stroke-width: 2");
     circle.setCursor(Cursor.HAND);
     circle.setStroke(initialColor);
     updateCircle();
