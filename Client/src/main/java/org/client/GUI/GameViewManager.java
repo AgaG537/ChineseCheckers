@@ -8,9 +8,11 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import org.client.Board.Board;
 import org.client.Board.Cell;
+import org.client.Board.Pawn;
 import org.client.Client;
 
 /**
@@ -78,14 +80,15 @@ public class GameViewManager {
 
           if (cell.isInsideBoard()){
             Circle circ = new Circle(cellRadius);
-            circ.setStyle("-fx-stroke-width: 1");
-            circ.setCursor(Cursor.HAND);
+            cell.setCircle(circ);
 
             circ.setStroke(cell.getInitialColor());
             circ.setFill(cell.getCurrentColor());
 
             circ.setOnMouseClicked(event -> {
               if (cell.isInsideBoard()) {
+                String tmp = "%d %d %d";
+                client.sendMessage(String.format(tmp,cell.getRow(),cell.getCol(),cell.getInitialPlayerNum()));
                 System.out.printf("Clicked on cell: row=%d, col=%d, user=%d%n",
                     cell.getRow(), cell.getCol(), cell.getInitialPlayerNum());
               }

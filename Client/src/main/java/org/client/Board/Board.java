@@ -12,7 +12,7 @@ public class Board {
   private final int playerZoneHeight;
   private final int boardHeight; //17
   private final int boardWidth; //25
-  private final Cell[][] cells;
+  private Cell[][] cells;
 
   private final int constraintSize;
 
@@ -29,7 +29,8 @@ public class Board {
 
     cells = new Cell[boardHeight][boardWidth];
     initializeBoard();
-    initializePlayerZonesAndPawns();
+
+    cells = PlayerZoneFactory.addPlayerZones(6,boardWidth,boardHeight,playerZoneHeight,cells);
   }
 
   /**
@@ -114,7 +115,7 @@ public class Board {
           for (int col = colStart - k; col <= colStart + k; col += 2) {
             int playerNum = i + 1;
             cells[row][col].setInitialPlayerNum(playerNum);
-            cells[row][col].setCurrentPlayerNum(playerNum);
+            //cells[row][col].setCurrentPlayerNum(playerNum);
             Color cellColor;
             Color pawnColor;
             switch (playerNum) {
@@ -122,8 +123,7 @@ public class Board {
               case 3: cellColor = pawnColor = Color.BLUE; break;
               default: cellColor = pawnColor = Color.WHITE;
             }
-            cells[row][col].setInitialColor(cellColor);
-            cells[row][col].setCurrentColor(pawnColor);
+            Pawn pawn = new Pawn(playerNum,pawnColor,cells[row][col]);
           }
           k++;
         }
@@ -132,7 +132,7 @@ public class Board {
           for (int col = colStart - k; col <= colStart + k; col += 2) {
             int playerNum = i + 1;
             cells[row][col].setInitialPlayerNum(playerNum);
-            cells[row][col].setCurrentPlayerNum(playerNum);
+            //cells[row][col].setCurrentPlayerNum(playerNum);
             Color cellColor;
             Color pawnColor;
             switch (playerNum) {
@@ -140,13 +140,11 @@ public class Board {
               case 4: cellColor = pawnColor = Color.GREEN; break;
               default: cellColor = pawnColor = Color.YELLOW;
             }
-            cells[row][col].setInitialColor(cellColor);
-            cells[row][col].setCurrentColor(pawnColor);
+            Pawn pawn = new Pawn(playerNum,pawnColor,cells[row][col]);
           }
           k++;
         }
       }
-
     }
   }
 

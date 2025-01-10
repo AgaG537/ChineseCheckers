@@ -79,8 +79,16 @@ public class ClientHandler implements Runnable {
         if (gameManager.isGameStarted() && userNum == gameManager.getCurrTurn()) {
           sendMessage("It's your turn!");
           String message = bufferedReader.readLine();
-          gameManager.broadcastMove(userNum, message);
-          gameManager.advanceTurn(gameManager.getClientHandlers().size());
+          int flag = gameManager.validateMove(userNum, message);
+          switch (flag) {
+            case 0:
+              System.out.println(message);
+              System.out.println(userNum);
+              gameManager.broadcastMove(userNum, message);
+              gameManager.advanceTurn(gameManager.getClientHandlers().size()); break;
+            default:
+              System.out.println("Something weird happened!");
+          }
         } else {
           if (bufferedReader.ready()) {
             bufferedReader.readLine();

@@ -169,4 +169,8 @@ public class GameManager {
       }
     }
   }
+
+  public int validateMove(int userNum, String input) {
+    return 0;
+  }
 }

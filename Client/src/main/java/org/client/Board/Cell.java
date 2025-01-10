@@ -1,6 +1,8 @@
 package org.client.Board;
 
+import javafx.scene.Cursor;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 
 /**
  * Represents a single cell on the game board.
@@ -10,10 +12,13 @@ public class Cell {
   private final int row;
   private final int col;
   private boolean insideBoard;
+  private boolean occupied;
   private int initialPlayerNum;
   private Color initialColor;
-  private int currentPlayerNum;
+  //private int currentPlayerNum;
   private Color currentColor;
+  private Pawn pawn;
+  private Circle circle;
 
   /**
    * Constructor for the Cell class.
@@ -25,8 +30,10 @@ public class Cell {
     this.row = row;
     this.col = col;
     insideBoard = false;
-    initialPlayerNum = currentPlayerNum = 0;
+    initialPlayerNum = 0;
     initialColor = currentColor = Color.TRANSPARENT;
+    occupied = false;
+    pawn = null;
   }
 
   /**
@@ -81,18 +88,18 @@ public class Cell {
    * @return The current player number
    * assigned to the cell (0 if unoccupied).
    */
-  public int getCurrentPlayerNum() {
-    return currentPlayerNum;
-  }
+//  public int getCurrentPlayerNum() {
+//    return currentPlayerNum;
+//  }
 
   /**
    * Updates the current player number for the cell.
    *
    * @param playerNum The new player number.
    */
-  public void setCurrentPlayerNum(int playerNum) {
-    currentPlayerNum = playerNum;
-  }
+//  public void setCurrentPlayerNum(int playerNum) {
+//    currentPlayerNum = playerNum;
+//  }
 
   /**
    * @return The initial color of the cell.
@@ -126,5 +133,32 @@ public class Cell {
     currentColor = color;
   }
 
+  public Pawn getPawn() {
+    return pawn;
+  }
+
+  public void pawnMoveIn(Pawn pawn) {
+    this.pawn = pawn;
+    this.occupied = true;
+    this.currentColor=pawn.getColor();
+  }
+
+  public void pawnMoveOut(Pawn pawn) {
+    this.pawn = null;
+    this.occupied = false;
+    this.currentColor=Color.TRANSPARENT;
+  }
+
+  public void setCircle(Circle circle) {
+    this.circle = circle;
+    circle.setStyle("-fx-stroke-width: 1");
+    circle.setCursor(Cursor.HAND);
+    circle.setStroke(initialColor);
+    updateCircle();
+  }
+
+  public void updateCircle() {
+    circle.setFill(currentColor);
+  }
 }
 
