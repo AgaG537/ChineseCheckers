@@ -133,22 +133,41 @@ public class Cell {
     currentColor = color;
   }
 
+  /**
+   * @return The pawn currently occupying the cell.
+   */
   public Pawn getPawn() {
     return pawn;
   }
 
+  /**
+   * Moves a pawn into the cell, marking it as occupied.
+   *
+   * @param pawn The pawn to place in the cell.
+   */
   public void pawnMoveIn(Pawn pawn) {
     this.pawn = pawn;
     this.occupied = true;
-    this.currentColor=pawn.getColor();
+    this.currentColor = pawn.getColor();
   }
 
+  /**
+   * Removes the pawn from the cell, marking it as unoccupied.
+   *
+   * @param pawn The pawn to remove from the cell.
+   */
   public void pawnMoveOut(Pawn pawn) {
     this.pawn = null;
     this.occupied = false;
-    this.currentColor=Color.TRANSPARENT;
+    this.currentColor = Color.TRANSPARENT;
   }
 
+  /**
+   * Sets the Circle representing the cell.
+   * Updates the style and cursor.
+   *
+   * @param circle The Circle to associate with the cell.
+   */
   public void setCircle(Circle circle) {
     this.circle = circle;
     circle.setStyle("-fx-stroke-width: 1");
@@ -157,6 +176,9 @@ public class Cell {
     updateCircle();
   }
 
+  /**
+   * Updates the Circle to reflect the current color of the cell.
+   */
   public void updateCircle() {
     circle.setFill(currentColor);
   }

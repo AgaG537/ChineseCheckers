@@ -91,6 +91,8 @@ public class Board {
   }
 
   /**
+   * Not used anymore, replaced by PlayerZoneFactory
+   *
    * Assigns specific zones of the board to different
    * players and initializes their pawns.
    */

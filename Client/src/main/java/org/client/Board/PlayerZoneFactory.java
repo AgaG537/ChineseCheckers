@@ -2,8 +2,17 @@ package org.client.Board;
 
 import javafx.scene.paint.Color;
 
+/**
+ * Factory class for generating player zones on the board.
+ */
 public class PlayerZoneFactory {
 
+  /**
+   * Generates a default color based on the player's number.
+   *
+   * @param playerNum The player's number.
+   * @return The default color for the player.
+   */
   private static Color generateDefaultColor(int playerNum) {
     switch (playerNum) {
       case 1:
@@ -21,11 +30,26 @@ public class PlayerZoneFactory {
     }
     return Color.GREY;
   }
-
+  /**
+   * Determines if the player number is odd (ascending order of the player zone).
+   *
+   * @param playerNumber The player's number.
+   * @return True if the player number is odd, false otherwise.
+   */
   private static boolean isAsc(int playerNumber) {
     return playerNumber == 1 || playerNumber == 3 || playerNumber == 5;
   }
 
+  /**
+   * Adds player zones to the board for a specified number of players.
+   *
+   * @param numPlayers The number of players.
+   * @param boardWidth The width of the board.
+   * @param boardHeight The height of the board.
+   * @param playerZoneHeight The height of each player's zone.
+   * @param cells The current state of the board's cells.
+   * @return The updated board cells with player zones added.
+   */
   public static Cell[][] addPlayerZones(int numPlayers, int boardWidth, int boardHeight, int playerZoneHeight, Cell[][] cells) {
     int[][] playerZonesStartPoints = {
         {0, (boardWidth / 2)}, // Upper zone [0]
