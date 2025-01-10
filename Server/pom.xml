@@ -7,7 +7,7 @@
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>checkerstest2</name>
+  <name>Server</name>
   <url>http://maven.apache.org</url>
 
   <properties>
@@ -35,6 +35,14 @@
               <mainClass>org.server.Server</mainClass>
             </manifest>
           </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.4.0</version>
+        <configuration>
+          <mainClass>org.server.Server</mainClass>
         </configuration>
       </plugin>
     </plugins>
