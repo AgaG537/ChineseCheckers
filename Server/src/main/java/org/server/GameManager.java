@@ -139,7 +139,7 @@ public class GameManager {
   public synchronized void broadcastGameStarted() {
     for (ClientHandler clientHandler : clientHandlers) {
       try {
-        clientHandler.sendMessage("Starting the game! Wait for an announcement about your turn.");
+        clientHandler.sendMessage("Starting the game! Wait for an announcement about your turn." + maxUsers + "," + "variant");
       } catch (Exception e) {
         clientHandler.closeEverything();
       }

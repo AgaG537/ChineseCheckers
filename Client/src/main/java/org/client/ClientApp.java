@@ -58,8 +58,13 @@ public class ClientApp extends Application {
       @Override
       public void run() {
 
-        if (messageFromServer.getText().equals("Game options correct.")) {
-          guiManager.setGamePanes();
+        if (message.equals("Game options correct.")) {
+          guiManager.setWaitingPanes();
+        } else if (message.startsWith("Starting the game!")) {
+          String options = message.substring("Starting the game! Wait for an announcement about your turn.".length());
+          String[] optionsTable = options.split(",");
+          guiManager.setGamePanes(Integer.parseInt(optionsTable[0]), optionsTable[1]);
+          messageFromServer.setText("Starting the game! Wait for an announcement about your turn.");
         }
 
         guiManager.addLabel(messageFromServer);

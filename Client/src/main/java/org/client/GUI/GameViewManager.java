@@ -41,11 +41,11 @@ public class GameViewManager {
    * @param boardBox The VBox for displaying the central game board.
    * @param sideBox The VBox for displaying the side panel.
    */
-  public GameViewManager(Client client, VBox boardBox, VBox sideBox) {
+  public GameViewManager(Client client, VBox boardBox, VBox sideBox, int numOfPlayers, String variant) {
     this.client = client;
     this.boardBox = boardBox;
     this.sideBox = sideBox;
-    board = new Board(10);
+    board = new Board(10, numOfPlayers, variant);
 
     constraintSize = board.getConstraintSize();
     cellRadius = (constraintSize * 3) / 4;
@@ -109,6 +109,5 @@ public class GameViewManager {
    */
   private void setGameSidePane() {
     sideBox.setSpacing(10);
-    sideBox.getChildren().clear();
   }
 }
