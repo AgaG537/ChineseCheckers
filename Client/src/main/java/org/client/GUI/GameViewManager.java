@@ -4,29 +4,29 @@ package org.client.GUI;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import org.client.Board.Board;
-import org.client.Board.Cell;
-import org.client.Board.Pawn;
+import javafx.scene.text.Font;
+import org.client.Board.*;
 import org.client.Client;
 
 /**
- * Handles the layout and functionality
- * of the game view during play.
- * Manages the central game board and
- * the side pane for updates/messages.
+ * Handles the layout and functionality of the game view during play.
+ * Manages the central game board and the side pane for updates/messages.
  */
 public class GameViewManager {
 
   private final Client client;
+  private final int playerNum;
 
   private final VBox boardBox;
-  private final VBox sideBox;
+  private final VBox playerInfoBox;
 
   private final int cellRadius; //15
   private final int constraintSize;
@@ -38,14 +38,18 @@ public class GameViewManager {
    * Constructor for the GameViewManager class.
    *
    * @param client The client responsible for server communication.
+   * @param playerNum The player's number.
    * @param boardBox The VBox for displaying the central game board.
-   * @param sideBox The VBox for displaying the side panel.
+   * @param playerInfoBox The VBox for displaying the side panel player info.
+   * @param numOfPlayers The total number of players in the game.
+   * @param variant The variant of the game being played.
    */
-  public GameViewManager(Client client, VBox boardBox, VBox sideBox, int numOfPlayers, String variant) {
+  public GameViewManager(Client client, int playerNum, VBox boardBox, VBox playerInfoBox, int numOfPlayers, String variant) {
     this.client = client;
+    this.playerNum = playerNum;
     this.boardBox = boardBox;
-    this.sideBox = sideBox;
-    board = new Board(10, numOfPlayers, variant);
+    this.playerInfoBox = playerInfoBox;
+    board = new Board(10, playerNum, numOfPlayers, variant);
 
     constraintSize = board.getConstraintSize();
     cellRadius = (constraintSize * 3) / 4;
@@ -54,6 +58,7 @@ public class GameViewManager {
 
   /**
    * Initializes the game panes (central board and side panel).
+   * Configures and displays both the central game board and the side panel.
    */
   public void setGamePanes() {
     setGameCentralPane();
@@ -62,6 +67,7 @@ public class GameViewManager {
 
   /**
    * Sets up the central pane to display the game board.
+   * Configures a grid layout and populates it with clickable cells representing the board.
    */
   private void setGameCentralPane() {
       GridPane gridPane = new GridPane();
@@ -82,7 +88,7 @@ public class GameViewManager {
             Circle circ = new Circle(cellRadius);
             cell.setCircle(circ);
 
-            circ.setStroke(cell.getInitialColor());
+            circ.setStroke(cell.getZoneColor());
             circ.setFill(cell.getCurrentColor());
 
             circ.setOnMouseClicked(event -> {
@@ -104,10 +110,22 @@ public class GameViewManager {
   }
 
   /**
-   * Sets up the side pane to display
-   * messages received from the server.
+   * Sets up the side pane to display messages and actions for the player.
+   * Displays the player's information and provides options like skipping a turn.
    */
   private void setGameSidePane() {
-    sideBox.setSpacing(10);
+    Label playerNumLabel = new Label("Your number: " + playerNum + "\nYour color: " + ColorManager.getDefaultColorString(playerNum));
+    playerNumLabel.setTextFill(Color.BLACK);
+    playerNumLabel.setFont(new Font("Verdana",20));
+    playerNumLabel.setWrapText(true);
+
+    Button skipButton = new Button("skip turn");
+    skipButton.setMinWidth(125);
+    skipButton.setCursor(Cursor.HAND);
+    skipButton.setStyle("-fx-font-size : 15px;");
+    skipButton.setOnMouseClicked(event -> {
+      client.sendMessage("skip");
+    });
+    playerInfoBox.getChildren().addAll(playerNumLabel, skipButton);
   }
 }
