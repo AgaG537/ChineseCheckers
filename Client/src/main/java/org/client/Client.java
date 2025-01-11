@@ -81,7 +81,7 @@ public class Client {
         while (socket.isConnected()) {
           try {
             messageFromServer = bufferedReader.readLine();
-            clientApp.showMessageFromServer(messageFromServer);
+            clientApp.handleMessageFromServer(messageFromServer);
             System.out.println(messageFromServer);
           } catch (IOException e) {
             closeEverything();

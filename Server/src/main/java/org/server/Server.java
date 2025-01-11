@@ -35,7 +35,7 @@ public class Server {
       while (!serverSocket.isClosed()) {
         if (gameManager.getClientHandlers().size() < gameManager.getMaxUsers() || gameManager.getMaxUsers() == 0) {
           Socket socket = serverSocket.accept();
-          int userNum = gameManager.getClientHandlers().size();
+          int userNum = gameManager.getClientHandlers().size() + 1;
           ClientHandler clientHandler = new ClientHandler(socket, gameManager, userNum);
           new Thread(clientHandler).start();
 

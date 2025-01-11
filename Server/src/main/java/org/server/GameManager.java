@@ -98,7 +98,11 @@ public class GameManager {
    * @param playerCount The total number of players in the game.
    */
   public synchronized void advanceTurn(int playerCount) {
-    currTurn = (currTurn + 1) % playerCount;
+    if (currTurn + 1 > playerCount) {
+      currTurn = 1;
+    } else {
+      currTurn++;
+    }
   }
 
   /**
@@ -106,7 +110,7 @@ public class GameManager {
    *
    */
   public synchronized void setRandomTurn() {
-    currTurn = (int) ((Math.random() * getMaxUsers()));
+    currTurn = (int) ((Math.random() * getMaxUsers()) + 1);
   }
 
   /**
@@ -139,7 +143,7 @@ public class GameManager {
   public synchronized void broadcastGameStarted() {
     for (ClientHandler clientHandler : clientHandlers) {
       try {
-        clientHandler.sendMessage("Starting the game! Wait for an announcement about your turn." + maxUsers + "," + "variant");
+        clientHandler.sendMessage("START." + maxUsers + "," + "variant" + "," + getCurrTurn());
       } catch (Exception e) {
         clientHandler.closeEverything();
       }
@@ -162,7 +166,9 @@ public class GameManager {
     for (ClientHandler clientHandler : clientHandlers) {
       try {
         if (!Objects.equals(clientHandler.getUserNum(), userNum)) {
-          clientHandler.sendMessage("User number " + userNum + " moved: " + move);
+        clientHandler.sendMessage("User number " + userNum + " moved: " + move);
+        } else {
+          clientHandler.sendMessage("You just moved");
         }
       } catch (Exception e) {
         clientHandler.closeEverything();

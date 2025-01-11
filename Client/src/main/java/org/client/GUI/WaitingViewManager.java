@@ -15,17 +15,17 @@ public class WaitingViewManager {
 
 
   private final VBox boardBox;
-  private final VBox sideBox;
+  private final VBox serverMessageBox;
 
   /**
    * Constructor for the WaitingViewManager class.
    *
    * @param boardBox The VBox for displaying the central game board.
-   * @param sideBox The VBox for displaying the side panel.
+   * @param serverMessageBox The VBox for displaying the side panel.
    */
-  public WaitingViewManager(VBox boardBox, VBox sideBox) {
+  public WaitingViewManager(VBox boardBox, VBox serverMessageBox) {
     this.boardBox = boardBox;
-    this.sideBox = sideBox;
+    this.serverMessageBox = serverMessageBox;
   }
 
   /**
@@ -55,11 +55,10 @@ public class WaitingViewManager {
   }
 
   /**
-   * Sets up the side pane to display
-   * messages received from the server.
+   * Sets up the side pane to display messages received from the server.
    */
   private void setWaitingSidePane() {
-    sideBox.setSpacing(10);
-    sideBox.getChildren().clear();
+    serverMessageBox.setSpacing(10);
+    serverMessageBox.getChildren().clear();
   }
 }

@@ -8,40 +8,6 @@ import javafx.scene.paint.Color;
 public class PlayerZoneFactory {
 
   /**
-   * Generates a default color based on the player's number.
-   *
-   * @param playerNum The player's number.
-   * @return The default color for the player.
-   */
-  private static Color generateDefaultColor(int playerNum) {
-    switch (playerNum) {
-      case 1:
-        return Color.BLACK;
-      case 2:
-        return Color.RED;
-      case 3:
-        return Color.GREEN;
-      case 4:
-        return Color.WHITE;
-      case 5:
-        return Color.YELLOW;
-      case 6:
-        return Color.BLUE;
-    }
-    return Color.GREY;
-  }
-
-//  /**
-//   * Determines if the player number is odd (ascending order of the player zone).
-//   *
-//   * @param playerNumber The player's number.
-//   * @return True if the player number is odd, false otherwise.
-//   */
-//  private static boolean isAsc(int playerNumber) {
-//    return playerNumber == 1 || playerNumber == 3 || playerNumber == 5;
-//  }
-
-  /**
    * Adds player zones to the board for a specified number of players.
    *
    * @param numPlayers The number of players.
@@ -72,6 +38,9 @@ public class PlayerZoneFactory {
       default: activeZoneNums[0] = activeZoneNums[1] = activeZoneNums[2] = activeZoneNums[3] = activeZoneNums[4] = activeZoneNums[5] = 1;
     }
 
+    int defaultPlayerNum = 1;
+    int playerNum = 0;
+
     for (int i = 0; i < playerZonesStartPoints.length; i++) {
       int[] zoneStartPoint = playerZonesStartPoints[i];
       int rowStart = zoneStartPoint[0];
@@ -81,10 +50,9 @@ public class PlayerZoneFactory {
       if (i % 2 == 0) {
         for (int row = rowStart; row < rowStart + playerZoneHeight; row++) {
           for (int col = colStart - k; col <= colStart + k; col += 2) {
-            Color color = generateDefaultColor(i + 1);
-            int playerNum;
+            Color color = ColorManager.generateDefaultColor(i + 1);
             if (activeZoneNums[i] == 1) {
-              playerNum = i + 1;
+              playerNum = defaultPlayerNum;
             } else {
               playerNum = 0;
             }
@@ -95,10 +63,9 @@ public class PlayerZoneFactory {
       } else {
         for (int row = rowStart; row > rowStart - playerZoneHeight; row--) {
           for (int col = colStart - k; col <= colStart + k; col += 2) {
-            Color color = generateDefaultColor(i + 1);
-            int playerNum;
+            Color color = ColorManager.generateDefaultColor(i + 1);
             if (activeZoneNums[i] == 1) {
-              playerNum = i + 1;
+              playerNum = defaultPlayerNum;
             } else {
               playerNum = 0;
             }
@@ -108,53 +75,17 @@ public class PlayerZoneFactory {
         }
       }
 
-    }
+      if (playerNum == defaultPlayerNum) {
+        defaultPlayerNum++;
+      }
 
-//    switch (numPlayers) {
-//      case 2:
-//        // player num 1 upper zone
-//        cells = PlayerZone.addPlayerZone(playerZonesStartPoints[0][0],playerZonesStartPoints[0][1], generateDefaultColor(1),playerZoneHeight,1,cells,isAsc(1));
-//        //player num 4 bottom zone
-//        cells = PlayerZone.addPlayerZone(playerZonesStartPoints[3][0],playerZonesStartPoints[3][1], generateDefaultColor(4),playerZoneHeight,4,cells,isAsc(4));
-//      break;
-//      case 3:
-//        // player num 1 upper zone
-//        cells = PlayerZone.addPlayerZone(playerZonesStartPoints[0][0],playerZonesStartPoints[0][1], generateDefaultColor(1),playerZoneHeight,1,cells,isAsc(1));
-//        // player num 3 right bottom
-//        cells = PlayerZone.addPlayerZone(playerZonesStartPoints[2][0],playerZonesStartPoints[2][1], generateDefaultColor(3),playerZoneHeight,3,cells,isAsc(3));
-//        // player num 5 left bottom
-//        cells = PlayerZone.addPlayerZone(playerZonesStartPoints[4][0],playerZonesStartPoints[4][1], generateDefaultColor(4),playerZoneHeight,4,cells,isAsc(4));
-//      break;
-//      case 4:
-//        // player num 2 right upper
-//        cells = PlayerZone.addPlayerZone(playerZonesStartPoints[1][0],playerZonesStartPoints[1][1], generateDefaultColor(2),playerZoneHeight,2,cells,isAsc(2));
-//        // player num 3 right bottom
-//        cells = PlayerZone.addPlayerZone(playerZonesStartPoints[2][0],playerZonesStartPoints[2][1], generateDefaultColor(3),playerZoneHeight,3,cells,isAsc(3));
-//        // player num 5 left bottom
-//        cells = PlayerZone.addPlayerZone(playerZonesStartPoints[4][0],playerZonesStartPoints[4][1], generateDefaultColor(5),playerZoneHeight,5,cells,isAsc(5));
-//        // player num 6 left upper
-//        cells = PlayerZone.addPlayerZone(playerZonesStartPoints[5][0],playerZonesStartPoints[5][1], generateDefaultColor(6),playerZoneHeight,6,cells,isAsc(6));
-//      break;
-//      case 6:
-//        // player num 1 upper zone
-//        cells = PlayerZone.addPlayerZone(playerZonesStartPoints[0][0],playerZonesStartPoints[0][1], generateDefaultColor(1),playerZoneHeight,1,cells,isAsc(1));
-//        // player num 2 right upper
-//        cells = PlayerZone.addPlayerZone(playerZonesStartPoints[1][0],playerZonesStartPoints[1][1], generateDefaultColor(2),playerZoneHeight,2,cells,isAsc(2));
-//        // player num 3 right bottom
-//        cells = PlayerZone.addPlayerZone(playerZonesStartPoints[2][0],playerZonesStartPoints[2][1], generateDefaultColor(3),playerZoneHeight,3,cells,isAsc(3));
-//        //player num 4 bottom zone
-//        cells = PlayerZone.addPlayerZone(playerZonesStartPoints[3][0],playerZonesStartPoints[3][1], generateDefaultColor(4),playerZoneHeight,4,cells,isAsc(4));
-//        // player num 5 left bottom
-//        cells = PlayerZone.addPlayerZone(playerZonesStartPoints[4][0],playerZonesStartPoints[4][1], generateDefaultColor(5),playerZoneHeight,5,cells,isAsc(5));
-//        // player num 6 left upper
-//        cells = PlayerZone.addPlayerZone(playerZonesStartPoints[5][0],playerZonesStartPoints[5][1], generateDefaultColor(6),playerZoneHeight,6,cells,isAsc(6));
-//        break;
-//    }
+    }
     return cells;
   }
 
   /**
-   * Sets the initial player number and color for a given cell, and places a pawn if the player number is non-zero.
+   * Configures a cell by setting its initial player number and color.
+   * Creates a pawn for the player if their number is non-zero.
    *
    * @param color The color to set for the cell.
    * @param playerNum The player's number (0 if no player, otherwise the player's number).
@@ -162,7 +93,7 @@ public class PlayerZoneFactory {
    */
   public static void setCellZone(Color color, int playerNum, Cell currentCell) {
     currentCell.setInitialPlayerNum(playerNum);
-    currentCell.setInitialColor(color);
+    currentCell.setZoneColor(color);
     if (playerNum != 0) {
       Pawn pawn = new Pawn(playerNum,color,currentCell);
     }
