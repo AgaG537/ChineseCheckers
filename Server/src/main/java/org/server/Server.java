@@ -23,7 +23,7 @@ public class Server {
    */
   public Server(ServerSocket serverSocket) {
     this.serverSocket = serverSocket;
-    this.gameManager = new GameManager(new BoardManager());
+    this.gameManager = new GameManager();
   }
 
   /**
@@ -41,6 +41,7 @@ public class Server {
 
           if (gameManager.getClientHandlers().size() == gameManager.getMaxUsers()) {
             gameManager.startGame();
+            gameManager.setBoard(new BoardManager(10, gameManager.getMaxUsers(), "standard"));
             gameManager.broadcastGameStarted();
           }
         }

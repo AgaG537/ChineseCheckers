@@ -16,6 +16,8 @@ import javafx.scene.text.Font;
 import org.client.Board.*;
 import org.client.Client;
 
+import java.util.ArrayList;
+
 /**
  * Handles the layout and functionality of the game view during play.
  * Manages the central game board and the side pane for updates/messages.
@@ -33,6 +35,7 @@ public class GameViewManager {
   private final int vGapSize;
 
   private final Board board;
+  private ArrayList<String> rawCommand;
 
   /**
    * Constructor for the GameViewManager class.
@@ -50,6 +53,7 @@ public class GameViewManager {
     this.boardBox = boardBox;
     this.playerInfoBox = playerInfoBox;
     board = new Board(10, playerNum, numOfPlayers, variant);
+    rawCommand = new ArrayList<>();
 
     constraintSize = board.getConstraintSize();
     cellRadius = (constraintSize * 3) / 4;
@@ -93,10 +97,20 @@ public class GameViewManager {
 
             circ.setOnMouseClicked(event -> {
               if (cell.isInsideBoard()) {
-                String tmp = "%d %d %d";
-                client.sendMessage(String.format(tmp,cell.getRow(),cell.getCol(),cell.getInitialPlayerNum()));
-                System.out.printf("Clicked on cell: row=%d, col=%d, user=%d%n",
-                    cell.getRow(), cell.getCol(), cell.getInitialPlayerNum());
+                String tmp;
+                try {
+                  tmp = String.format("%d %d %d", cell.getRow(), cell.getCol(), cell.getPawn().getPlayerNum());
+                } catch (NullPointerException e) {
+                  tmp = String.format("%d %d %d", cell.getRow(), cell.getCol(), 0);
+                }
+                rawCommand.add(tmp);
+                if (rawCommand.size() == 2) {
+                  String message = rawCommand.get(0) + " " + rawCommand.get(1);
+                  client.sendMessage(message);
+                  System.out.println("Message sent: " + message);
+                  rawCommand.clear();
+                }
+                System.out.printf("Clicked on cell: row=%d, col=%d, player=%d\n",cell.getRow(), cell.getCol(), cell.getInitialPlayerNum());
               }
             });
 

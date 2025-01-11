@@ -22,11 +22,14 @@ public class GameManager {
   /**
    * Constructs a GameManager.
    */
-  public GameManager(Board board) {
+  public GameManager() {
     this.clientHandlers = new ArrayList<>();
     this.maxUsers = 0;
     this.currTurn = 0;
     this.gameStarted = false;
+  }
+
+  public void setBoard(Board board) {
     this.currentBoard = board;
   }
 
@@ -177,6 +180,12 @@ public class GameManager {
   }
 
   public int validateMove(int userNum, String input) {
-    return 0;
+    boolean valid = currentBoard.validateMove(userNum, input);
+    if (valid) {
+      return 0;
+    }
+    else {
+      return 1;
+    }
   }
 }
