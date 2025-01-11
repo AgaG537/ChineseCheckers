@@ -3,8 +3,8 @@ package org.client.Board;
 import javafx.scene.paint.Color;
 
 public class Pawn {
-  private int playerNum;
-  private Color color;
+  private final int playerNum;
+  private final Color color;
   private Cell currCell = null;
 
 

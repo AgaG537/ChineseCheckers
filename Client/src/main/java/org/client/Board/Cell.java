@@ -14,8 +14,7 @@ public class Cell {
   private boolean insideBoard;
   private boolean occupied;
   private int initialPlayerNum;
-  private Color initialColor;
-  //private int currentPlayerNum;
+  private Color zoneColor;
   private Color currentColor;
   private Pawn pawn;
   private Circle circle;
@@ -31,7 +30,7 @@ public class Cell {
     this.col = col;
     insideBoard = false;
     initialPlayerNum = 0;
-    initialColor = currentColor = Color.TRANSPARENT;
+    zoneColor = Color.TRANSPARENT;
     occupied = false;
     pawn = null;
   }
@@ -83,29 +82,11 @@ public class Cell {
     initialPlayerNum = playerNum;
   }
 
-
-  /**
-   * @return The current player number
-   * assigned to the cell (0 if unoccupied).
-   */
-//  public int getCurrentPlayerNum() {
-//    return currentPlayerNum;
-//  }
-
-  /**
-   * Updates the current player number for the cell.
-   *
-   * @param playerNum The new player number.
-   */
-//  public void setCurrentPlayerNum(int playerNum) {
-//    currentPlayerNum = playerNum;
-//  }
-
   /**
    * @return The initial color of the cell.
    */
-  public Color getInitialColor() {
-    return initialColor;
+  public Color getZoneColor() {
+    return zoneColor;
   }
 
   /**
@@ -113,8 +94,8 @@ public class Cell {
    *
    * @param color The color to assign.
    */
-  public void setInitialColor(Color color) {
-    initialColor = color;
+  public void setZoneColor(Color color) {
+    zoneColor = color;
   }
 
   /**
@@ -172,7 +153,7 @@ public class Cell {
     this.circle = circle;
     circle.setStyle("-fx-stroke-width: 2");
     circle.setCursor(Cursor.HAND);
-    circle.setStroke(initialColor);
+    circle.setStroke(zoneColor);
     updateCircle();
   }
 
