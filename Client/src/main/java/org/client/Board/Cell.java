@@ -30,7 +30,7 @@ public class Cell {
     this.col = col;
     insideBoard = false;
     initialPlayerNum = 0;
-    zoneColor = Color.TRANSPARENT;
+    zoneColor = currentColor = Color.TRANSPARENT;
     occupied = false;
     pawn = null;
   }
