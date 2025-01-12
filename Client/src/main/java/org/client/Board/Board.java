@@ -115,4 +115,29 @@ public class Board {
     return cells[i][j];
   }
 
+  public void handleCommand(String command) {
+    int[] vals = decodeInput(command);
+
+    int rowStart = vals[0];
+    int colStart = vals[1];
+    int rowEnd = vals[2];
+    int colEnd = vals[3];
+
+    Pawn pawn = cells[rowStart][colStart].getPawn();
+    cells[rowStart][colStart].pawnMoveOut();
+    cells[rowEnd][colEnd].pawnMoveIn(pawn);
+  }
+
+  private int[] decodeInput(String input) {
+    String[] tokens = input.split(" ");
+    int[] result = new int[tokens.length];
+    try {
+      for (int i = 1; i < tokens.length; i++) {
+        result[i] = Integer.parseInt(tokens[i]);
+      }
+    } catch (NumberFormatException e) {
+      e.printStackTrace();
+    }
+    return result;
+  }
 }

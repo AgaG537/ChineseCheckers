@@ -164,8 +164,7 @@ public class GameManager {
     if (!gameStarted) {
       return;
     }
-
-    String move = currentBoard.makeMove(userNum, input);
+    String move = currentBoard.makeMove(input);
     for (ClientHandler clientHandler : clientHandlers) {
       try {
         if (!Objects.equals(clientHandler.getUserNum(), userNum)) {

@@ -8,7 +8,7 @@ import javafx.scene.shape.Circle;
  * Represents a single cell on the game board.
  * Tracks the state, position, and ownership of the cell.
  */
-public class Cell {
+public class Cell extends Circle {
   private final int row;
   private final int col;
   private boolean insideBoard;
@@ -33,6 +33,7 @@ public class Cell {
     zoneColor = currentColor = Color.TRANSPARENT;
     occupied = false;
     pawn = null;
+    this.setRadius(0);
   }
 
   /**
@@ -130,17 +131,18 @@ public class Cell {
     this.pawn = pawn;
     this.occupied = true;
     this.currentColor = pawn.getColor();
+    updateCircle();
   }
 
   /**
    * Removes the pawn from the cell, marking it as unoccupied.
    *
-   * @param pawn The pawn to remove from the cell.
    */
-  public void pawnMoveOut(Pawn pawn) {
+  public void pawnMoveOut() {
     this.pawn = null;
     this.occupied = false;
     this.currentColor = Color.TRANSPARENT;
+    updateCircle();
   }
 
   /**
@@ -161,6 +163,9 @@ public class Cell {
    * Updates the Circle to reflect the current color of the cell.
    */
   public void updateCircle() {
+    if (circle == null) {
+      return;
+    }
     circle.setFill(currentColor);
   }
 }

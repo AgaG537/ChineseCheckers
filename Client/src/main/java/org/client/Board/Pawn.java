@@ -27,7 +27,7 @@ public class Pawn {
   }
 
   public void setCurrCell(Cell currCell) {
-    currCell.pawnMoveOut(this);
+    currCell.pawnMoveOut();
     this.currCell = currCell;
     currCell.pawnMoveIn(this);
   }

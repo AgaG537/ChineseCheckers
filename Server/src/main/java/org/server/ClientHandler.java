@@ -79,7 +79,6 @@ public class ClientHandler implements Runnable {
     try {
       while (socket.isConnected()) {
         if (gameManager.isGameStarted() && userNum == gameManager.getCurrTurn()) {
-          //sendMessage("It's your turn!");
           String message = bufferedReader.readLine();
           int flag = gameManager.validateMove(userNum, message);
           switch (flag) {

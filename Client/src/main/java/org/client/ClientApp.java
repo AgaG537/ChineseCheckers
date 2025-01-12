@@ -69,7 +69,10 @@ public class ClientApp extends Application {
         } else if (message.startsWith("START")) {
           guiManager.setGamePanes(message);
           guiManager.addCurrPlayerInfo();
-        } else {
+        } else if (message.startsWith("[CMD]")) {
+
+        }
+        else {
           guiManager.addLabel(message);
         }
       }

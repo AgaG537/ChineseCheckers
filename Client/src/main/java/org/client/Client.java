@@ -1,6 +1,8 @@
 package org.client;
 
 
+import org.client.Board.Board;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -12,6 +14,7 @@ public class Client {
   private BufferedReader bufferedReader;
   private BufferedWriter bufferedWriter;
   private ClientApp clientApp;
+  private Board board;
 
   /**
    * Constructs a Client with the specified socket and GUI.
@@ -45,6 +48,10 @@ public class Client {
     } catch (IOException e) {
       closeEverything();
     }
+  }
+
+  public void setBoard(Board board) {
+    this.board = board;
   }
 
 
@@ -81,8 +88,13 @@ public class Client {
         while (socket.isConnected()) {
           try {
             messageFromServer = bufferedReader.readLine();
-            clientApp.handleMessageFromServer(messageFromServer);
-            System.out.println(messageFromServer);
+            if (messageFromServer.startsWith("[CMD]")) {
+              board.handleCommand(messageFromServer);
+            }
+            else {
+              clientApp.handleMessageFromServer(messageFromServer);
+              System.out.println(messageFromServer);
+            }
           } catch (IOException e) {
             closeEverything();
           }

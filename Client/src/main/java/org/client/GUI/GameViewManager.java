@@ -53,6 +53,7 @@ public class GameViewManager {
     this.boardBox = boardBox;
     this.playerInfoBox = playerInfoBox;
     board = new Board(10, playerNum, numOfPlayers, variant);
+    client.setBoard(board);
     rawCommand = new ArrayList<>();
 
     constraintSize = board.getConstraintSize();
@@ -89,13 +90,14 @@ public class GameViewManager {
           Cell cell = board.getCell(i,j);
 
           if (cell.isInsideBoard()){
-            Circle circ = new Circle(cellRadius);
-            cell.setCircle(circ);
+            cell.setRadius(cellRadius);
+            cell.setStyle("-fx-stroke-width: 2");
+            cell.setCursor(Cursor.HAND);
 
-            circ.setStroke(cell.getZoneColor());
-            circ.setFill(cell.getCurrentColor());
+            cell.setStroke(cell.getZoneColor());
+            cell.setFill(cell.getCurrentColor());
 
-            circ.setOnMouseClicked(event -> {
+            cell.setOnMouseClicked(event -> {
               if (cell.isInsideBoard()) {
                 String tmp;
                 try {
@@ -114,7 +116,7 @@ public class GameViewManager {
               }
             });
 
-            gridPane.add(circ, j, i);
+            gridPane.add(cell, j, i);
           }
         }
       }

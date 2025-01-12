@@ -154,66 +154,104 @@ public class BoardManager implements Board {
   }
 
   @Override
-  public String makeMove(int userId, String input) {
-    return input;
+  public String makeMove(String input) {
+    int[] moveDetails = decodeInput(input);
+    int rowStart = moveDetails[0];
+    int colStart = moveDetails[1];
+    int rowEnd = moveDetails[3];
+    int colEnd = moveDetails[4];
+
+    Pawn pawn = cells[rowStart][colStart].getPawn();
+    cells[rowStart][colStart].pawnMoveOut();
+    cells[rowEnd][colEnd].pawnMoveIn(pawn);
+    return "[CMD] " + rowStart + " " + colStart + " " + rowEnd + " " + colEnd;
+//    return input;
   }
 
   @Override
   public boolean validateMove(int userNum, String input) {
-    int[] vals = decodeInput(input);
+    int[] moveDetails = decodeInput(input);
+    int startRow = moveDetails[0];
+    int startCol = moveDetails[1];
+    int startPlayer = moveDetails[2];
+    int endRow = moveDetails[3];
+    int endCol = moveDetails[4];
+    int endPlayer = moveDetails[5];
 
-    int rowStart = vals[0];
-    int colStart = vals[1];
-    int playerStart = vals[2];
-    int rowEnd = vals[3];
-    int colEnd = vals[4];
-    int playerEnd = vals[5];
+    System.out.printf("Player: %d clicked pawn: %d\n", userNum, startPlayer);
+    System.out.printf("Start: [%d, %d], End: [%d, %d]\n", startRow, startCol, endRow, endCol);
 
+    // Validate starting and ending positions
+    if (!isValidStartingPoint(userNum, startPlayer) || !isValidEndingPoint(endPlayer)) {
+      return false;
+    }
+
+    // Directions for movement
     int[][] directions = {
-        {-1, -1}, //upper left
-        {0, -2}, // left
-        {1,-1}, // bottom left
-        {-1,-1}, // bottom right
-        {0,2}, // right
-        {-1,1} // upper right
+        {-1, -1}, {0, -2}, {1, -1},  // Upper left, left, bottom left
+        {1, 1}, {0, 2}, {-1, 1}      // Bottom right, right, upper right
     };
 
-    Pawn pawn = cells[rowStart][colStart].getPawn();
     ArrayList<int[]> visited = new ArrayList<>();
 
-    // Add verification if pawn exists
+    // Check single-step moves
+    if (isValidSingleStep(startRow, startCol, endRow, endCol, directions)) {
+      return true;
+    }
 
-    //Move by one to empty space
+    // Check jumps
+    return isValidJump(startRow, startCol, endRow, endCol, directions, visited);
+  }
+
+  private boolean isValidStartingPoint(int userNum, int startPlayer) {
+    if (startPlayer != userNum) {
+      System.out.println("Invalid start: Not your pawn.");
+      return false;
+    }
+    return true;
+  }
+
+  private boolean isValidEndingPoint(int endPlayer) {
+    if (endPlayer != 0) {
+      System.out.println("Invalid end: Target cell is occupied.");
+      return false;
+    }
+    return true;
+  }
+
+  private boolean isValidSingleStep(int startRow, int startCol, int endRow, int endCol, int[][] directions) {
     for (int[] direction : directions) {
-      int tmpRow = rowStart + direction[0];
-      int tmpCol = colStart + direction[1];
-      if (tmpRow == rowEnd && tmpCol == colEnd) {
-        if (cells[tmpRow][tmpCol].isOccupied()) {
-          return false;
-        }
+      int targetRow = startRow + direction[0];
+      int targetCol = startCol + direction[1];
+      if (targetRow == endRow && targetCol == endCol && !cells[targetRow][targetCol].isOccupied()) {
+        System.out.println("Valid single-step move.");
         return true;
       }
     }
+    return false;
+  }
 
-    // Jumps
+  private boolean isValidJump(int startRow, int startCol, int endRow, int endCol, int[][] directions, ArrayList<int[]> visited) {
     for (int[] direction : directions) {
-      int tmpRow = rowStart + direction[0];
-      int tmpCol = colStart + direction[1];
-      for (Cell neighbor : cells[rowStart][colStart].getNeighbors()) {
-        tmpRow = tmpRow + direction[0];
-        tmpCol = tmpCol + direction[1];
-        if (0 <= tmpRow && tmpRow < cells.length && 0 <= tmpCol && tmpCol < cells[0].length) {
-          if (cells[tmpRow][tmpCol].isOccupied()) {
-            return false;
-          }
-          if (tmpRow == rowEnd && tmpCol == colEnd) {
+      int jumpOverRow = startRow + direction[0];
+      int jumpOverCol = startCol + direction[1];
+
+      // Check if the adjacent cell is within bounds and occupied
+      if (isWithinBounds(jumpOverRow, jumpOverCol) && cells[jumpOverRow][jumpOverCol].isOccupied()) {
+        int landingRow = jumpOverRow + direction[0];
+        int landingCol = jumpOverCol + direction[1];
+
+        // Check if the landing cell is within bounds and unoccupied
+        if (isWithinBounds(landingRow, landingCol) && !cells[landingRow][landingCol].isOccupied()) {
+          if (landingRow == endRow && landingCol == endCol) {
+            System.out.println("Valid jump move.");
             return true;
           }
-          else {
-            visited.add(new int[]{rowStart,colStart});
-            if (validateMoveRecursively(tmpRow,tmpCol,rowEnd,colEnd,visited)) {
-              return true;
-            }
+
+          // Add to visited and recurse
+          visited.add(new int[]{startRow, startCol});
+          if (validateMoveRecursively(landingRow, landingCol, endRow, endCol, visited)) {
+            return true;
           }
         }
       }
@@ -221,48 +259,46 @@ public class BoardManager implements Board {
     return false;
   }
 
-  public boolean validateMoveRecursively(int startRow, int startCol, int endRow, int endCol, ArrayList<int[]> visited) {
-    if (cells[startRow][startCol].isOccupied()) {
+  private boolean validateMoveRecursively(int currentRow, int currentCol, int endRow, int endCol, ArrayList<int[]> visited) {
+    if (cells[currentRow][currentCol].isOccupied()) {
+      System.out.println("Invalid recursive move: Current cell is occupied.");
       return false;
     }
-    if (startRow == endRow && startCol == endCol) {
+    if (currentRow == endRow && currentCol == endCol) {
+      System.out.println("Recursive move successful.");
       return true;
     }
-    if (visited.stream().anyMatch(arr -> Arrays.equals(arr, new int[]{startRow, startCol}))) {
+    if (visited.stream().anyMatch(cell -> Arrays.equals(cell, new int[]{currentRow, currentCol}))) {
+      System.out.println("Invalid recursive move: Already visited this cell.");
       return false;
     }
 
-    visited.add(new int[]{startRow, startCol});
-
+    visited.add(new int[]{currentRow, currentCol});
     int[][] directions = {
-        {-1, -1}, //upper left
-        {0, -2}, // left
-        {1,-1}, // bottom left
-        {-1,-1}, // bottom right
-        {0,2}, // right
-        {-1,1} // upper right
+        {-1, -1}, {0, -2}, {1, -1},  // Upper left, left, bottom left
+        {1, 1}, {0, 2}, {-1, 1}      // Bottom right, right, upper right
     };
 
     for (int[] direction : directions) {
-      int tmpRow = startRow + direction[0];
-      int tmpCol = startCol + direction[1];
-      if (0 <= tmpRow && tmpRow < cells.length && 0 <= tmpCol && tmpCol < cells[0].length) {
-        if (cells[tmpRow][tmpCol].isOccupied()) {
-          int jumpRow = tmpRow + direction[0];
-          int jumpCol = tmpCol + direction[1];
-
-          if (0 <= jumpRow && jumpRow < cells.length && 0 <= jumpCol && jumpCol < cells[0].length) {
-            if (!cells[jumpRow][jumpCol].isOccupied()) {
-              if (validateMoveRecursively(jumpRow,jumpCol,endRow,endCol,visited)) {
-                return true;
-              }
-            }
+      int jumpOverRow = currentRow + direction[0];
+      int jumpOverCol = currentCol + direction[1];
+      if (isWithinBounds(jumpOverRow, jumpOverCol) && cells[jumpOverRow][jumpOverCol].isOccupied()) {
+        int landingRow = jumpOverRow + direction[0];
+        int landingCol = jumpOverCol + direction[1];
+        if (isWithinBounds(landingRow, landingCol) && !cells[landingRow][landingCol].isOccupied()) {
+          if (validateMoveRecursively(landingRow, landingCol, endRow, endCol, visited)) {
+            return true;
           }
-          }
+        }
       }
     }
     return false;
   }
+
+  private boolean isWithinBounds(int row, int col) {
+    return row >= 0 && row < cells.length && col >= 0 && col < cells[0].length;
+  }
+
 
   private int[] decodeInput(String input) {
     String[] tokens = input.split(" ");

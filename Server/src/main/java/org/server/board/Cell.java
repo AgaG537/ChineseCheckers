@@ -108,9 +108,8 @@ public class Cell {
   /**
    * Removes the pawn from the cell, marking it as unoccupied.
    *
-   * @param pawn The pawn to remove from the cell.
    */
-  public void pawnMoveOut(Pawn pawn) {
+  public void pawnMoveOut() {
     this.pawn = null;
     this.occupied = false;
   }
