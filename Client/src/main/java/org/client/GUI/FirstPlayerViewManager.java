@@ -73,8 +73,8 @@ public class FirstPlayerViewManager {
    */
   private void setFirstPlayerSidePane() {
     Label titleLabel = new Label("GAME SETUP");
-    titleLabel.setFont(new Font("Verdana",35));
-    titleLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: black");
+    titleLabel.setStyle("-fx-font-family: Verdana; -fx-font-size: 35; " +
+                        "-fx-font-weight: bold; -fx-text-fill: black");
 
     Label chooseVariantLabel = new Label("Choose game variant:");
     chooseVariantLabel.setFont(new Font("Verdana",23));

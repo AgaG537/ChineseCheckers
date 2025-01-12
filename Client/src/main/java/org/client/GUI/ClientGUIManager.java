@@ -5,6 +5,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -28,6 +29,7 @@ public class ClientGUIManager {
   private final ScrollPane sidePane;
   private final VBox boardBox;
   private final VBox sideBox;
+  private final VBox infoBox;
   private final VBox serverMessageBox;
   private final VBox playerInfoBox;
   private final VBox currPlayerInfoBox;
@@ -47,6 +49,7 @@ public class ClientGUIManager {
     sidePane = new ScrollPane();
     boardBox = new VBox();
     sideBox = new VBox();
+    infoBox = new VBox();
     playerInfoBox = new VBox();
     currPlayerInfoBox = new VBox();
     serverMessageBox = new VBox();
@@ -75,6 +78,7 @@ public class ClientGUIManager {
   public void setWaitingPanes() {
     sideBox.getChildren().clear();
     sideBox.getChildren().add(serverMessageBox);
+    sideBox.setPadding(new Insets(0));
     WaitingViewManager manager = new WaitingViewManager(boardBox, serverMessageBox);
     manager.setWaitingPanes();
   }
@@ -95,7 +99,10 @@ public class ClientGUIManager {
     GameViewManager manager = new GameViewManager(client, playerNum, boardBox, playerInfoBox, numOfPlayers, variant);
     manager.setGamePanes();
 
-    sideBox.getChildren().addAll(playerInfoBox, currPlayerInfoBox, serverMessageBox);
+    infoBox.setStyle("-fx-border-color: black; -fx-border-insets: 5; -fx-border-width: 3; -fx-border-style: dashed;");
+    infoBox.getChildren().addAll(playerInfoBox, currPlayerInfoBox);
+    serverMessageBox.setPadding(new Insets(0,15,0,15));
+    sideBox.getChildren().addAll(infoBox, serverMessageBox);
   }
 
   /**
@@ -106,7 +113,7 @@ public class ClientGUIManager {
   public void addLabel(String message) {
     Label messageLabel = new Label(message);
     messageLabel.setTextFill(Color.BLACK);
-    messageLabel.setFont(new Font("Verdana",15));
+    messageLabel.setFont(new Font("Verdana",18));
     messageLabel.setWrapText(true);
     serverMessageBox.getChildren().add(messageLabel);
   }
@@ -117,22 +124,46 @@ public class ClientGUIManager {
   public void addCurrPlayerInfo() {
     currPlayerInfoBox.getChildren().clear();
 
-    Label messageLabel;
-    if (currTurn == playerNum) {
-      messageLabel = new Label("It's your turn!");
-    } else {
-      messageLabel = new Label("Current player number: " + currTurn + "\nWait for your turn.");
-    }
+    Label titleLabel = new Label("CURRENT TURN:");
+    titleLabel.setStyle("-fx-font-family: Verdana; -fx-font-size: 25; " +
+        "-fx-font-weight: bold; -fx-text-fill: black");
+
+    Label messageLabel = new Label();
     messageLabel.setTextFill(Color.BLACK);
     messageLabel.setFont(new Font("Verdana",20));
     messageLabel.setWrapText(true);
-    currPlayerInfoBox.getChildren().add(messageLabel);
+    messageLabel.setAlignment(Pos.CENTER);
+    messageLabel.setPadding(new Insets(0,0,5,0));
+
+    currPlayerInfoBox.setPadding(new Insets(15));
+    currPlayerInfoBox.setPrefHeight(130);
+
+    if (currTurn == playerNum) {
+      messageLabel.setText("It's your turn!");
+
+      Button skipButton = new Button("SKIP TURN");
+      skipButton.setMinWidth(125);
+      skipButton.setCursor(Cursor.HAND);
+      skipButton.setStyle("-fx-font-size : 15px;");
+      skipButton.setOnMouseClicked(event -> {
+        client.sendMessage("skip");
+      });
+
+      currPlayerInfoBox.getChildren().addAll(titleLabel, messageLabel, skipButton);
+    } else {
+      messageLabel.setText("Current player: " + currTurn + "\nWait for your turn.");
+      currPlayerInfoBox.getChildren().addAll(titleLabel, messageLabel);
+    }
 
     if(currTurn + 1 > numOfPlayers) {
       currTurn = 1;
     } else {
       currTurn++;
     }
+  }
+
+  public void clearServerMessageBox() {
+    serverMessageBox.getChildren().clear();
   }
 
   /**
@@ -163,7 +194,8 @@ public class ClientGUIManager {
       }
     });
 
-    serverMessageBox.setSpacing(10);
+    serverMessageBox.setSpacing(15);
+    serverMessageBox.setPadding(new Insets(15));
   }
 
 }

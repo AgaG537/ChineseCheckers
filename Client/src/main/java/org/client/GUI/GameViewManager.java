@@ -4,14 +4,12 @@ package org.client.GUI;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import org.client.Board.*;
 import org.client.Client;
@@ -26,6 +24,7 @@ public class GameViewManager {
 
   private final Client client;
   private final int playerNum;
+  private final int numOfPlayers;
 
   private final VBox boardBox;
   private final VBox playerInfoBox;
@@ -50,6 +49,7 @@ public class GameViewManager {
   public GameViewManager(Client client, int playerNum, VBox boardBox, VBox playerInfoBox, int numOfPlayers, String variant) {
     this.client = client;
     this.playerNum = playerNum;
+    this.numOfPlayers = numOfPlayers;
     this.boardBox = boardBox;
     this.playerInfoBox = playerInfoBox;
     board = new Board(10, playerNum, numOfPlayers, variant);
@@ -130,18 +130,17 @@ public class GameViewManager {
    * Displays the player's information and provides options like skipping a turn.
    */
   private void setGameSidePane() {
-    Label playerNumLabel = new Label("Your number: " + playerNum + "\nYour color: " + ColorManager.getDefaultColorString(playerNum));
+    Label titleLabel = new Label("PLAYER INFO:");
+    titleLabel.setStyle("-fx-font-family: Verdana; -fx-font-size: 25; " +
+        "-fx-font-weight: bold; -fx-text-fill: black");
+
+    String colorName = ColorManager.getDefaultColorString(numOfPlayers, playerNum);
+    Label playerNumLabel = new Label("number: " + playerNum + "\ncolor: " + colorName);
     playerNumLabel.setTextFill(Color.BLACK);
     playerNumLabel.setFont(new Font("Verdana",20));
+    playerNumLabel.setAlignment(Pos.CENTER);
     playerNumLabel.setWrapText(true);
-
-    Button skipButton = new Button("skip turn");
-    skipButton.setMinWidth(125);
-    skipButton.setCursor(Cursor.HAND);
-    skipButton.setStyle("-fx-font-size : 15px;");
-    skipButton.setOnMouseClicked(event -> {
-      client.sendMessage("skip");
-    });
-    playerInfoBox.getChildren().addAll(playerNumLabel, skipButton);
+    playerInfoBox.setPadding(new Insets(15));
+    playerInfoBox.getChildren().addAll(titleLabel, playerNumLabel);
   }
 }
