@@ -26,6 +26,7 @@ public class GameViewManager {
 
   private final Client client;
   private final int playerNum;
+  private final int numOfPlayers;
 
   private final VBox boardBox;
   private final VBox playerInfoBox;
@@ -50,6 +51,7 @@ public class GameViewManager {
   public GameViewManager(Client client, int playerNum, VBox boardBox, VBox playerInfoBox, int numOfPlayers, String variant) {
     this.client = client;
     this.playerNum = playerNum;
+    this.numOfPlayers = numOfPlayers;
     this.boardBox = boardBox;
     this.playerInfoBox = playerInfoBox;
     board = new Board(10, playerNum, numOfPlayers, variant);
@@ -130,7 +132,8 @@ public class GameViewManager {
    * Displays the player's information and provides options like skipping a turn.
    */
   private void setGameSidePane() {
-    Label playerNumLabel = new Label("Your number: " + playerNum + "\nYour color: " + ColorManager.getDefaultColorString(playerNum));
+    String colorName = ColorManager.getDefaultColorString(numOfPlayers, playerNum);
+    Label playerNumLabel = new Label("Your number: " + playerNum + "\nYour color: " + colorName);
     playerNumLabel.setTextFill(Color.BLACK);
     playerNumLabel.setFont(new Font("Verdana",20));
     playerNumLabel.setWrapText(true);
