@@ -89,6 +89,7 @@ public class ClientHandler implements Runnable {
               gameManager.advanceTurn(gameManager.getClientHandlers().size()); break;
             default:
               System.out.println("Something weird happened!");
+              sendMessage("Invalid move!");
           }
         } else {
           if (bufferedReader.ready()) {

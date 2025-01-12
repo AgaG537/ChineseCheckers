@@ -132,19 +132,17 @@ public class GameViewManager {
    * Displays the player's information and provides options like skipping a turn.
    */
   private void setGameSidePane() {
+    Label titleLabel = new Label("PLAYER INFO:");
+    titleLabel.setStyle("-fx-font-family: Verdana; -fx-font-size: 25; " +
+        "-fx-font-weight: bold; -fx-text-fill: black");
+
     String colorName = ColorManager.getDefaultColorString(numOfPlayers, playerNum);
-    Label playerNumLabel = new Label("Your number: " + playerNum + "\nYour color: " + colorName);
+    Label playerNumLabel = new Label("number: " + playerNum + "\ncolor: " + colorName);
     playerNumLabel.setTextFill(Color.BLACK);
     playerNumLabel.setFont(new Font("Verdana",20));
+    playerNumLabel.setAlignment(Pos.CENTER);
     playerNumLabel.setWrapText(true);
-
-    Button skipButton = new Button("skip turn");
-    skipButton.setMinWidth(125);
-    skipButton.setCursor(Cursor.HAND);
-    skipButton.setStyle("-fx-font-size : 15px;");
-    skipButton.setOnMouseClicked(event -> {
-      client.sendMessage("skip");
-    });
-    playerInfoBox.getChildren().addAll(playerNumLabel, skipButton);
+    playerInfoBox.setPadding(new Insets(15));
+    playerInfoBox.getChildren().addAll(titleLabel, playerNumLabel);
   }
 }

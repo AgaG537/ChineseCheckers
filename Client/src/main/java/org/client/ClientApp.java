@@ -62,6 +62,7 @@ public class ClientApp extends Application {
       public void run() {
 
         if (message.startsWith("User number ") || message.equals("You just moved")) {
+          guiManager.clearServerMessageBox();
           guiManager.addCurrPlayerInfo();
         } else if (message.equals("Game options correct.")) {
           guiManager.setWaitingPanes();
@@ -69,6 +70,8 @@ public class ClientApp extends Application {
         } else if (message.startsWith("START")) {
           guiManager.setGamePanes(message);
           guiManager.addCurrPlayerInfo();
+        } else if (message.equals("Invalid move!")) {
+          guiManager.addLabel(message);
         } else if (message.startsWith("[CMD]")) {
 
         }

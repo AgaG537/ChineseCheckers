@@ -133,7 +133,7 @@ public class GameManager {
     for (ClientHandler clientHandler : clientHandlers) {
       try {
         int missingNumOfUsers = maxUsers - clientHandlers.size();
-        clientHandler.sendMessage("Still waiting for " + missingNumOfUsers + " more user(s).");
+        clientHandler.sendMessage("Waiting for " + missingNumOfUsers + " more player(s).");
       } catch (Exception e) {
         clientHandler.closeEverything();
       }

@@ -5,9 +5,11 @@ import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import org.client.Client;
 
 /**
@@ -73,8 +75,8 @@ public class FirstPlayerViewManager {
    */
   private void setFirstPlayerSidePane() {
     Label titleLabel = new Label("GAME SETUP");
-    titleLabel.setFont(new Font("Verdana",35));
-    titleLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: black");
+    titleLabel.setStyle("-fx-font-family: Verdana; -fx-font-size: 35; " +
+                        "-fx-font-weight: bold; -fx-text-fill: black");
 
     Label chooseVariantLabel = new Label("Choose game variant:");
     chooseVariantLabel.setFont(new Font("Verdana",23));
