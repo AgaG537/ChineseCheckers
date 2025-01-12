@@ -18,6 +18,7 @@ public class Cell extends Circle {
   private Color currentColor;
   private Pawn pawn;
   private Circle circle;
+  private int flag;
 
   /**
    * Constructor for the Cell class.
@@ -34,6 +35,11 @@ public class Cell extends Circle {
     occupied = false;
     pawn = null;
     this.setRadius(0);
+    flag = 0;
+  }
+
+  public int getFlag() {
+    return flag;
   }
 
   /**
@@ -145,28 +151,20 @@ public class Cell extends Circle {
     updateCircle();
   }
 
-  /**
-   * Sets the Circle representing the cell.
-   * Updates the style and cursor.
-   *
-   * @param circle The Circle to associate with the cell.
-   */
-  public void setCircle(Circle circle) {
-    this.circle = circle;
-    circle.setStyle("-fx-stroke-width: 2");
-    circle.setCursor(Cursor.HAND);
-    circle.setStroke(zoneColor);
-    updateCircle();
-  }
 
   /**
    * Updates the Circle to reflect the current color of the cell.
    */
   public void updateCircle() {
-    if (circle == null) {
-      return;
-    }
-    circle.setFill(currentColor);
+    this.setFill(currentColor);
+  }
+
+  public boolean isOccupied() {
+    return occupied;
+  }
+
+  public void setFlag(int i) {
+    this.flag = i;
   }
 }
 

@@ -12,6 +12,7 @@ public class Pawn {
     this.playerNum = playerNum;
     this.color = color;
     setCurrCell(initCell);
+    currCell.pawnMoveIn(this);
   }
 
   public int getPlayerNum() {

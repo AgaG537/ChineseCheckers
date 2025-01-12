@@ -92,10 +92,12 @@ public class PlayerZoneFactory {
    * @param currentCell The cell to update with the player's information.
    */
   public static void setCellZone(Color color, int playerNum, Cell currentCell) {
+    currentCell.setFlag(5);
     currentCell.setInitialPlayerNum(playerNum);
     currentCell.setZoneColor(color);
     if (playerNum != 0) {
       Pawn pawn = new Pawn(playerNum,color,currentCell);
+      currentCell.pawnMoveIn(pawn);
     }
   }
 

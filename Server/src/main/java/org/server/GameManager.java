@@ -172,6 +172,7 @@ public class GameManager {
         } else {
           clientHandler.sendMessage("You just moved");
         }
+        clientHandler.sendMessage(move);
       } catch (Exception e) {
         clientHandler.closeEverything();
       }

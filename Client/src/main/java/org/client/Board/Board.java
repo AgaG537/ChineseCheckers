@@ -31,6 +31,7 @@ public class Board {
     initializeBoard();
 
     cells = PlayerZoneFactory.addPlayerZones(numOfPlayers,boardWidth,boardHeight,playerZoneHeight,cells);
+
   }
 
   /**
@@ -131,9 +132,11 @@ public class Board {
   private int[] decodeInput(String input) {
     String[] tokens = input.split(" ");
     int[] result = new int[tokens.length];
+
+
     try {
       for (int i = 1; i < tokens.length; i++) {
-        result[i] = Integer.parseInt(tokens[i]);
+        result[i-1] = Integer.parseInt(tokens[i]);
       }
     } catch (NumberFormatException e) {
       e.printStackTrace();
