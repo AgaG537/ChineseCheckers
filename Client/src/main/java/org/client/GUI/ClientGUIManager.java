@@ -33,6 +33,7 @@ public class ClientGUIManager {
   private final VBox serverMessageBox;
   private final VBox playerInfoBox;
   private final VBox currPlayerInfoBox;
+  private String variant;
 
   /**
    * Constructs the GUI manager with the specified main pane and client instance.
@@ -68,10 +69,14 @@ public class ClientGUIManager {
    * Sets up the GUI for the first player, including options to configure the game.
    */
   public void setFirstPlayerPanes() {
-    FirstPlayerViewManager manager = new FirstPlayerViewManager(client, boardBox, sideBox);
+    FirstPlayerViewManager manager = new FirstPlayerViewManager(client, boardBox, sideBox, this);
     manager.setFirstPlayerPanes();
   }
 
+  public void setVariant(String variant) {
+    this.variant = variant;
+    System.out.println(variant);
+  }
   /**
    * Sets the GUI to a waiting state until the game starts.
    */
@@ -95,7 +100,8 @@ public class ClientGUIManager {
     String[] optionsTable = options.split(",");
     currTurn = Integer.parseInt(optionsTable[2]);
     numOfPlayers = Integer.parseInt(optionsTable[0]);
-    String variant = optionsTable[1];
+//    String variant = optionsTable[1];
+    System.out.println(variant);
     GameViewManager manager = new GameViewManager(client, playerNum, boardBox, playerInfoBox, numOfPlayers, variant);
     manager.setGamePanes();
 

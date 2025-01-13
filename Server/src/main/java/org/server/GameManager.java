@@ -3,6 +3,7 @@ package org.server;
 
 import org.server.board.Board;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -18,6 +19,7 @@ public class GameManager {
   private int currTurn;
   private boolean gameStarted;
   private Board currentBoard;
+  private String variant;
 
   /**
    * Constructs a GameManager.
@@ -40,7 +42,16 @@ public class GameManager {
    */
   public synchronized void addUser(ClientHandler clientHandler) {
     clientHandlers.add(clientHandler);
+    try {
+      clientHandler.sendMessage("VARIANT " + variant);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
+
+  public void setVariant(String variant) {
+    this.variant=variant;
+  };
 
   /**
    * Removes a client handler from the user manager.

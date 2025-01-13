@@ -27,6 +27,7 @@ public class FirstPlayerViewManager {
   private final String[] possibleVariants = {"standard", "variant1", "variant2"};
   private String chosenVariant;
   private Integer numOfPlayers;
+  private ClientGUIManager guiManager;
 
   /**
    * Constructor for the FirstPlayerViewManager class.
@@ -35,10 +36,11 @@ public class FirstPlayerViewManager {
    * @param boardBox The VBox for displaying the central pane.
    * @param sideBox The VBox for displaying the side panel.
    */
-  public FirstPlayerViewManager(Client client, VBox boardBox, VBox sideBox) {
+  public FirstPlayerViewManager(Client client, VBox boardBox, VBox sideBox, ClientGUIManager clientGUIManager) {
     this.client = client;
     this.boardBox = boardBox;
     this.sideBox = sideBox;
+    this.guiManager = clientGUIManager;
 
     chosenVariant = "standard";
     numOfPlayers = 2;
@@ -115,9 +117,12 @@ public class FirstPlayerViewManager {
 
     applyButton.setOnAction(e -> {
       System.out.println("Chosen variant: " + chooseVariantChoiceBox.getValue());
+      guiManager.setVariant(chooseVariantChoiceBox.getValue());
       System.out.println("Chosen number of players: " + choosePlayerNumChoiceBox.getValue());
 
       String message = choosePlayerNumChoiceBox.getValue().toString() + "," + chooseVariantChoiceBox.getValue();
+
+      // Mamy tutaj variant
       client.sendMessage(message);
     });
 

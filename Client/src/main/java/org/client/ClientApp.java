@@ -69,6 +69,9 @@ public class ClientApp extends Application {
           guiManager.addLabel(message);
         } else if (message.startsWith("[CMD]")) {
 
+        } else if (message.startsWith("VARIANT")) {
+          String[] tokens = message.split(" ");
+          guiManager.setVariant(tokens[1]);
         }
         else {
           guiManager.addLabel(message);

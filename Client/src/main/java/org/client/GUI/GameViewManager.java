@@ -52,7 +52,7 @@ public class GameViewManager {
     this.numOfPlayers = numOfPlayers;
     this.boardBox = boardBox;
     this.playerInfoBox = playerInfoBox;
-    board = new Board(10, playerNum, numOfPlayers, variant);
+    board = BoardFactory.createBoard(variant,10,numOfPlayers);
     client.setBoard(board);
     rawCommand = new ArrayList<>();
 

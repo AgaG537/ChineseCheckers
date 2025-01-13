@@ -62,7 +62,9 @@ public class ClientHandler implements Runnable {
         String[] message = (bufferedReader.readLine()).split(",");
         maxUsers = Integer.parseInt(message[0]);
         variant = message[1];
+        System.out.println(variant);
         gameManager.setMaxUsers(maxUsers);
+        gameManager.setVariant(variant);
       } catch (NumberFormatException e) {
         sendMessage("Wrong number of users!");
       }
