@@ -276,7 +276,7 @@ public class PlayerZoneFactory {
 
 
       int targetPlayerNum;
-      if (variant.equals("standard")) {
+      if (variant.equals("standard") || variant.equals("yinyang")) {
         targetPlayerNum = getOppositeTargetPlayerNum(i + 1);
       } else {
         targetPlayerNum = getTargetPlayerNum(i + 1);
