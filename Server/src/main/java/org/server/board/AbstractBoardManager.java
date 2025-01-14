@@ -395,9 +395,7 @@ public abstract class AbstractBoardManager implements Board {
    *
    * @return The player number of the winner, or 0 if no winner is found.
    */
-  public int checkWin() {
-    return PlayerZoneFactory.checkZoneForWin(cells);
-  }
+  public abstract int checkWin();
 
   public Cell[][] getCells() {
     return cells;

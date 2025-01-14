@@ -21,4 +21,9 @@ public class BoardManager extends AbstractBoardManager {
     PlayerZoneFactory playerZoneFactory = new PlayerZoneFactory(numOfPlayers,boardWidth,boardHeight,playerZoneHeight);
     this.cells = playerZoneFactory.addPlayerZones(cells);
   }
+
+  @Override
+  public int checkWin() {
+    return PlayerZoneFactory.checkZoneForWin(cells,"standard");
+  }
 }

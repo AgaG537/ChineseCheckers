@@ -23,4 +23,8 @@ public class OrderBoardManager extends AbstractBoardManager {
     cells = playerZoneFactory.addOrderPlayerZones(numOfPlayers,boardWidth,boardHeight,playerZoneHeight,cells);
   }
 
+  @Override
+  public int checkWin() {
+    return PlayerZoneFactory.checkZoneForWin(cells,"order");
+  }
 }

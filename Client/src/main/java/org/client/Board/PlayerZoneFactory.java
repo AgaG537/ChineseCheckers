@@ -206,32 +206,32 @@ public class PlayerZoneFactory {
       activeZoneNums[i] = 0;
     }
 
-    int player1num = random.nextInt(6);
-    int player2num = random.nextInt(6);
-    while (player2num == player1num) {
-      player2num = random.nextInt(6);
+    int player1ZoneNum = random.nextInt(6);
+    int player2ZoneNum = random.nextInt(6);
+    while (player1ZoneNum == player2ZoneNum || player1ZoneNum == 0 || player2ZoneNum == 3) {
+      player1ZoneNum = random.nextInt(6);
+      player2ZoneNum = random.nextInt(6);
     }
 
-    activeZoneNums[player2num] = activeZoneNums[player1num]= 1;
-    Color[] colors = {Color.BLACK, Color.WHITE};
-    int defaultPlayerNum = 1;
-    int playerNum = 0;
+    activeZoneNums[player1ZoneNum] = activeZoneNums[player2ZoneNum] = 1;
+    int playerNum;
 
-    int currColor = 0;
     for (int i = 0; i < playerZonesStartPoints.length; i++) {
       int[] zoneStartPoint = playerZonesStartPoints[i];
       int rowStart = zoneStartPoint[0];
       int colStart = zoneStartPoint[1];
 
       int k = 0;
-      int counter = 0;
       if (i % 2 == 0) {
         for (int row = rowStart; row < rowStart + playerZoneHeight; row++) {
           for (int col = colStart - k; col <= colStart + k; col += 2) {
             Color color = ColorManager.generateDefaultColor(i + 1);
-            Color pawnColor = Color.TRANSPARENT;
             if (activeZoneNums[i] == 1) {
-              playerNum = defaultPlayerNum;
+              if (i == player1ZoneNum) {
+                playerNum = 1;
+              } else {
+                playerNum = 2;
+              }
             } else {
               playerNum = 0;
             }
@@ -243,9 +243,12 @@ public class PlayerZoneFactory {
         for (int row = rowStart; row > rowStart - playerZoneHeight; row--) {
           for (int col = colStart - k; col <= colStart + k; col += 2) {
             Color color = ColorManager.generateDefaultColor(i + 1);
-            Color pawnColor = Color.TRANSPARENT;
             if (activeZoneNums[i] == 1) {
-              playerNum = defaultPlayerNum;
+              if (i == player1ZoneNum) {
+                playerNum = 1;
+              } else {
+                playerNum = 2;
+              }
             } else {
               playerNum = 0;
             }
@@ -253,9 +256,6 @@ public class PlayerZoneFactory {
           }
           k++;
         }
-      }
-      if (playerNum == defaultPlayerNum) {
-        defaultPlayerNum++;
       }
     }
 
