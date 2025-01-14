@@ -14,9 +14,11 @@ public class BoardManager implements Board {
   private final int constraintSize;
 
   /**
-   * Constructor for the Board class.
+   * Constructor for the BoardManager class.
    *
    * @param marblesPerPlayer The number of marbles per player.
+   * @param numOfPlayers     The number of players in the game.
+   * @param variant          The game variant (e.g., "standard", "order").
    */
   public BoardManager(int marblesPerPlayer, int numOfPlayers, String variant) {
     playerZoneHeight = countPlayerZoneHeight(marblesPerPlayer);
@@ -154,6 +156,12 @@ public class BoardManager implements Board {
     return cells[i][j];
   }
 
+  /**
+   * Executes a move by relocating a pawn from a starting cell to a target cell.
+   *
+   * @param input The move details encoded as a string (e.g., "rowStart colStart rowEnd colEnd").
+   * @return A command string describing the move made.
+   */
   @Override
   public String makeMove(String input) {
     int[] moveDetails = decodeInput(input);
@@ -169,6 +177,13 @@ public class BoardManager implements Board {
 //    return input;
   }
 
+  /**
+   * Validates if a move is legal based on the game rules.
+   *
+   * @param userNum The user number making the move.
+   * @param input   The move details encoded as a string (e.g., "startRow startCol endRow endCol").
+   * @return True if the move is valid; false otherwise.
+   */
   @Override
   public boolean validateMove(int userNum, String input) {
     int[] moveDetails = decodeInput(input);
@@ -204,6 +219,13 @@ public class BoardManager implements Board {
     return isValidJump(startRow, startCol, endRow, endCol, directions, visited);
   }
 
+  /**
+   * Checks if the starting position of the move belongs to the current player.
+   *
+   * @param userNum    The player number attempting the move.
+   * @param startPlayer The player number associated with the pawn at the start position.
+   * @return True if the starting position is valid; false otherwise.
+   */
   private boolean isValidStartingPoint(int userNum, int startPlayer) {
     if (startPlayer != userNum) {
       System.out.println("Invalid start: Not your pawn.");
@@ -212,6 +234,12 @@ public class BoardManager implements Board {
     return true;
   }
 
+  /**
+   * Checks if the ending position of the move is unoccupied.
+   *
+   * @param endPlayer The player number at the target position (0 if unoccupied).
+   * @return True if the ending position is valid; false otherwise.
+   */
   private boolean isValidEndingPoint(int endPlayer) {
     if (endPlayer != 0) {
       System.out.println("Invalid end: Target cell is occupied.");
@@ -220,6 +248,16 @@ public class BoardManager implements Board {
     return true;
   }
 
+  /**
+   * Validates a single-step move by checking if the target cell is adjacent and unoccupied.
+   *
+   * @param startRow   Starting row index.
+   * @param startCol   Starting column index.
+   * @param endRow     Target row index.
+   * @param endCol     Target column index.
+   * @param directions Possible movement directions for the pawn.
+   * @return True if the move is a valid single-step move; false otherwise.
+   */
   private boolean isValidSingleStep(int startRow, int startCol, int endRow, int endCol, int[][] directions) {
     for (int[] direction : directions) {
       int targetRow = startRow + direction[0];
@@ -232,6 +270,17 @@ public class BoardManager implements Board {
     return false;
   }
 
+  /**
+   * Validates a jump move by checking if the target cell is reachable via a valid jump.
+   *
+   * @param startRow Starting row index.
+   * @param startCol Starting column index.
+   * @param endRow   Target row index.
+   * @param endCol   Target column index.
+   * @param directions Possible jump directions for the pawn.
+   * @param visited  A list of already visited cells to avoid cycles.
+   * @return True if the move is a valid jump move; false otherwise.
+   */
   private boolean isValidJump(int startRow, int startCol, int endRow, int endCol, int[][] directions, ArrayList<int[]> visited) {
     for (int[] direction : directions) {
       int jumpOverRow = startRow + direction[0];
@@ -260,6 +309,16 @@ public class BoardManager implements Board {
     return false;
   }
 
+  /**
+   * Recursively validates multi-jump moves by exploring all possible jump paths.
+   *
+   * @param currentRow Current row index during recursion.
+   * @param currentCol Current column index during recursion.
+   * @param endRow     Target row index.
+   * @param endCol     Target column index.
+   * @param visited    A list of already visited cells to avoid cycles.
+   * @return True if the end cell is reachable via valid jumps; false otherwise.
+   */
   private boolean validateMoveRecursively(int currentRow, int currentCol, int endRow, int endCol, ArrayList<int[]> visited) {
     if (cells[currentRow][currentCol].isOccupied()) {
       System.out.println("Invalid recursive move: Current cell is occupied.");
@@ -296,11 +355,23 @@ public class BoardManager implements Board {
     return false;
   }
 
+  /**
+   * Checks if a cell coordinate is within the bounds of the board.
+   *
+   * @param row The row index.
+   * @param col The column index.
+   * @return True if the cell is within bounds; false otherwise.
+   */
   private boolean isWithinBounds(int row, int col) {
     return row >= 0 && row < cells.length && col >= 0 && col < cells[0].length;
   }
 
-
+  /**
+   * Decodes a move input string into an array of integers representing the move details.
+   *
+   * @param input The move input as a string.
+   * @return An array of integers containing the parsed move details.
+   */
   private int[] decodeInput(String input) {
     String[] tokens = input.split(" ");
     int[] result = new int[tokens.length];
@@ -314,6 +385,11 @@ public class BoardManager implements Board {
     return result;
   }
 
+  /**
+   * Checks the player zones for a win condition.
+   *
+   * @return The player number of the winner, or 0 if no winner is found.
+   */
   public int checkWin() {
     return PlayerZoneFactory.checkZoneForWin(cells);
   }

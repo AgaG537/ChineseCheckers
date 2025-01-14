@@ -80,10 +80,17 @@ public class ClientGUIManager {
     manager.setFirstPlayerPanes();
   }
 
+  /**
+   * Sets the game variant (e.g., "standard", "order", "yinyang").
+   * Used to customize gameplay based on the selected variant.
+   *
+   * @param variant The selected game variant.
+   */
   public void setVariant(String variant) {
     this.variant = variant;
     System.out.println(variant);
   }
+
   /**
    * Sets the GUI to a waiting state until the game starts.
    */
@@ -132,7 +139,9 @@ public class ClientGUIManager {
   }
 
   /**
-   * Updates the current player information box with the turn status.
+   * Updates the current player's information box based on the game state.
+   * Displays whether it's the current player's turn or if they have finished.
+   * Adds a "SKIP TURN" button for the active player to skip their turn.
    */
   public void addCurrPlayerInfo() {
     currPlayerInfoBox.getChildren().clear();
@@ -191,10 +200,19 @@ public class ClientGUIManager {
 
   }
 
+  /**
+   * Clears the side pane's part used for displaying messages frm server.
+   */
   public void clearServerMessageBox() {
     serverMessageBox.getChildren().clear();
   }
 
+  /**
+   * Handles the display of a winning message when a player finishes the game.
+   * Updates the finished players list and GUI to reflect the new game state.
+   *
+   * @param message A string message from the server indicating which player won.
+   */
   public void showWin(String message) {
     int playerNum = Integer.parseInt(message.substring("WIN.".length()));
     finishedPlayers.add(playerNum);
@@ -208,6 +226,12 @@ public class ClientGUIManager {
     }
   }
 
+  /**
+   * Determines the ordinal representation of a player's finishing position.
+   * Converts numerical position (e.g., 1, 2, 3) into a string (e.g., "first", "second", "third").
+   *
+   * @return The ordinal string representation of the player's position.
+   */
   private String getPlaceNumString() {
     int finisherNum = finishedPlayers.size();
     String finisherNumString;

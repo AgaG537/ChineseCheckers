@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * Represents a single cell on the game board.
- * Tracks the state, position, and ownership of the cell.
+ * Tracks its position, whether it is within the playable area, and its current state (e.g., occupied or unoccupied).
  */
 public class Cell {
   private final int row;
@@ -17,11 +17,13 @@ public class Cell {
   private int zoneNum;
   private Pawn pawn;
   private List<Cell> neighbors;
+
   /**
-   * Constructor for the Cell class.
+   * Constructs a cell with specified row and column indices.
+   * Initializes the cell's state as outside the playable area and unoccupied.
    *
-   * @param row The row index of the cell
-   * @param col The column index of the cell
+   * @param row The row index of the cell.
+   * @param col The column index of the cell.
    */
   public Cell(int row, int col) {
     this.row = row;
@@ -34,10 +36,20 @@ public class Cell {
     neighbors = new ArrayList<Cell>();
   }
 
+  /**
+   * Sets the neighboring cells for this cell.
+   *
+   * @param neighbors A list of neighboring cells.
+   */
   public void setNeighbors(List<Cell> neighbors) {
     this.neighbors=neighbors;
   }
 
+  /**
+   * Retrieves the list of neighboring cells.
+   *
+   * @return A list of neighboring cells.
+   */
   public List<Cell> getNeighbors() {
     return neighbors;
   }
@@ -126,13 +138,17 @@ public class Cell {
 
   /**
    * Removes the pawn from the cell, marking it as unoccupied.
-   *
    */
   public void pawnMoveOut() {
     this.pawn = null;
     this.occupied = false;
   }
 
+  /**
+   * Checks whether the cell is currently occupied by a pawn.
+   *
+   * @return True if the cell is occupied; false otherwise.
+   */
   public boolean isOccupied() {
     return occupied;
   }

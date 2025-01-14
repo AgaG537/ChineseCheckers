@@ -2,10 +2,10 @@ package org.client.Board;
 
 import javafx.scene.paint.Color;
 
+
 /**
  * Represents the game board for Chinese Checkers.
- * The board is initialized with specific dimensions
- * and divided into zones for players.
+ * This class initializes and manages a standard board layout with cells and zones.
  */
 public class StandardBoard implements Board {
 
@@ -17,9 +17,10 @@ public class StandardBoard implements Board {
   private final int constraintSize;
 
   /**
-   * Constructor for the Board class.
+   * Constructs a StandardBoard with specified marbles per player and number of players.
    *
-   * @param marblesPerPlayer The number of marbles per player.
+   * @param marblesPerPlayer The number of marbles each player has.
+   * @param numOfPlayers The number of players in the game.
    */
   public StandardBoard(int marblesPerPlayer, int numOfPlayers) {
     playerZoneHeight = countPlayerZoneHeight(marblesPerPlayer);
@@ -35,8 +36,7 @@ public class StandardBoard implements Board {
   }
 
   /**
-   * @return The size constraint used
-   * for cell rendering in the GUI.
+   * @return The size constraint used for cell rendering in the GUI.
    */
   @Override
   public int getConstraintSize() {
@@ -46,7 +46,7 @@ public class StandardBoard implements Board {
   /**
    * Calculates the height of a player's triangular zone.
    *
-   * @param marblesPerPlayer Number of marbles a player has.
+   * @param marblesPerPlayer The number of marbles a player has.
    * @return The height of the triangular player zone.
    */
   private int countPlayerZoneHeight(int marblesPerPlayer) {
@@ -63,8 +63,7 @@ public class StandardBoard implements Board {
   }
 
   /**
-   * Initializes the board structure by marking
-   * valid positions inside the board.
+   * Initializes the board by marking valid positions inside the board.
    */
   private void initializeBoard() {
     int i, j, k;
@@ -120,6 +119,11 @@ public class StandardBoard implements Board {
     return cells[i][j];
   }
 
+  /**
+   * Handles a command that moves a pawn on the board.
+   *
+   * @param command The movement command in the format "startRow startCol endRow endCol".
+   */
   @Override
   public void handleCommand(String command) {
     int[] vals = decodeInput(command);
@@ -134,6 +138,12 @@ public class StandardBoard implements Board {
     cells[rowEnd][colEnd].pawnMoveIn(pawn);
   }
 
+  /**
+   * Decodes the input command into an array of integers.
+   *
+   * @param input The movement command string.
+   * @return An array of integers representing positions in the command.
+   */
   private int[] decodeInput(String input) {
     String[] tokens = input.split(" ");
     int[] result = new int[tokens.length];
@@ -149,6 +159,9 @@ public class StandardBoard implements Board {
     return result;
   }
 
+  /**
+   * Disables mouse interactions with all cells on the board, typically after a win.
+   */
   @Override
   public void setWin() {
     int i, j;
