@@ -58,9 +58,15 @@ public class ClientApp extends Application {
       public void run() {
 
         if (message.startsWith("User number ") || message.equals("You just moved")) {
+          System.out.println(message);
           guiManager.clearServerMessageBox();
           guiManager.addCurrPlayerInfo();
-        } else if (message.equals("Game options correct.")) {
+        } else if (message.startsWith("Turn skipped by user:") || message.equals("You just skipped")) {
+          System.out.println(message);
+          guiManager.clearServerMessageBox();
+          guiManager.addCurrPlayerInfo();
+        }
+        else if (message.equals("Game options correct.")) {
           guiManager.setWaitingPanes();
           guiManager.addLabel(message);
         } else if (message.startsWith("START")) {

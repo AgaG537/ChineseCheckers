@@ -241,6 +241,25 @@ public class GameManager {
     }
   }
 
+  public synchronized void broadcastSkip(int userNum) {
+    if (!gameStarted) {
+      return;
+    }
+
+    for (ClientHandler clientHandler : clientHandlers) {
+      try {
+        if (!Objects.equals(clientHandler.getUserNum(), userNum)) {
+          clientHandler.sendMessage("Turn skipped by user: " + userNum);
+        } else {
+          clientHandler.sendMessage("You just skipped");
+        }
+        clientHandler.sendMessage("SKIPPED");
+      } catch (Exception e) {
+        clientHandler.closeEverything();
+      }
+    }
+  }
+
   /**
    * Broadcasts a message that the player has won.
    */
@@ -262,6 +281,12 @@ public class GameManager {
    * @return 0 if the move is valid, 1 if the move is invalid.
    */
   public int validateMove(int userNum, String input) {
+    System.out.println(input);
+    System.out.println(input.equals("SKIP"));
+    if (input.equals("SKIP")) {
+      System.out.println("returning 2");
+      return 2;
+    }
     boolean valid = currentBoard.validateMove(userNum, input);
     if (valid) {
       return 0;

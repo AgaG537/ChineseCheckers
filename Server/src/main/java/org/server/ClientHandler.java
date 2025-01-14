@@ -96,9 +96,15 @@ public class ClientHandler implements Runnable {
                 gameManager.addFinishedPlayer(playerCheckedForWin);
               }
               break;
-            default:
-              System.out.println("Something weird happened!");
+            case 1:
               sendMessage("Invalid move!");
+              System.out.println("wrong move");
+              break;
+            case 2:
+              gameManager.advanceTurn(gameManager.getClientHandlers().size());
+              gameManager.broadcastSkip(userNum);
+            default:
+              System.out.println("Something went wrong");
           }
         } else {
           if (bufferedReader.ready()) {

@@ -175,7 +175,7 @@ public class ClientGUIManager {
         skipButton.setCursor(Cursor.HAND);
         skipButton.setStyle("-fx-font-size : 15px;");
         skipButton.setOnMouseClicked(event -> {
-          client.sendMessage("skip");
+          client.sendMessage("SKIP");
         });
 
         currPlayerInfoBox.getChildren().addAll(titleLabel, messageLabel, skipButton);
