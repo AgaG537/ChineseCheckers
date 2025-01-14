@@ -33,12 +33,17 @@ public class GameManager {
     finishedPlayers = new ArrayList<>();
   }
 
+  /**
+   * Sets the current board for the game.
+   *
+   * @param board The board instance to set.
+   */
   public void setBoard(Board board) {
     this.currentBoard = board;
   }
 
   /**
-   * Adds a client handler to the user manager.
+   * Adds a client handler to the user manager and notifies the client of the selected variant.
    *
    * @param clientHandler The client handler to add.
    */
@@ -51,10 +56,20 @@ public class GameManager {
     }
   }
 
+  /**
+   * Sets the game variant for the current session.
+   *
+   * @param variant The variant to set (e.g., "standard", "order", "yinyang").
+   */
   public void setVariant(String variant) {
     this.variant=variant;
   };
 
+  /**
+   * Retrieves the currently selected game variant.
+   *
+   * @return The selected game variant as a string.
+   */
   public String getVariant() {
     return variant;
   }
@@ -237,6 +252,13 @@ public class GameManager {
     }
   }
 
+  /**
+   * Validates a move made by a player based on the current game state.
+   *
+   * @param userNum The player's user number.
+   * @param input   The move input provided by the player.
+   * @return 0 if the move is valid, 1 if the move is invalid.
+   */
   public int validateMove(int userNum, String input) {
     boolean valid = currentBoard.validateMove(userNum, input);
     if (valid) {
@@ -247,10 +269,21 @@ public class GameManager {
     }
   }
 
+  /**
+   * Checks if there is a winning condition on the current board.
+   *
+   * @return The user number of the winning player, or 0 if no winner yet.
+   */
   public int checkWin() {
     return currentBoard.checkWin();
   }
 
+  /**
+   * Adds a player to the list of finished players.
+   * If all players have finished, broadcasts a game-finished message to all clients.
+   *
+   * @param playerNum The player number to mark as finished.
+   */
   public void addFinishedPlayer(int playerNum) {
     finishedPlayers.add(playerNum);
     if (finishedPlayers.size() == clientHandlers.size()) {
