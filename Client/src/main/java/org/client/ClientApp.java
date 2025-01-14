@@ -67,6 +67,10 @@ public class ClientApp extends Application {
           guiManager.addCurrPlayerInfo();
         } else if (message.equals("Invalid move!")) {
           guiManager.addLabel(message);
+        } else if (message.startsWith("WIN")) {
+          guiManager.showWin(message);
+        } else if (message.equals("GAME FINISHED!")) {
+          guiManager.addLabel(message);
         } else if (message.startsWith("[CMD]")) {
 
         } else if (message.startsWith("VARIANT")) {

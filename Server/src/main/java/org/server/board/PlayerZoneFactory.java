@@ -1,24 +1,59 @@
 package org.server.board;
 
 
+import java.util.ArrayList;
+import java.util.Map;
+
 /**
  * Factory class for generating player zones on the board.
  */
 public class PlayerZoneFactory {
 
+  private static int numPlayers;
+  private static int playerZoneHeight;
+  private static int numOfCellsPerZone;
+  private static int[][] playerZonesStartPoints;
+  private static ArrayList<Integer> finishedPlayers;
+
+  private static final Map<Integer, Map<Integer, Integer>> TARGET_PLAYER_NUMBERS = Map.of(
+      2, Map.of(
+          1, 2,
+          4, 1
+      ),
+      3, Map.of(
+          2, 3,
+          6, 2,
+          4, 1
+      ),
+      4, Map.of(
+          3, 4,
+          2, 3,
+          6, 2,
+          5, 1
+      ),
+      6, Map.of(
+          3, 6,
+          2, 5,
+          1, 4,
+          6, 3,
+          5, 2,
+          4, 1
+      )
+  );
 
   /**
-   * Adds player zones to the board for a specified number of players.
+   * Constructs a PlayerZoneFactory object.
    *
-   * @param numPlayers The number of players.
+   * @param numOfPlayers The number of players.
    * @param boardWidth The width of the board.
    * @param boardHeight The height of the board.
-   * @param playerZoneHeight The height of each player's zone.
-   * @param cells The current state of the board's cells.
-   * @return The updated board cells with player zones added.
+   * @param playerZoneHeightValue The height of each player's zone.
    */
-  public static Cell[][] addPlayerZones(int numPlayers, int boardWidth, int boardHeight, int playerZoneHeight, Cell[][] cells) {
-    int[][] playerZonesStartPoints = {
+  public PlayerZoneFactory(int numOfPlayers, int boardWidth, int boardHeight, int playerZoneHeightValue) {
+    numPlayers = numOfPlayers;
+    playerZoneHeight = playerZoneHeightValue;
+    numOfCellsPerZone = getNumOfCellsPerZone(playerZoneHeight);
+    playerZonesStartPoints = new int[][]{
         {0, (boardWidth / 2)}, // Upper zone [0]
         {playerZoneHeight * 2 - 1, boardWidth - playerZoneHeight},  // Right upper zone xxx [1]
         {boardHeight - playerZoneHeight * 2, boardWidth - playerZoneHeight}, // Right bottom zone [2]
@@ -26,7 +61,15 @@ public class PlayerZoneFactory {
         {boardHeight - playerZoneHeight * 2, playerZoneHeight - 1}, // Left bottom zone [4]
         {playerZoneHeight * 2 - 1, playerZoneHeight - 1} // Left upper zone xxx [5]
     };
+    finishedPlayers = new ArrayList<>();
+  }
 
+  /**
+   * Adds player zones to the board.
+   *
+   * @return The updated board cells with player zones added.
+   */
+  public Cell[][] addPlayerZones(Cell[][] cells) {
     int[] activeZoneNums = new int[6];
     for (int i = 0; i < activeZoneNums.length; i++) {
       activeZoneNums[0] = 0;
@@ -38,6 +81,9 @@ public class PlayerZoneFactory {
       default: activeZoneNums[0] = activeZoneNums[1] = activeZoneNums[2] = activeZoneNums[3] = activeZoneNums[4] = activeZoneNums[5] = 1;
     }
 
+    int defaultPlayerNum = 1;
+    int playerNum = 0;
+
     for (int i = 0; i < playerZonesStartPoints.length; i++) {
       int[] zoneStartPoint = playerZonesStartPoints[i];
       int rowStart = zoneStartPoint[0];
@@ -47,73 +93,34 @@ public class PlayerZoneFactory {
       if (i % 2 == 0) {
         for (int row = rowStart; row < rowStart + playerZoneHeight; row++) {
           for (int col = colStart - k; col <= colStart + k; col += 2) {
-            int playerNum;
             if (activeZoneNums[i] == 1) {
-              playerNum = i + 1;
+              playerNum = defaultPlayerNum;
             } else {
               playerNum = 0;
             }
-            setCellZone(playerNum, cells[row][col]);
+            setCellZone(playerNum, i + 1, cells[row][col]);
           }
           k++;
         }
       } else {
         for (int row = rowStart; row > rowStart - playerZoneHeight; row--) {
           for (int col = colStart - k; col <= colStart + k; col += 2) {
-            int playerNum;
             if (activeZoneNums[i] == 1) {
-              playerNum = i + 1;
+              playerNum = defaultPlayerNum;
             } else {
               playerNum = 0;
             }
-            setCellZone(playerNum, cells[row][col]);
+            setCellZone(playerNum, i + 1, cells[row][col]);
           }
           k++;
         }
       }
+      if (playerNum == defaultPlayerNum) {
+        defaultPlayerNum++;
+      }
 
     }
 
-//    switch (numPlayers) {
-//      case 2:
-//        // player num 1 upper zone
-//        cells = PlayerZone.addPlayerZone(playerZonesStartPoints[0][0],playerZonesStartPoints[0][1], generateDefaultColor(1),playerZoneHeight,1,cells,isAsc(1));
-//        //player num 4 bottom zone
-//        cells = PlayerZone.addPlayerZone(playerZonesStartPoints[3][0],playerZonesStartPoints[3][1], generateDefaultColor(4),playerZoneHeight,4,cells,isAsc(4));
-//      break;
-//      case 3:
-//        // player num 1 upper zone
-//        cells = PlayerZone.addPlayerZone(playerZonesStartPoints[0][0],playerZonesStartPoints[0][1], generateDefaultColor(1),playerZoneHeight,1,cells,isAsc(1));
-//        // player num 3 right bottom
-//        cells = PlayerZone.addPlayerZone(playerZonesStartPoints[2][0],playerZonesStartPoints[2][1], generateDefaultColor(3),playerZoneHeight,3,cells,isAsc(3));
-//        // player num 5 left bottom
-//        cells = PlayerZone.addPlayerZone(playerZonesStartPoints[4][0],playerZonesStartPoints[4][1], generateDefaultColor(4),playerZoneHeight,4,cells,isAsc(4));
-//      break;
-//      case 4:
-//        // player num 2 right upper
-//        cells = PlayerZone.addPlayerZone(playerZonesStartPoints[1][0],playerZonesStartPoints[1][1], generateDefaultColor(2),playerZoneHeight,2,cells,isAsc(2));
-//        // player num 3 right bottom
-//        cells = PlayerZone.addPlayerZone(playerZonesStartPoints[2][0],playerZonesStartPoints[2][1], generateDefaultColor(3),playerZoneHeight,3,cells,isAsc(3));
-//        // player num 5 left bottom
-//        cells = PlayerZone.addPlayerZone(playerZonesStartPoints[4][0],playerZonesStartPoints[4][1], generateDefaultColor(5),playerZoneHeight,5,cells,isAsc(5));
-//        // player num 6 left upper
-//        cells = PlayerZone.addPlayerZone(playerZonesStartPoints[5][0],playerZonesStartPoints[5][1], generateDefaultColor(6),playerZoneHeight,6,cells,isAsc(6));
-//      break;
-//      case 6:
-//        // player num 1 upper zone
-//        cells = PlayerZone.addPlayerZone(playerZonesStartPoints[0][0],playerZonesStartPoints[0][1], generateDefaultColor(1),playerZoneHeight,1,cells,isAsc(1));
-//        // player num 2 right upper
-//        cells = PlayerZone.addPlayerZone(playerZonesStartPoints[1][0],playerZonesStartPoints[1][1], generateDefaultColor(2),playerZoneHeight,2,cells,isAsc(2));
-//        // player num 3 right bottom
-//        cells = PlayerZone.addPlayerZone(playerZonesStartPoints[2][0],playerZonesStartPoints[2][1], generateDefaultColor(3),playerZoneHeight,3,cells,isAsc(3));
-//        //player num 4 bottom zone
-//        cells = PlayerZone.addPlayerZone(playerZonesStartPoints[3][0],playerZonesStartPoints[3][1], generateDefaultColor(4),playerZoneHeight,4,cells,isAsc(4));
-//        // player num 5 left bottom
-//        cells = PlayerZone.addPlayerZone(playerZonesStartPoints[4][0],playerZonesStartPoints[4][1], generateDefaultColor(5),playerZoneHeight,5,cells,isAsc(5));
-//        // player num 6 left upper
-//        cells = PlayerZone.addPlayerZone(playerZonesStartPoints[5][0],playerZonesStartPoints[5][1], generateDefaultColor(6),playerZoneHeight,6,cells,isAsc(6));
-//        break;
-//    }
     return cells;
   }
 
@@ -123,12 +130,73 @@ public class PlayerZoneFactory {
    * @param playerNum The player's number (0 if no player, otherwise the player's number).
    * @param currentCell The cell to update with the player's information.
    */
-  public static void setCellZone(int playerNum, Cell currentCell) {
+  public void setCellZone(int playerNum, int zoneNum, Cell currentCell) {
     currentCell.setInitialPlayerNum(playerNum);
+    currentCell.setZoneNum(zoneNum);
     if (playerNum != 0) {
       Pawn pawn = new Pawn(playerNum,currentCell);
     }
   }
 
+
+  public static int checkZoneForWin(Cell[][] cells) {
+    for (int i = 0; i < playerZonesStartPoints.length; i++) {
+      int[] zoneStartPoint = playerZonesStartPoints[i];
+      int rowStart = zoneStartPoint[0];
+      int colStart = zoneStartPoint[1];
+
+      int targetPlayerNum = getTargetPlayerNum(i + 1);
+
+      if (targetPlayerNum != 0 && !finishedPlayers.contains(targetPlayerNum)) {
+        int targetPlayerInCount = 0;
+        int k = 0;
+        if (i % 2 == 0) {
+          for (int row = rowStart; row < rowStart + playerZoneHeight; row++) {
+            for (int col = colStart - k; col <= colStart + k; col += 2) {
+              if (cells[row][col].getPawn() != null) {
+                if (cells[row][col].getPawn().getPlayerNum() == targetPlayerNum) {
+                  targetPlayerInCount++;
+                }
+              }
+            }
+            k++;
+          }
+        } else {
+          for (int row = rowStart; row > rowStart - playerZoneHeight; row--) {
+            for (int col = colStart - k; col <= colStart + k; col += 2) {
+              if (cells[row][col].getPawn() != null) {
+                if (cells[row][col].getPawn().getPlayerNum() == targetPlayerNum) {
+                  targetPlayerInCount++;
+                }
+              }
+            }
+            k++;
+          }
+        }
+
+        if (targetPlayerInCount == numOfCellsPerZone) {
+          finishedPlayers.add(targetPlayerNum);
+          return targetPlayerNum;
+        }
+      }
+
+    }
+
+    return 0;
+  }
+
+  public static int getTargetPlayerNum(int zoneNum) {
+    return TARGET_PLAYER_NUMBERS.get(numPlayers).getOrDefault(zoneNum, 0);
+  }
+
+  private int getNumOfCellsPerZone(int playerZoneHeight) {
+    int counter = playerZoneHeight;
+    int numOfCells = 0;
+    while (counter != 0) {
+      numOfCells += counter;
+      counter--;
+    }
+    return numOfCells;
+  }
 
 }

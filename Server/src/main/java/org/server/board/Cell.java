@@ -14,6 +14,7 @@ public class Cell {
   private boolean insideBoard;
   private boolean occupied;
   private int initialPlayerNum;
+  private int zoneNum;
   private Pawn pawn;
   private List<Cell> neighbors;
   /**
@@ -27,6 +28,7 @@ public class Cell {
     this.col = col;
     insideBoard = false;
     initialPlayerNum = 0;
+    zoneNum = 0;
     occupied = false;
     pawn = null;
     neighbors = new ArrayList<Cell>();
@@ -85,6 +87,23 @@ public class Cell {
    */
   public void setInitialPlayerNum(int playerNum) {
     initialPlayerNum = playerNum;
+  }
+
+  /**
+   * @return The zone number initially
+   * assigned to the cell (0 if unoccupied).
+   */
+  public int getZoneNum() {
+    return zoneNum;
+  }
+
+  /**
+   * Assigns a zone number to the cell.
+   *
+   * @param zoneNum The zone number to assign.
+   */
+  public void setZoneNum(int zoneNum) {
+    this.zoneNum = zoneNum;
   }
 
 
