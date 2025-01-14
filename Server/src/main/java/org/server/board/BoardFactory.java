@@ -17,9 +17,9 @@ public class BoardFactory {
     Board board;
     switch (variant) {
       case "standard":
-        board = new BoardManager(marbles,numOfPlayers,variant); break;
+        board = new BoardManager(marbles,numOfPlayers); break;
       case "order":
-        board = new OrderBoardManager(marbles,numOfPlayers,variant); break;
+        board = new OrderBoardManager(marbles,numOfPlayers); break;
       case "yinyang":
         board = new YinYangBoardManager(marbles); break;
       default:

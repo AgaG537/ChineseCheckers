@@ -71,7 +71,7 @@ public class PlayerZoneFactory {
    *
    * @return The updated board cells with player zones added.
    */
-  public Cell[][] addPlayerZones(Cell[][] cells) {
+  public static Cell[][] addPlayerZones(Cell[][] cells) {
     int[] activeZoneNums = new int[6];
     for (int i = 0; i < activeZoneNums.length; i++) {
       activeZoneNums[0] = 0;
@@ -232,7 +232,7 @@ public class PlayerZoneFactory {
    * @param playerNum The player's number (0 if no player, otherwise the player's number).
    * @param currentCell The cell to update with the player's information.
    */
-  public void setCellZone(int playerNum, int zoneNum, Cell currentCell) {
+  public static void setCellZone(int playerNum, int zoneNum, Cell currentCell) {
     currentCell.setInitialPlayerNum(playerNum);
     currentCell.setZoneNum(zoneNum);
     if (playerNum != 0) {
