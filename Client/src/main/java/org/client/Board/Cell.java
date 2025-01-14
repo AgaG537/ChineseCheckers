@@ -1,6 +1,5 @@
 package org.client.Board;
 
-import javafx.scene.Cursor;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
@@ -17,7 +16,6 @@ public class Cell extends Circle {
   private Color zoneColor;
   private Color currentColor;
   private Pawn pawn;
-  private Circle circle;
   private int flag;
 
   /**
@@ -166,5 +164,6 @@ public class Cell extends Circle {
   public void setFlag(int i) {
     this.flag = i;
   }
+
 }
 

@@ -2,7 +2,6 @@ package org.client;
 
 
 import org.client.Board.Board;
-import org.client.Board.StandardBoard;
 
 import java.io.*;
 import java.net.Socket;

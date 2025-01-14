@@ -6,4 +6,5 @@ public interface Board {
   public int getBoardHeight();
   public int getBoardWidth();
   public Cell getCell(int x, int y);
+  public void setWin();
 }

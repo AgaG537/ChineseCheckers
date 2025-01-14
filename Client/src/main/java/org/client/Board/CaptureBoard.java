@@ -111,4 +111,14 @@ public class CaptureBoard implements Board {
   @Override
   public void handleCommand(String command) {
   }
+
+  @Override
+  public void setWin() {
+    int i, j;
+    for (i = 0; i < boardHeight; i++) {
+      for (j = 0; j < boardWidth; j++) {
+        cells[i][j].setOnMouseClicked(null);
+      }
+    }
+  }
 }

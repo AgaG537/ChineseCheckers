@@ -88,7 +88,13 @@ public class ClientHandler implements Runnable {
               System.out.println(message);
               System.out.println(userNum);
               gameManager.broadcastMove(userNum, message);
-              gameManager.advanceTurn(gameManager.getClientHandlers().size()); break;
+              gameManager.advanceTurn(gameManager.getClientHandlers().size());
+              int playerCheckedForWin = gameManager.checkWin();
+              if (playerCheckedForWin != 0) {
+                gameManager.broadcastPlayerWon(playerCheckedForWin);
+                gameManager.addFinishedPlayer(playerCheckedForWin);
+              }
+              break;
             default:
               System.out.println("Something weird happened!");
               sendMessage("Invalid move!");

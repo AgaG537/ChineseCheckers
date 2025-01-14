@@ -13,6 +13,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import org.client.Client;
 
+import java.util.ArrayList;
+
 /**
  * Manages the setup and functionality of the client GUI components.
  * Includes views for the initial setup, waiting phase, and gameplay.
@@ -23,6 +25,9 @@ public class ClientGUIManager {
   private final int playerNum;
   private int currTurn;
   private int numOfPlayers;
+  private final ArrayList<Integer> finishedPlayers;
+  private boolean didIFinish;
+  private GameViewManager gameViewManager;
 
   private final BorderPane mainPane;
   private final BorderPane boardPane;
@@ -44,6 +49,8 @@ public class ClientGUIManager {
   public ClientGUIManager(BorderPane root, Client client) {
     this.client = client;
     playerNum = client.getUserNumFromServer();
+    finishedPlayers = new ArrayList<>();
+    didIFinish = false;
 
     mainPane = root;
     boardPane = new BorderPane();
@@ -102,8 +109,8 @@ public class ClientGUIManager {
     numOfPlayers = Integer.parseInt(optionsTable[0]);
 //    String variant = optionsTable[1];
     System.out.println(variant);
-    GameViewManager manager = new GameViewManager(client, playerNum, boardBox, playerInfoBox, numOfPlayers, variant);
-    manager.setGamePanes();
+    gameViewManager = new GameViewManager(client, playerNum, boardBox, playerInfoBox, numOfPlayers, variant);
+    gameViewManager.setGamePanes();
 
     infoBox.setStyle("-fx-border-color: black; -fx-border-insets: 5; -fx-border-width: 3; -fx-border-style: dashed;");
     infoBox.getChildren().addAll(playerInfoBox, currPlayerInfoBox);
@@ -130,7 +137,13 @@ public class ClientGUIManager {
   public void addCurrPlayerInfo() {
     currPlayerInfoBox.getChildren().clear();
 
-    Label titleLabel = new Label("CURRENT TURN:");
+    Label titleLabel;
+    if (!didIFinish) {
+      titleLabel = new Label("CURRENT TURN:");
+    } else {
+      titleLabel = new Label("YOU FINISHED!");
+    }
+
     titleLabel.setStyle("-fx-font-family: Verdana; -fx-font-size: 25; " +
         "-fx-font-weight: bold; -fx-text-fill: black");
 
@@ -144,32 +157,70 @@ public class ClientGUIManager {
     currPlayerInfoBox.setPadding(new Insets(15));
     currPlayerInfoBox.setPrefHeight(130);
 
-    if (currTurn == playerNum) {
-      messageLabel.setText("It's your turn!");
+    if (!didIFinish) {
+      if (currTurn == playerNum) {
+        messageLabel.setText("It's your turn!");
 
-      Button skipButton = new Button("SKIP TURN");
-      skipButton.setMinWidth(125);
-      skipButton.setCursor(Cursor.HAND);
-      skipButton.setStyle("-fx-font-size : 15px;");
-      skipButton.setOnMouseClicked(event -> {
-        client.sendMessage("skip");
-      });
+        Button skipButton = new Button("SKIP TURN");
+        skipButton.setMinWidth(125);
+        skipButton.setCursor(Cursor.HAND);
+        skipButton.setStyle("-fx-font-size : 15px;");
+        skipButton.setOnMouseClicked(event -> {
+          client.sendMessage("skip");
+        });
 
-      currPlayerInfoBox.getChildren().addAll(titleLabel, messageLabel, skipButton);
+        currPlayerInfoBox.getChildren().addAll(titleLabel, messageLabel, skipButton);
+      } else {
+        messageLabel.setText("Current player: " + currTurn + "\nWait for your turn.");
+        currPlayerInfoBox.getChildren().addAll(titleLabel, messageLabel);
+      }
+
+      do {
+        if (currTurn + 1 > numOfPlayers) {
+          currTurn = 1;
+        } else {
+          currTurn++;
+        }
+      } while (finishedPlayers.contains(currTurn));
+
     } else {
-      messageLabel.setText("Current player: " + currTurn + "\nWait for your turn.");
+      String finisherNumString = getPlaceNumString();
+      messageLabel.setText("You take " + finisherNumString + " place. Congratulations!");
       currPlayerInfoBox.getChildren().addAll(titleLabel, messageLabel);
     }
 
-    if(currTurn + 1 > numOfPlayers) {
-      currTurn = 1;
-    } else {
-      currTurn++;
-    }
   }
 
   public void clearServerMessageBox() {
     serverMessageBox.getChildren().clear();
+  }
+
+  public void showWin(String message) {
+    int playerNum = Integer.parseInt(message.substring("WIN.".length()));
+    finishedPlayers.add(playerNum);
+    if (this.playerNum == playerNum) {
+      gameViewManager.getBoard().setWin();
+      didIFinish = true;
+      addCurrPlayerInfo();
+    } else {
+      String finisherNumString = getPlaceNumString();
+      addLabel("Player " + playerNum + " takes " + finisherNumString + " place!");
+    }
+  }
+
+  private String getPlaceNumString() {
+    int finisherNum = finishedPlayers.size();
+    String finisherNumString;
+    switch (finisherNum) {
+      case 1: finisherNumString = "first"; break;
+      case 2: finisherNumString = "second"; break;
+      case 3: finisherNumString = "third"; break;
+      case 4: finisherNumString = "fourth"; break;
+      case 5: finisherNumString = "fifth"; break;
+      case 6: finisherNumString = "sixth"; break;
+      default: finisherNumString = "";
+    }
+    return finisherNumString;
   }
 
   /**

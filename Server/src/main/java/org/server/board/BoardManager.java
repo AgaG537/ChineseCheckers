@@ -28,7 +28,8 @@ public class BoardManager implements Board {
     initializeBoard();
     initializeNeighbors();
 
-    cells = PlayerZoneFactory.addPlayerZones(numOfPlayers,boardWidth,boardHeight,playerZoneHeight,cells);
+    PlayerZoneFactory playerZoneFactory = new PlayerZoneFactory(numOfPlayers,boardWidth,boardHeight,playerZoneHeight);
+    cells = playerZoneFactory.addPlayerZones(cells);
   }
 
   /**
@@ -313,5 +314,8 @@ public class BoardManager implements Board {
     return result;
   }
 
+  public int checkWin() {
+    return PlayerZoneFactory.checkZoneForWin(cells);
+  }
 
 }

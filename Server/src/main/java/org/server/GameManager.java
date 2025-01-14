@@ -20,6 +20,7 @@ public class GameManager {
   private boolean gameStarted;
   private Board currentBoard;
   private String variant;
+  private ArrayList<Integer> finishedPlayers;
 
   /**
    * Constructs a GameManager.
@@ -29,6 +30,7 @@ public class GameManager {
     this.maxUsers = 0;
     this.currTurn = 0;
     this.gameStarted = false;
+    finishedPlayers = new ArrayList<>();
   }
 
   public void setBoard(Board board) {
@@ -112,10 +114,24 @@ public class GameManager {
    * @param playerCount The total number of players in the game.
    */
   public synchronized void advanceTurn(int playerCount) {
-    if (currTurn + 1 > playerCount) {
-      currTurn = 1;
+    if (finishedPlayers.isEmpty()) {
+      if (currTurn + 1 > playerCount) {
+        currTurn = 1;
+      } else {
+        currTurn++;
+      }
     } else {
-      currTurn++;
+      if (playerCount == finishedPlayers.size()) {
+        broadcastGameFinished();
+      } else {
+        do {
+          if (currTurn + 1 > playerCount) {
+            currTurn = 1;
+          } else {
+            currTurn++;
+          }
+        } while (finishedPlayers.contains(currTurn));
+      }
     }
   }
 
@@ -164,6 +180,19 @@ public class GameManager {
     }
   }
 
+  /**
+   * Broadcasts a message that the game has started.
+   */
+  public synchronized void broadcastGameFinished() {
+    for (ClientHandler clientHandler : clientHandlers) {
+      try {
+        clientHandler.sendMessage("GAME FINISHED!");
+      } catch (Exception e) {
+        clientHandler.closeEverything();
+      }
+    }
+  }
+
 
   /**
    * Broadcasts a move made by a player to all clients.
@@ -184,6 +213,20 @@ public class GameManager {
           clientHandler.sendMessage("You just moved");
         }
         clientHandler.sendMessage(move);
+
+      } catch (Exception e) {
+        clientHandler.closeEverything();
+      }
+    }
+  }
+
+  /**
+   * Broadcasts a message that the player has won.
+   */
+  public synchronized void broadcastPlayerWon(int playerNum) {
+    for (ClientHandler clientHandler : clientHandlers) {
+      try {
+        clientHandler.sendMessage("WIN." + playerNum);
       } catch (Exception e) {
         clientHandler.closeEverything();
       }
@@ -197,6 +240,17 @@ public class GameManager {
     }
     else {
       return 1;
+    }
+  }
+
+  public int checkWin() {
+    return currentBoard.checkWin();
+  }
+
+  public void addFinishedPlayer(int playerNum) {
+    finishedPlayers.add(playerNum);
+    if (finishedPlayers.size() == clientHandlers.size()) {
+      broadcastGameFinished();
     }
   }
 }
