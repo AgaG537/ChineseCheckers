@@ -11,24 +11,36 @@ Wroclaw University of Science and Technology group project for Programming Techn
 - Maven version 3.3.0+
 
 ### Start-up
-1. Clone the repository.
-2. Run commands in the terminal:
+1. Clone the repository:
+```
+git clone https://github.com/JinerX/ChineseCheckers.git
+```
+2. Go to the project folder and switch to the secondIteration branch:
+```
+cd ChineseCheckers
+git checkout secondIteration
+```
+3. To start the Server, run commands in the terminal:
 ```
 cd Server
 mvn clean install exec:java
 ```
-7. Information about server starting should appear.
-8. In a separate terminal, run commands:
+&emsp;Information about server starting should appear.
+
+4. To run the Client, in a separate terminal, run commands:
 ```
 cd Client
 mvn clean install javafx:run
 ```
-9. The JavaFX window with game options should appear. As a first player - host, choose game variant, number of players and click the **APPLY** button.
-10. Now you can run the Client program (commands for the Client folder given above) for the rest of the players, from separate terminals.
+&emsp;The JavaFX window with game options should appear. As a host, choose game variant, number of players and click the **APPLY** button.
 
-### Implemented rules
-1. When all clients are connected, one of them will be selected at random and asked to make a move.
-2. ... (_to be added_)
+5. Now you can run the Client program (commands for the Client folder given above) for the rest of the players, from separate terminals.
+
+### Implemented rules - standard version
+1. When all clients are connected, one of them will be selected at random and asked to make a move. Then, the order of players' moves is determined clockwise.
+2. A player's movement can consist of individual moves or jumps over other pawns (their own or other players'). A player can also choose not to make a move by pressing the **SKIP TURN** button.
+3. When one of the players wins the game, an announcement is displayed. The remaining players can continue the game, competing for the remaining places (second, third, etc.).
+4. The game ends when all players reach opposite zones.
 
 ## Authors
 - Agnieszka Głuszkiewicz (AgaG537)
