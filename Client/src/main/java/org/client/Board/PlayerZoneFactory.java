@@ -8,6 +8,7 @@ import java.util.Random;
  * Factory class for generating player zones on the board.
  */
 public class PlayerZoneFactory {
+  private static int seed;
 
   /**
    * Adds player zones to the board for a specified number of players.
@@ -162,7 +163,8 @@ public class PlayerZoneFactory {
     }
 
     // Randomly distribute pawns in the middle of the board.
-    Random random = new Random(1234);
+    System.out.println("SEED------------------------------------------------------------------------" + seed);
+    Random random = new Random(seed);
     int player = 0;
     int currPlayer = 0;
     for (int j : activeZoneNums) {
@@ -196,7 +198,7 @@ public class PlayerZoneFactory {
 
   public static Cell[][] addYinYangZones(int boardWidth, int boardHeight, int playerZoneHeight, Cell[][] cells) {
     int marbles = (1+playerZoneHeight)*playerZoneHeight/2;
-    Random random = new Random(1234);
+    Random random = new Random(seed);
     int[][] playerZonesStartPoints = {
         {0, (boardWidth / 2)}, // Upper zone [0]
         {playerZoneHeight * 2 - 1, boardWidth - playerZoneHeight},  // Right upper zone xxx [1]
@@ -308,5 +310,9 @@ public class PlayerZoneFactory {
     currentCell.setFlag(5);
     currentCell.setInitialPlayerNum(playerNum);
     currentCell.setZoneColor(color);
+  }
+
+  public static void setSeed(int seed) {
+    PlayerZoneFactory.seed = seed;
   }
 }

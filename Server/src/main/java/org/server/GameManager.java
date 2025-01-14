@@ -21,6 +21,7 @@ public class GameManager {
   private Board currentBoard;
   private String variant;
   private ArrayList<Integer> finishedPlayers;
+  private int seed;
 
   /**
    * Constructs a GameManager.
@@ -51,6 +52,7 @@ public class GameManager {
     clientHandlers.add(clientHandler);
     try {
       clientHandler.sendMessage("VARIANT " + variant);
+      clientHandler.sendMessage("SEED " + seed);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -289,5 +291,9 @@ public class GameManager {
     if (finishedPlayers.size() == clientHandlers.size()) {
       broadcastGameFinished();
     }
+  }
+
+  public void setSeed(int seed) {
+    this.seed = seed;
   }
 }

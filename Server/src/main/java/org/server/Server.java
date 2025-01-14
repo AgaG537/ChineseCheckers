@@ -4,10 +4,12 @@ package org.server;
 import org.server.board.Board;
 import org.server.board.BoardFactory;
 import org.server.board.BoardManager;
+import org.server.board.PlayerZoneFactory;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Random;
 
 /**
  * The main server class responsible for accepting client connections
@@ -26,6 +28,10 @@ public class Server {
   public Server(ServerSocket serverSocket) {
     this.serverSocket = serverSocket;
     this.gameManager = new GameManager();
+    Random random = new Random();
+    int seed = random.nextInt(1000000);
+    this.gameManager.setSeed(seed);
+    PlayerZoneFactory.setSeed(seed);
   }
 
   /**

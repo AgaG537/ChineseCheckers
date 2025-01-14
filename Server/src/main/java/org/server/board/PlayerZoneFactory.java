@@ -15,6 +15,7 @@ public class PlayerZoneFactory {
   private static int numOfCellsPerZone;
   private static int[][] playerZonesStartPoints;
   private static ArrayList<Integer> finishedPlayers;
+  private static int seed;
 
   private static final Map<Integer, Map<Integer, Integer>> TARGET_PLAYER_NUMBERS = Map.of(
       2, Map.of(
@@ -201,7 +202,8 @@ public class PlayerZoneFactory {
     }
 
     // Randomly distribute pawns in the middle of the board.
-    Random random = new Random(1234);
+    System.out.println(seed);
+    Random random = new Random(seed);
     int player = 0;
     for (int j : activeZoneNums) {
       player++;
@@ -210,7 +212,6 @@ public class PlayerZoneFactory {
         while (i < marbles) {
           int row = random.nextInt(boardHeight);
           int col = random.nextInt(boardWidth);
-          System.out.println(row + " " + col);
 
           if (cells[row][col].getPawn() == null && cells[row][col].getZoneNum()==0 && cells[row][col].isInsideBoard()) {
             Pawn pawn = new Pawn(player, cells[row][col]);
@@ -289,7 +290,7 @@ public class PlayerZoneFactory {
 
   public Cell[][] addYinYangZones(int boardWidth, int boardHeight, int playerZoneHeight, Cell[][] cells) {
     int marbles = (1+playerZoneHeight)*playerZoneHeight/2;
-    Random random = new Random(1234);
+    Random random = new Random(seed);
     int[][] playerZonesStartPoints = {
         {0, (boardWidth / 2)}, // Upper zone [0]
         {playerZoneHeight * 2 - 1, boardWidth - playerZoneHeight},  // Right upper zone xxx [1]
@@ -390,5 +391,9 @@ public class PlayerZoneFactory {
   private static void setOrderCellZone(int zoneNum, int playerNum, Cell currentCell) {
     currentCell.setInitialPlayerNum(playerNum);
     currentCell.setZoneNum(zoneNum);
+  }
+
+  public static void setSeed(int seed) {
+    PlayerZoneFactory.seed = seed;
   }
 }
