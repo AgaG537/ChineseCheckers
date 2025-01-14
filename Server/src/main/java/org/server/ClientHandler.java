@@ -1,6 +1,8 @@
 package org.server;
 
 
+import org.server.board.MaxUserHandler;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -63,6 +65,7 @@ public class ClientHandler implements Runnable {
         maxUsers = Integer.parseInt(message[0]);
         variant = message[1];
         System.out.println(variant);
+        maxUsers = MaxUserHandler.handleMaxUsers(maxUsers, variant);
 
         gameManager.setMaxUsers(maxUsers);
         gameManager.setVariant(variant);
