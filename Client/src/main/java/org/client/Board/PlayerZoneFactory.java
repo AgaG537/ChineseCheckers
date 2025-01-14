@@ -97,7 +97,6 @@ public class PlayerZoneFactory {
    */
   public static Cell[][] addOrderPlayerZones(int numPlayers, int boardWidth, int boardHeight, int playerZoneHeight, Cell[][] cells) {
     int marbles = (1+playerZoneHeight)*playerZoneHeight/2;
-    System.out.printf("PZH %d, marbles: %d",playerZoneHeight, marbles);
 
 
     int[][] playerZonesStartPoints = {
@@ -163,7 +162,6 @@ public class PlayerZoneFactory {
     }
 
     // Randomly distribute pawns in the middle of the board.
-    System.out.println("SEED------------------------------------------------------------------------" + seed);
     Random random = new Random(seed);
     int player = 0;
     int currPlayer = 0;
@@ -171,20 +169,15 @@ public class PlayerZoneFactory {
       player++;
       if (j!=0) {
         currPlayer++;
-        System.out.println("Currplayer: " + currPlayer);
         int i = 0;
         while (i < marbles) {
-          System.out.printf("i: %d, marbles: %d\n", i, marbles);
           int row = random.nextInt(boardHeight);
           int col = random.nextInt(boardWidth);
-          System.out.println(row + " " + col);
 
           if (cells[row][col].getPawn() == null && cells[row][col].getZoneColor().toString().equals("0xffa64dff")) {
             Color pawnColor = ColorManager.generateDefaultColor(player);
             Pawn pawn = new Pawn(currPlayer, pawnColor, cells[row][col]);
             cells[row][col].pawnMoveIn(pawn);
-            System.out.printf("row: %d, col: %d\n", row, col);
-            System.out.println(cells[row][col].getPawn());
             i++;
           }
         }

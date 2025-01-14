@@ -21,7 +21,7 @@ public abstract class AbstractBoard implements Board {
 
   protected abstract void setupPlayerZones(int numOfPlayers);
 
-  private int calculatePlayerZoneHeight(int marblesPerPlayer) {
+  public int calculatePlayerZoneHeight(int marblesPerPlayer) {
     int sum = 0;
     int heightCounter = 0;
     while (sum < marblesPerPlayer) {
@@ -106,5 +106,9 @@ public abstract class AbstractBoard implements Board {
         cells[i][j].setOnMouseClicked(null);
       }
     }
+  }
+
+  public Cell[][] getCells() {
+    return cells;
   }
 }

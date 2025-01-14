@@ -56,38 +56,7 @@ public class ClientApp extends Application {
     Platform.runLater(new Runnable() {
       @Override
       public void run() {
-
-        if (message.startsWith("User number ") || message.equals("You just moved")) {
-          System.out.println(message);
-          guiManager.clearServerMessageBox();
-          guiManager.addCurrPlayerInfo();
-        } else if (message.startsWith("Turn skipped by user:") || message.equals("You just skipped")) {
-          System.out.println(message);
-          guiManager.clearServerMessageBox();
-          guiManager.addCurrPlayerInfo();
-        }
-        else if (message.equals("Game options correct.")) {
-          guiManager.setWaitingPanes();
-          guiManager.addLabel(message);
-        } else if (message.startsWith("START")) {
-          guiManager.setGamePanes(message);
-          guiManager.addCurrPlayerInfo();
-        } else if (message.equals("Invalid move!")) {
-          guiManager.addLabel(message);
-        } else if (message.startsWith("WIN")) {
-          guiManager.showWin(message);
-        } else if (message.equals("GAME FINISHED!")) {
-          guiManager.addLabel(message);
-        } else if (message.startsWith("[CMD]")) {
-
-        } else if (message.startsWith("VARIANT")) {
-          String[] tokens = message.split(" ");
-          guiManager.setVariant(tokens[1]);
-          System.out.println(message);
-        }
-        else {
-          guiManager.addLabel(message);
-        }
+        CommandHandler.handleCommand(message, guiManager);
       }
     });
   }

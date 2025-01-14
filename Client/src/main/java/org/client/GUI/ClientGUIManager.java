@@ -114,8 +114,6 @@ public class ClientGUIManager {
     String[] optionsTable = options.split(",");
     currTurn = Integer.parseInt(optionsTable[2]);
     numOfPlayers = Integer.parseInt(optionsTable[0]);
-//    String variant = optionsTable[1];
-    System.out.println(variant);
     gameViewManager = new GameViewManager(client, playerNum, boardBox, playerInfoBox, numOfPlayers, variant);
     gameViewManager.setGamePanes();
 

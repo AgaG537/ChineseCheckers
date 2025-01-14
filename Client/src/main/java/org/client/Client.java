@@ -67,7 +67,6 @@ public class Client {
       try {
         String userNumString = bufferedReader.readLine();
         userNum = Integer.parseInt(userNumString);
-        System.out.println(userNum);
       } catch (IOException e) {
         closeEverything();
       }
@@ -93,13 +92,11 @@ public class Client {
               board.handleCommand(messageFromServer);
             }
             else if (messageFromServer.startsWith("SEED")) {
-              System.out.println(messageFromServer);
               String[] tokens = messageFromServer.split(" ");
               PlayerZoneFactory.setSeed(Integer.parseInt(tokens[1]));
             }
             else {
               clientApp.handleMessageFromServer(messageFromServer);
-              System.out.println(messageFromServer);
             }
           } catch (IOException e) {
             closeEverything();
