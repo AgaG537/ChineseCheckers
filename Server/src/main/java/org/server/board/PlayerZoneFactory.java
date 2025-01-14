@@ -17,7 +17,7 @@ public class PlayerZoneFactory {
   private static ArrayList<Integer> finishedPlayers;
   private static int seed;
 
-  private static final Map<Integer, Map<Integer, Integer>> TARGET_PLAYER_NUMBERS = Map.of(
+  private static final Map<Integer, Map<Integer, Integer>> OPPOSITE_TARGET_PLAYER_NUMBERS = Map.of(
       2, Map.of(
           1, 2,
           4, 1
@@ -40,6 +40,32 @@ public class PlayerZoneFactory {
           6, 3,
           5, 2,
           4, 1
+      )
+  );
+
+  private static final Map<Integer, Map<Integer, Integer>> TARGET_PLAYER_NUMBERS = Map.of(
+      2, Map.of(
+          1, 1,
+          4, 2
+      ),
+      3, Map.of(
+          1, 1,
+          3, 2,
+          5, 3
+      ),
+      4, Map.of(
+          2, 1,
+          3, 2,
+          5, 3,
+          6, 4
+      ),
+      6, Map.of(
+          1, 1,
+          2, 2,
+          3, 3,
+          4, 4,
+          5, 5,
+          6, 6
       )
   );
 
@@ -206,8 +232,8 @@ public class PlayerZoneFactory {
     Random random = new Random(seed);
     int player = 0;
     for (int j : activeZoneNums) {
-      player++;
       if (j!=0) {
+        player++;
         int i = 0;
         while (i < marbles) {
           int row = random.nextInt(boardHeight);
@@ -242,13 +268,19 @@ public class PlayerZoneFactory {
   }
 
 
-  public static int checkZoneForWin(Cell[][] cells) {
+  public static int checkZoneForWin(Cell[][] cells, String variant) {
     for (int i = 0; i < playerZonesStartPoints.length; i++) {
       int[] zoneStartPoint = playerZonesStartPoints[i];
       int rowStart = zoneStartPoint[0];
       int colStart = zoneStartPoint[1];
 
-      int targetPlayerNum = getTargetPlayerNum(i + 1);
+
+      int targetPlayerNum;
+      if (variant.equals("standard")) {
+        targetPlayerNum = getOppositeTargetPlayerNum(i + 1);
+      } else {
+        targetPlayerNum = getTargetPlayerNum(i + 1);
+      }
 
       if (targetPlayerNum != 0 && !finishedPlayers.contains(targetPlayerNum)) {
         int targetPlayerInCount = 0;
@@ -305,34 +337,35 @@ public class PlayerZoneFactory {
       activeZoneNums[i] = 0;
     }
 
-    int player1num = random.nextInt(6);
-    int player2num = random.nextInt(6);
-    while (player2num == player1num) {
-      player2num = random.nextInt(6);
+    int player1ZoneNum = random.nextInt(6);
+    int player2ZoneNum = random.nextInt(6);
+    while (player1ZoneNum == player2ZoneNum || player1ZoneNum == 0 || player2ZoneNum == 3) {
+      player1ZoneNum = random.nextInt(6);
+      player2ZoneNum = random.nextInt(6);
     }
-    int[] playerNums = {player1num, player2num};
 
-    activeZoneNums[player2num] = activeZoneNums[player1num]= 1;
-    int defaultPlayerNum = 1;
-    int playerNum = 0;
+    activeZoneNums[player1ZoneNum] = activeZoneNums[player2ZoneNum] = 1;
+    int playerNum;
 
-    int currColor = 0;
     for (int i = 0; i < playerZonesStartPoints.length; i++) {
       int[] zoneStartPoint = playerZonesStartPoints[i];
       int rowStart = zoneStartPoint[0];
       int colStart = zoneStartPoint[1];
 
       int k = 0;
-      int counter = 0;
       if (i % 2 == 0) {
         for (int row = rowStart; row < rowStart + playerZoneHeight; row++) {
           for (int col = colStart - k; col <= colStart + k; col += 2) {
             if (activeZoneNums[i] == 1) {
-              playerNum = defaultPlayerNum;
+              if (i == player1ZoneNum) {
+                playerNum = 1;
+              } else {
+                playerNum = 2;
+              }
             } else {
               playerNum = 0;
             }
-            setYinYangCellZone(playerNums, playerNum, cells[row][col]);
+            setCellZone(i + 1, playerNum, cells[row][col]);
           }
           k++;
         }
@@ -340,17 +373,18 @@ public class PlayerZoneFactory {
         for (int row = rowStart; row > rowStart - playerZoneHeight; row--) {
           for (int col = colStart - k; col <= colStart + k; col += 2) {
             if (activeZoneNums[i] == 1) {
-              playerNum = defaultPlayerNum;
+              if (i == player1ZoneNum) {
+                playerNum = 1;
+              } else {
+                playerNum = 2;
+              }
             } else {
               playerNum = 0;
             }
-            setYinYangCellZone(playerNums, playerNum, cells[row][col]);
+            setCellZone(i + 1, playerNum, cells[row][col]);
           }
           k++;
         }
-      }
-      if (playerNum == defaultPlayerNum) {
-        defaultPlayerNum++;
       }
     }
 
@@ -359,6 +393,10 @@ public class PlayerZoneFactory {
 
   public static int getTargetPlayerNum(int zoneNum) {
     return TARGET_PLAYER_NUMBERS.get(numPlayers).getOrDefault(zoneNum, 0);
+  }
+
+  public static int getOppositeTargetPlayerNum(int zoneNum) {
+    return OPPOSITE_TARGET_PLAYER_NUMBERS.get(numPlayers).getOrDefault(zoneNum, 0);
   }
 
   private int getNumOfCellsPerZone(int playerZoneHeight) {

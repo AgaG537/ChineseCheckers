@@ -23,4 +23,9 @@ public class YinYangBoardManager extends AbstractBoardManager {
     cells =  playerZoneFactory.addYinYangZones(boardWidth,boardHeight,playerZoneHeight,cells);
   }
 
+  @Override
+  public int checkWin() {
+    return PlayerZoneFactory.checkZoneForWin(cells,"yinyang");
+  }
+
 }
