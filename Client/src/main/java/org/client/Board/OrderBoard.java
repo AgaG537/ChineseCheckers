@@ -2,7 +2,7 @@ package org.client.Board;
 
 import javafx.scene.paint.Color;
 
-public class CaptureBoard implements Board {
+public class OrderBoard implements Board {
   private final int playerZoneHeight;
   private final int boardHeight; //17
   private final int boardWidth; //25
@@ -10,7 +10,7 @@ public class CaptureBoard implements Board {
 
   private final int constraintSize;
 
-  public CaptureBoard(int marblesPerPlayer, int numOfPlayers) {
+  public OrderBoard(int marblesPerPlayer, int numOfPlayers) {
     playerZoneHeight = countPlayerZoneHeight(marblesPerPlayer);
     boardHeight = playerZoneHeight * 4 + 1;
     boardWidth = (playerZoneHeight * 6) + 1;
@@ -19,7 +19,7 @@ public class CaptureBoard implements Board {
     cells = new Cell[boardHeight][boardWidth];
     initializeBoard();
 
-    cells = PlayerZoneFactory.addPlayerZones(numOfPlayers,boardWidth,boardHeight,playerZoneHeight,cells);
+    cells = PlayerZoneFactory.addOrderPlayerZones(numOfPlayers,boardWidth,boardHeight,playerZoneHeight,cells);
   }
 
   /**
@@ -121,4 +121,5 @@ public class CaptureBoard implements Board {
       }
     }
   }
+
 }
