@@ -153,6 +153,7 @@ public abstract class AbstractBoardManager implements Board {
    * @return The cell at the specified position.
    */
   public Cell getCell(int i, int j) {
+    System.out.printf("rows: %d, cols: %d\n", cells.length, cells[0].length);
     return cells[i][j];
   }
 
@@ -199,6 +200,10 @@ public abstract class AbstractBoardManager implements Board {
 
     // Validate starting and ending positions
     if (!isValidStartingPoint(userNum, startPlayer) || !isValidEndingPoint(endPlayer)) {
+      return false;
+    }
+
+    if (cells[startRow][startCol].getPawn() == null) {
       return false;
     }
 
@@ -392,6 +397,10 @@ public abstract class AbstractBoardManager implements Board {
    */
   public int checkWin() {
     return PlayerZoneFactory.checkZoneForWin(cells);
+  }
+
+  public Cell[][] getCells() {
+    return cells;
   }
 
 }
