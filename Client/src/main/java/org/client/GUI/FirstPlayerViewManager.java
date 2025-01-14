@@ -24,7 +24,7 @@ public class FirstPlayerViewManager {
   private final VBox sideBox;
 
   private final int[] numsOfPlayers = {2,3,4,6};
-  private final String[] possibleVariants = {"standard", "variant1", "variant2"};
+  private final String[] possibleVariants = {"standard", "order", "yinyang"};
   private String chosenVariant;
   private Integer numOfPlayers;
   private ClientGUIManager guiManager;

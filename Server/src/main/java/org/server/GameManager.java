@@ -55,6 +55,10 @@ public class GameManager {
     this.variant=variant;
   };
 
+  public String getVariant() {
+    return variant;
+  }
+
   /**
    * Removes a client handler from the user manager.
    *

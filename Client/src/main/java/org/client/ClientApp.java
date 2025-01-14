@@ -76,6 +76,7 @@ public class ClientApp extends Application {
         } else if (message.startsWith("VARIANT")) {
           String[] tokens = message.split(" ");
           guiManager.setVariant(tokens[1]);
+          System.out.println(message);
         }
         else {
           guiManager.addLabel(message);

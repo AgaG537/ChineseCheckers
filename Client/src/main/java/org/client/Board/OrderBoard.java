@@ -110,6 +110,16 @@ public class OrderBoard implements Board {
 
   @Override
   public void handleCommand(String command) {
+    int[] vals = decodeInput(command);
+
+    int rowStart = vals[0];
+    int colStart = vals[1];
+    int rowEnd = vals[2];
+    int colEnd = vals[3];
+
+    Pawn pawn = cells[rowStart][colStart].getPawn();
+    cells[rowStart][colStart].pawnMoveOut();
+    cells[rowEnd][colEnd].pawnMoveIn(pawn);
   }
 
   @Override
@@ -120,6 +130,21 @@ public class OrderBoard implements Board {
         cells[i][j].setOnMouseClicked(null);
       }
     }
+  }
+
+  private int[] decodeInput(String input) {
+    String[] tokens = input.split(" ");
+    int[] result = new int[tokens.length];
+
+
+    try {
+      for (int i = 1; i < tokens.length; i++) {
+        result[i-1] = Integer.parseInt(tokens[i]);
+      }
+    } catch (NumberFormatException e) {
+      e.printStackTrace();
+    }
+    return result;
   }
 
 }

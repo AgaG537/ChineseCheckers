@@ -1,6 +1,8 @@
 package org.server;
 
 
+import org.server.board.Board;
+import org.server.board.BoardFactory;
 import org.server.board.BoardManager;
 
 import java.io.IOException;
@@ -41,7 +43,8 @@ public class Server {
 
           if (gameManager.getClientHandlers().size() == gameManager.getMaxUsers()) {
             gameManager.startGame();
-            gameManager.setBoard(new BoardManager(10, gameManager.getMaxUsers(), "standard"));
+            Board board = BoardFactory.createBoard(10, gameManager.getMaxUsers(), gameManager.getVariant());
+            gameManager.setBoard(board);
             gameManager.broadcastGameStarted();
           }
         }
