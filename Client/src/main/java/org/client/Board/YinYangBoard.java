@@ -7,6 +7,7 @@ public class YinYangBoard extends AbstractBoard {
 
   @Override
   protected void setupPlayerZones(int numOfPlayers) {
-    cells = PlayerZoneFactory.addYinYangZones(boardWidth, boardHeight, playerZoneHeight, cells);
+    PlayerZoneFactory playerZoneFactory = new PlayerZoneFactory(2,boardWidth,boardHeight,playerZoneHeight);
+    cells =  playerZoneFactory.addYinYangZones(cells);
   }
 }

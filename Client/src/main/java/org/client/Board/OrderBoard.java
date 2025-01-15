@@ -7,6 +7,7 @@ public class OrderBoard extends AbstractBoard {
 
   @Override
   protected void setupPlayerZones(int numOfPlayers) {
-    cells = PlayerZoneFactory.addOrderPlayerZones(numOfPlayers, boardWidth, boardHeight, playerZoneHeight, cells);
+    PlayerZoneFactory playerZoneFactory = new PlayerZoneFactory(numOfPlayers,boardWidth,boardHeight,playerZoneHeight);
+    cells =  playerZoneFactory.addOrderPlayerZones(cells);
   }
 }
