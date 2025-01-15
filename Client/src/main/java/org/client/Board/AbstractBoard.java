@@ -9,6 +9,13 @@ public abstract class AbstractBoard implements Board {
   protected final int constraintSize;
   protected Cell[][] cells;
 
+
+  /**
+   * Constructs an AbstractBoard with the specified number of marbles per player and number of players.
+   *
+   * @param marblesPerPlayer The number of marbles each player has.
+   * @param numOfPlayers The number of players in the game.
+   */
   public AbstractBoard(int marblesPerPlayer, int numOfPlayers) {
     playerZoneHeight = calculatePlayerZoneHeight(marblesPerPlayer);
     boardHeight = playerZoneHeight * 4 + 1;
@@ -19,8 +26,21 @@ public abstract class AbstractBoard implements Board {
     setupPlayerZones(numOfPlayers);
   }
 
+  /**
+   * Abstract method for setting up player zones.
+   * Must be implemented by subclasses.
+   *
+   * @param numOfPlayers The number of players in the game.
+   */
   protected abstract void setupPlayerZones(int numOfPlayers);
 
+
+  /**
+   * Calculates the height of a player's zone based on the number of marbles.
+   *
+   * @param marblesPerPlayer The number of marbles per player.
+   * @return The height of the player zone, or 0 if invalid.
+   */
   public int calculatePlayerZoneHeight(int marblesPerPlayer) {
     int sum = 0;
     int heightCounter = 0;
@@ -31,6 +51,9 @@ public abstract class AbstractBoard implements Board {
     return sum == marblesPerPlayer ? heightCounter : 0;
   }
 
+  /**
+   * Initializes the game board by creating and marking valid cells.
+   */
   private void initializeBoard() {
     for (int i = 0; i < boardHeight; i++) {
       for (int j = 0; j < boardWidth; j++) {
@@ -40,6 +63,9 @@ public abstract class AbstractBoard implements Board {
     markValidBoardPositions();
   }
 
+  /**
+   * Marks valid positions on the board based on its geometry.
+   */
   private void markValidBoardPositions() {
     int k = 0;
     for (int i = 0; i < boardHeight - playerZoneHeight; i++) {
@@ -51,6 +77,13 @@ public abstract class AbstractBoard implements Board {
     }
   }
 
+
+  /**
+   * Sets a cell as part of the playable area and assigns a default color.
+   *
+   * @param row The row index of the cell.
+   * @param col The column index of the cell.
+   */
   private void setCellAsInsideBoard(int row, int col) {
     if (!cells[row][col].isInsideBoard()) {
       cells[row][col].setInsideBoard();
@@ -108,6 +141,11 @@ public abstract class AbstractBoard implements Board {
     }
   }
 
+  /**
+   * Returns the 2D array of cells representing the board.
+   *
+   * @return A 2D array of {@link Cell} objects.
+   */
   public Cell[][] getCells() {
     return cells;
   }
