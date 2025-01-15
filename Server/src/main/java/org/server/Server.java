@@ -55,29 +55,31 @@ public class Server {
             Board board = BoardFactory.createBoard(10, gameManager.getMaxUsers(), gameManager.getVariant());
             gameManager.setBoard(board);
             gameManager.broadcastGameStarted();
-            sleep(1000);
+            while (!allSetup(gameManager.getClientHandlers())) {
+              sleep(10);
+            }
             gameManager.broadcastBoardCreate();
-//            if (allSetup(gameManager.getClientHandlers())) {
-////              gameManager.broadcastGameStarted();
-//              gameManager.broadcastBoardCreate();
-//            }
           }
         }
       }
     } catch (IOException e) {
       closeServerSocket();
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
     }
-    catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
-    }
+//    catch (InterruptedException e) {
+//      Thread.currentThread().interrupt();
+//    }
   }
 
   public boolean allSetup(List<ClientHandler> clientHandlers) {
     for (ClientHandler clientHandler : clientHandlers) {
       if (clientHandler.getSetup() == false) {
+        System.out.println("ret false");
         return false;
       }
     }
+    System.out.println("ret true");
     return true;
   }
 

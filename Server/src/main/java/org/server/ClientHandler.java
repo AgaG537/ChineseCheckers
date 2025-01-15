@@ -86,16 +86,16 @@ public class ClientHandler implements Runnable {
   public void run() {
     try {
       while (socket.isConnected()) {
-        if (gameManager.isGameStarted() && userNum == gameManager.getCurrTurn()) {
-          String message = bufferedReader.readLine();
-          if (message.startsWith("SETUP")) {
-            if (Integer.parseInt(message.split(" ")[1]) == userNum) {
-              this.setup = true;
-              System.out.println("Client " + userNum + " setup complete");
-              sendMessage("[SETUP]");
-            }
-            continue;
+        String message = bufferedReader.readLine();
+        if (message.startsWith("SETUP")) {
+          if (Integer.parseInt(message.split(" ")[1]) == userNum) {
+            this.setup = true;
+            System.out.println("Client " + userNum + " setup complete");
+            sendMessage("[SETUP]");
           }
+          continue;
+        }
+        if (gameManager.isGameStarted() && userNum == gameManager.getCurrTurn()) {
           int flag = gameManager.validateMove(userNum, message);
           switch (flag) {
             case 0:

@@ -15,6 +15,7 @@ public class Client {
   private BufferedWriter bufferedWriter;
   private ClientApp clientApp;
   private Board board;
+  private boolean setup =  false;
 
   /**
    * Constructs a Client with the specified socket and GUI.
@@ -98,7 +99,10 @@ public class Client {
                 board.handleCommand(messageFromServer);
               } else if (messageFromServer.startsWith("[CREATE]")) {
                 board.handleCreate(messageFromServer);
-              } else if (messageFromServer.startsWith("SEED")) {
+              } else if (messageFromServer.equals("[SETUP]")) {
+                setup = true;
+              }
+              else if (messageFromServer.startsWith("SEED")) {
                 String[] tokens = messageFromServer.split(" ");
                 PlayerZoneFactory.setSeed(Integer.parseInt(tokens[1]));
               } else {
@@ -128,4 +132,7 @@ public class Client {
     }
   }
 
+  public boolean getSetupStatus() {
+    return setup;
+  }
 }

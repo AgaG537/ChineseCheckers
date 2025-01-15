@@ -58,6 +58,9 @@ public class GameViewManager {
     this.playerInfoBox = playerInfoBox;
     this.board = BoardFactory.createBoard(variant, 10, numOfPlayers);
     client.setBoard(board);
+    while (!client.getSetupStatus()) {
+      client.sendMessage("SETUP " + playerNum);
+    }
     rawCommand = new ArrayList<>();
 
     constraintSize = board.getConstraintSize();
