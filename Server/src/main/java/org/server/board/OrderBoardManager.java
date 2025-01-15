@@ -1,9 +1,5 @@
 package org.server.board;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 public class OrderBoardManager extends AbstractBoardManager {
 
 
@@ -20,7 +16,7 @@ public class OrderBoardManager extends AbstractBoardManager {
   @Override
   protected void setupPlayerZones(int numOfPlayers) {
     PlayerZoneFactory playerZoneFactory = new PlayerZoneFactory(numOfPlayers,boardWidth,boardHeight,playerZoneHeight);
-    cells = playerZoneFactory.addOrderPlayerZones(numOfPlayers,boardWidth,boardHeight,playerZoneHeight,cells);
+    cells = playerZoneFactory.addOrderPlayerZones(cells);
   }
 
   @Override

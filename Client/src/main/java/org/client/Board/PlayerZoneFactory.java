@@ -5,22 +5,33 @@ import javafx.scene.paint.Color;
 import java.util.Random;
 
 /**
- * Factory class for generating player zones on the board.
+ * Factory class for generating and managing player zones on the game board.
  */
 public class PlayerZoneFactory {
+  private static int numPlayers;
+  private static int boardWidth;
+  private static int boardHeight;
+  private static int playerZoneHeight;
+  private static int numOfCellsPerZone;
+  private static int[][] playerZonesStartPoints;
   private static int seed;
+  private static int[] activeZoneNums;
 
   /**
-   * Adds player zones to the board for a specified number of players.
+   * Initializes the factory with the game settings.
    *
-   * @param boardWidth The width of the board.
-   * @param boardHeight The height of the board.
-   * @param playerZoneHeight The height of each player's zone.
-   * @param cells The current state of the board's cells.
-   * @return The updated board cells with player zones added.
+   * @param numOfPlayers       Number of players in the game.
+   * @param boardWidthValue    Width of the game board.
+   * @param boardHeightValue   Height of the game board.
+   * @param playerZoneHeightValue Height of a player's zone.
    */
-  public static Cell[][] addPlayerZones(int numPlayers, int boardWidth, int boardHeight, int playerZoneHeight, Cell[][] cells) {
-    int[][] playerZonesStartPoints = {
+  public PlayerZoneFactory(int numOfPlayers, int boardWidthValue, int boardHeightValue, int playerZoneHeightValue) {
+    numPlayers = numOfPlayers;
+    playerZoneHeight = playerZoneHeightValue;
+    boardWidth = boardWidthValue;
+    boardHeight = boardHeightValue;
+    numOfCellsPerZone = getNumOfCellsPerZone(playerZoneHeight);
+    playerZonesStartPoints = new int[][]{
         {0, (boardWidth / 2)}, // Upper zone [0]
         {playerZoneHeight * 2 - 1, boardWidth - playerZoneHeight},  // Right upper zone xxx [1]
         {boardHeight - playerZoneHeight * 2, boardWidth - playerZoneHeight}, // Right bottom zone [2]
@@ -28,8 +39,14 @@ public class PlayerZoneFactory {
         {boardHeight - playerZoneHeight * 2, playerZoneHeight - 1}, // Left bottom zone [4]
         {playerZoneHeight * 2 - 1, playerZoneHeight - 1} // Left upper zone xxx [5]
     };
+    activeZoneNums = new int[6];
+    markActiveZones();
+  }
 
-    int[] activeZoneNums = new int[6];
+  /**
+   * Marks the zones as active or inactive based on the number of players.
+   */
+  private void markActiveZones() {
     for (int i = 0; i < activeZoneNums.length; i++) {
       activeZoneNums[0] = 0;
     }
@@ -39,7 +56,15 @@ public class PlayerZoneFactory {
       case 4: activeZoneNums[1] = activeZoneNums[2] = activeZoneNums[4] = activeZoneNums[5] = 1; break;
       default: activeZoneNums[0] = activeZoneNums[1] = activeZoneNums[2] = activeZoneNums[3] = activeZoneNums[4] = activeZoneNums[5] = 1;
     }
+  }
 
+  /**
+   * Adds standard player zones to the board.
+   *
+   * @param cells The current state of the board's cells.
+   * @return The updated board cells with player zones added.
+   */
+  public static Cell[][] addPlayerZones(Cell[][] cells) {
     int defaultPlayerNum = 1;
     int playerNum = 0;
 
@@ -86,38 +111,14 @@ public class PlayerZoneFactory {
   }
 
   /**
-   * Adds player zones to the board for a specified number of players.
+   * Adds player zones for an order out of chaos variant to the
+   * board and distributes pawns randomly in the middle of the board.
    *
-   * @param numPlayers The number of players.
-   * @param boardWidth The width of the board.
-   * @param boardHeight The height of the board.
-   * @param playerZoneHeight The height of each player's zone.
    * @param cells The current state of the board's cells.
-   * @return The updated board cells with player zones added.
+   * @return The updated board cells with ordered player zones added.
    */
-  public static Cell[][] addOrderPlayerZones(int numPlayers, int boardWidth, int boardHeight, int playerZoneHeight, Cell[][] cells) {
-    int marbles = (1+playerZoneHeight)*playerZoneHeight/2;
-
-
-    int[][] playerZonesStartPoints = {
-        {0, (boardWidth / 2)}, // Upper zone [0]
-        {playerZoneHeight * 2 - 1, boardWidth - playerZoneHeight},  // Right upper zone xxx [1]
-        {boardHeight - playerZoneHeight * 2, boardWidth - playerZoneHeight}, // Right bottom zone [2]
-        {boardHeight - 1, (boardWidth / 2)}, // Bottom zone xxx [3]
-        {boardHeight - playerZoneHeight * 2, playerZoneHeight - 1}, // Left bottom zone [4]
-        {playerZoneHeight * 2 - 1, playerZoneHeight - 1} // Left upper zone xxx [5]
-    };
-
-    int[] activeZoneNums = new int[6];
-    for (int i = 0; i < activeZoneNums.length; i++) {
-      activeZoneNums[0] = 0;
-    }
-    switch (numPlayers) {
-      case 2: activeZoneNums[0] = activeZoneNums[3] = 1; break;
-      case 3: activeZoneNums[0] = activeZoneNums[2] = activeZoneNums[4] = 1; break;
-      case 4: activeZoneNums[1] = activeZoneNums[2] = activeZoneNums[4] = activeZoneNums[5] = 1; break;
-      default: activeZoneNums[0] = activeZoneNums[1] = activeZoneNums[2] = activeZoneNums[3] = activeZoneNums[4] = activeZoneNums[5] = 1;
-    }
+  public static Cell[][] addOrderPlayerZones(Cell[][] cells) {
+    int marbles = numOfCellsPerZone;
 
     int defaultPlayerNum = 1;
     int playerNum = 0;
@@ -187,19 +188,14 @@ public class PlayerZoneFactory {
     return cells;
   }
 
-
-
-  public static Cell[][] addYinYangZones(int boardWidth, int boardHeight, int playerZoneHeight, Cell[][] cells) {
-    int marbles = (1+playerZoneHeight)*playerZoneHeight/2;
+  /**
+   * Adds Yin-Yang player zones for a specific game mode.
+   *
+   * @param cells The current state of the board's cells.
+   * @return The updated board cells with Yin-Yang player zones added.
+   */
+  public static Cell[][] addYinYangZones(Cell[][] cells) {
     Random random = new Random(seed);
-    int[][] playerZonesStartPoints = {
-        {0, (boardWidth / 2)}, // Upper zone [0]
-        {playerZoneHeight * 2 - 1, boardWidth - playerZoneHeight},  // Right upper zone xxx [1]
-        {boardHeight - playerZoneHeight * 2, boardWidth - playerZoneHeight}, // Right bottom zone [2]
-        {boardHeight - 1, (boardWidth / 2)}, // Bottom zone xxx [3]
-        {boardHeight - playerZoneHeight * 2, playerZoneHeight - 1}, // Left bottom zone [4]
-        {playerZoneHeight * 2 - 1, playerZoneHeight - 1} // Left upper zone xxx [5]
-    };
 
     int[] activeZoneNums = new int[6];
     for (int i = 0; i < activeZoneNums.length; i++) {
@@ -208,8 +204,7 @@ public class PlayerZoneFactory {
 
     int player1ZoneNum = random.nextInt(6);
     int player2ZoneNum = random.nextInt(6);
-    while (player1ZoneNum == player2ZoneNum || player1ZoneNum == 0 || player2ZoneNum == 3) {
-      player1ZoneNum = random.nextInt(6);
+    while (player1ZoneNum == player2ZoneNum) {
       player2ZoneNum = random.nextInt(6);
     }
 
@@ -225,34 +220,28 @@ public class PlayerZoneFactory {
       if (i % 2 == 0) {
         for (int row = rowStart; row < rowStart + playerZoneHeight; row++) {
           for (int col = colStart - k; col <= colStart + k; col += 2) {
-            Color color = ColorManager.generateDefaultColor(i + 1);
             if (activeZoneNums[i] == 1) {
               if (i == player1ZoneNum) {
                 playerNum = 1;
               } else {
                 playerNum = 2;
               }
-            } else {
-              playerNum = 0;
+              setYinYangCellZone(playerNum, cells[row][col]);
             }
-            setYinYangCellZone(color, playerNum, cells[row][col]);
           }
           k++;
         }
       } else {
         for (int row = rowStart; row > rowStart - playerZoneHeight; row--) {
           for (int col = colStart - k; col <= colStart + k; col += 2) {
-            Color color = ColorManager.generateDefaultColor(i + 1);
             if (activeZoneNums[i] == 1) {
               if (i == player1ZoneNum) {
                 playerNum = 1;
               } else {
                 playerNum = 2;
               }
-            } else {
-              playerNum = 0;
+              setYinYangCellZone(playerNum, cells[row][col]);
             }
-            setYinYangCellZone(color, playerNum, cells[row][col]);
           }
           k++;
         }
@@ -263,12 +252,11 @@ public class PlayerZoneFactory {
   }
 
   /**
-   * Configures a cell by setting its initial player number and color.
-   * Creates a pawn for the player if their number is non-zero.
+   * Configures a cell with a player number and color, and optionally creates a pawn for the player.
    *
-   * @param color The color to set for the cell.
-   * @param playerNum The player's number (0 if no player, otherwise the player's number).
-   * @param currentCell The cell to update with the player's information.
+   * @param color       The color to set for the cell.
+   * @param playerNum   The player's number (0 for no player).
+   * @param currentCell The cell to update.
    */
   public static void setCellZone(Color color, int playerNum, Cell currentCell) {
     currentCell.setFlag(5);
@@ -280,31 +268,63 @@ public class PlayerZoneFactory {
     }
   }
 
-
-  public static void setYinYangCellZone(Color zoneColor, int playerNum, Cell currentCell) {
+  /**
+   * Configures a cell for the Yin-Yang game mode, setting the appropriate player and color.
+   *
+   * @param playerNum   The player's number (1 or 2).
+   * @param currentCell The cell to update.
+   */
+  public static void setYinYangCellZone(int playerNum, Cell currentCell) {
     currentCell.setFlag(5);
     currentCell.setInitialPlayerNum(playerNum);
-    currentCell.setZoneColor(zoneColor);
-    Color pawnColor;
+    Color color;
     if (playerNum != 0) {
       if (playerNum == 1) {
-        pawnColor = Color.BLACK;
+        color = Color.BLACK;
       }
       else {
-        pawnColor = Color.WHITE;
+        color = Color.WHITE;
       }
-      Pawn pawn = new Pawn(playerNum,pawnColor,currentCell);
+      currentCell.setZoneColor(color);
+      Pawn pawn = new Pawn(playerNum,color,currentCell);
       currentCell.pawnMoveIn(pawn);
     }
   }
 
-
+  /**
+   * Configures a cell for an order out of chaos variant, for zones without creating pawns.
+   *
+   * @param color       The color to set for the cell.
+   * @param playerNum   The player's number.
+   * @param currentCell The cell to update.
+   */
   private static void setOrderCellZone(Color color, int playerNum, Cell currentCell) {
     currentCell.setFlag(5);
     currentCell.setInitialPlayerNum(playerNum);
     currentCell.setZoneColor(color);
   }
 
+  /**
+   * Calculates the number of cells in a triangular player zone.
+   *
+   * @param playerZoneHeight The height of the player's zone.
+   * @return The total number of cells in the zone.
+   */
+  private static int getNumOfCellsPerZone(int playerZoneHeight) {
+    int counter = playerZoneHeight;
+    int numOfCells = 0;
+    while (counter != 0) {
+      numOfCells += counter;
+      counter--;
+    }
+    return numOfCells;
+  }
+
+  /**
+   * Sets the seed value for randomization, ensuring reproducibility.
+   *
+   * @param seed The seed value.
+   */
   public static void setSeed(int seed) {
     PlayerZoneFactory.seed = seed;
   }

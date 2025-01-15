@@ -7,6 +7,7 @@ public class StandardBoard extends AbstractBoard {
 
   @Override
   protected void setupPlayerZones(int numOfPlayers) {
-    cells = PlayerZoneFactory.addPlayerZones(numOfPlayers, boardWidth, boardHeight, playerZoneHeight, cells);
+    PlayerZoneFactory playerZoneFactory = new PlayerZoneFactory(numOfPlayers,boardWidth,boardHeight,playerZoneHeight);
+    cells =  playerZoneFactory.addPlayerZones(cells);
   }
 }
