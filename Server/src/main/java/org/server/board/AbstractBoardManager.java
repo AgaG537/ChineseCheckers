@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Abstract class representing the common functionality for managing different board types.
+ * Provides the structure for initializing the board, managing moves, and validating gameplay.
+ */
 public abstract class AbstractBoardManager implements Board {
   protected final int playerZoneHeight;
   protected final int boardHeight; //17
@@ -28,10 +32,16 @@ public abstract class AbstractBoardManager implements Board {
     initializeBoard();
     initializeNeighbors();
 
-    PlayerZoneFactory playerZoneFactory = new PlayerZoneFactory(numOfPlayers,boardWidth,boardHeight,playerZoneHeight);
+    PlayerZoneFactory playerZoneFactory = new PlayerZoneFactory(numOfPlayers, boardWidth, boardHeight, playerZoneHeight);
     setupPlayerZones(numOfPlayers);
   }
 
+  /**
+   * Factory method to set up player zones. The specific implementation
+   * is determined by subclasses based on the board type.
+   *
+   * @param numOfPlayers The number of players in the game.
+   */
   protected abstract void setupPlayerZones(int numOfPlayers);
 
   /**
@@ -103,7 +113,9 @@ public abstract class AbstractBoardManager implements Board {
     for (int i = 0; i < boardHeight; i++) {
       for (int j = 0; j < boardWidth; j++) {
         Cell current = cells[i][j];
-        if (!current.isInsideBoard()) continue; // Skip cells not inside the board.
+        if (!current.isInsideBoard()) {
+          continue; // Skip cells not inside the board.
+        }
 
         List<Cell> neighbors = new ArrayList<>();
         for (int[] dir : directions) {
@@ -397,6 +409,11 @@ public abstract class AbstractBoardManager implements Board {
    */
   public abstract int checkWin();
 
+  /**
+   * Retrieves the 2D array of cells representing the board.
+   *
+   * @return A 2D array of Cell objects.
+   */
   public Cell[][] getCells() {
     return cells;
   }

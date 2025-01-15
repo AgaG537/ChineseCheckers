@@ -241,6 +241,11 @@ public class GameManager {
     }
   }
 
+  /**
+   * Broadcasts a message that the turn has been skipped by a user.
+   *
+   * @param userNum The user number of the player who skipped their turn.
+   */
   public synchronized void broadcastSkip(int userNum) {
     if (!gameStarted) {
       return;
@@ -318,6 +323,11 @@ public class GameManager {
     }
   }
 
+  /**
+   * Sets the seed for the game, which may affect randomness in gameplay mechanics.
+   *
+   * @param seed The seed value to set.
+   */
   public void setSeed(int seed) {
     this.seed = seed;
   }

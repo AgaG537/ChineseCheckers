@@ -1,11 +1,19 @@
-package org.server.board;
+package org.server;
 
 import org.junit.jupiter.api.Test;
+import org.server.board.Cell;
+import org.server.board.PlayerZoneFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the PlayerZoneFactory class to verify the creation and placement of player zones on the board.
+ */
 class PlayerZoneFactoryTest {
 
+  /**
+   * Tests the addition of player zones to the board.
+   */
   @Test
   void testAddPlayerZones() {
     int numOfPlayers = 3;
