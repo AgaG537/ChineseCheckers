@@ -7,8 +7,14 @@ import org.server.board.Pawn;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the BoardManager class, focusing on board initialization, moves, and game state validation.
+ */
 public class BoardManagerTest {
 
+  /**
+   * Tests the initialization of the board, including dimensions and cell setup.
+   */
   @Test
   public void testBoardInitialization() {
     BoardManager boardManager = new BoardManager(10, 2);
@@ -25,12 +31,18 @@ public class BoardManagerTest {
     }
   }
 
+  /**
+   * Verifies that the constraint size of the board is positive.
+   */
   @Test
   public void testConstraintSize() {
     BoardManager boardManager = new BoardManager(10, 2);
     assertTrue(boardManager.getConstraintSize() > 0, "Constraint size should be positive");
   }
 
+  /**
+   * Tests the `makeMove` method by simulating a pawn move on the board.
+   */
   @Test
   public void testMakeMove() {
     BoardManager boardManager = new BoardManager(10, 2);
@@ -49,6 +61,9 @@ public class BoardManagerTest {
     assertEquals(1, boardManager.getCell(5, 5).getPawn().getPlayerNum(), "Pawn should belong to player 1");
   }
 
+  /**
+   * Validates moves according to game rules, including both valid and invalid scenarios.
+   */
   @Test
   public void testValidateMove() {
     BoardManager boardManager = new BoardManager(10, 2);
@@ -66,6 +81,9 @@ public class BoardManagerTest {
     assertFalse(boardManager.validateMove(1, invalidMove), "Move should be invalid");
   }
 
+  /**
+   * Checks the `checkWin` method to ensure it identifies winning conditions correctly.
+   */
   @Test
   public void testCheckWin() {
     BoardManager boardManager = new BoardManager(10, 2);

@@ -1,7 +1,6 @@
 package org.client.Board;
 
 import javafx.scene.paint.Color;
-
 import java.util.Random;
 
 /**
@@ -51,10 +50,17 @@ public class PlayerZoneFactory {
       activeZoneNums[0] = 0;
     }
     switch (numPlayers) {
-      case 2: activeZoneNums[0] = activeZoneNums[3] = 1; break;
-      case 3: activeZoneNums[0] = activeZoneNums[2] = activeZoneNums[4] = 1; break;
-      case 4: activeZoneNums[1] = activeZoneNums[2] = activeZoneNums[4] = activeZoneNums[5] = 1; break;
-      default: activeZoneNums[0] = activeZoneNums[1] = activeZoneNums[2] = activeZoneNums[3] = activeZoneNums[4] = activeZoneNums[5] = 1;
+      case 2:
+        activeZoneNums[0] = activeZoneNums[3] = 1;
+        break;
+      case 3:
+        activeZoneNums[0] = activeZoneNums[2] = activeZoneNums[4] = 1;
+        break;
+      case 4:
+        activeZoneNums[1] = activeZoneNums[2] = activeZoneNums[4] = activeZoneNums[5] = 1;
+        break;
+      default:
+        activeZoneNums[0] = activeZoneNums[1] = activeZoneNums[2] = activeZoneNums[3] = activeZoneNums[4] = activeZoneNums[5] = 1;
     }
   }
 
@@ -168,7 +174,7 @@ public class PlayerZoneFactory {
     int currPlayer = 0;
     for (int j : activeZoneNums) {
       player++;
-      if (j!=0) {
+      if (j != 0) {
         currPlayer++;
         int i = 0;
         while (i < marbles) {
@@ -263,7 +269,7 @@ public class PlayerZoneFactory {
     currentCell.setInitialPlayerNum(playerNum);
     currentCell.setZoneColor(color);
     if (playerNum != 0) {
-      Pawn pawn = new Pawn(playerNum,color,currentCell);
+      Pawn pawn = new Pawn(playerNum, color, currentCell);
       currentCell.pawnMoveIn(pawn);
     }
   }
@@ -281,12 +287,11 @@ public class PlayerZoneFactory {
     if (playerNum != 0) {
       if (playerNum == 1) {
         color = Color.BLACK;
-      }
-      else {
+      } else {
         color = Color.WHITE;
       }
       currentCell.setZoneColor(color);
-      Pawn pawn = new Pawn(playerNum,color,currentCell);
+      Pawn pawn = new Pawn(playerNum, color, currentCell);
       currentCell.pawnMoveIn(pawn);
     }
   }

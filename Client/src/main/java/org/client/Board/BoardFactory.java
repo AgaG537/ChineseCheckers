@@ -13,15 +13,18 @@ public class BoardFactory {
    * @param numOfPlayers Number of players in the game.
    * @return The created board object.
    */
-  public static Board createBoard(String variant,int marblesPerPlayer, int numOfPlayers) {
+  public static Board createBoard(String variant, int marblesPerPlayer, int numOfPlayers) {
     Board board;
     switch (variant) {
       case "standard":
-        board = new StandardBoard(marblesPerPlayer, numOfPlayers); break;
+        board = new StandardBoard(marblesPerPlayer, numOfPlayers);
+        break;
       case "order":
-        board = new OrderBoard(marblesPerPlayer,numOfPlayers); break;
+        board = new OrderBoard(marblesPerPlayer, numOfPlayers);
+        break;
       case "yinyang":
-        board = new YinYangBoard(marblesPerPlayer); break;
+        board = new YinYangBoard(marblesPerPlayer);
+        break;
       default:
         board = null;
     }

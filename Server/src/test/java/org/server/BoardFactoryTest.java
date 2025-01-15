@@ -5,8 +5,14 @@ import org.server.board.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the BoardFactory class to ensure correct creation of different board variants.
+ */
 class BoardFactoryTest {
 
+  /**
+   * Tests the creation of a standard board variant.
+   */
   @Test
   void testCreateStandardBoard() {
     Board board = BoardFactory.createBoard(10, 2, "standard");
@@ -14,6 +20,9 @@ class BoardFactoryTest {
     assertTrue(board instanceof BoardManager, "Standard Board should be an instance of BoardManager");
   }
 
+  /**
+   * Tests the creation of an order board variant.
+   */
   @Test
   void testCreateOrderBoard() {
     Board board = BoardFactory.createBoard(10, 3, "order");
@@ -21,6 +30,9 @@ class BoardFactoryTest {
     assertTrue(board instanceof OrderBoardManager, "Order Board should be an instance of OrderBoardManager");
   }
 
+  /**
+   * Tests the creation of a YinYang board variant.
+   */
   @Test
   void testCreateYinYangBoard() {
     Board board = BoardFactory.createBoard(15, 2, "yinyang");
@@ -28,6 +40,9 @@ class BoardFactoryTest {
     assertTrue(board instanceof YinYangBoardManager, "YinYang Board should be an instance of YinYangBoardManager");
   }
 
+  /**
+   * Tests that creating a board with an invalid variant returns null.
+   */
   @Test
   void testInvalidVariantReturnsNull() {
     Board board = BoardFactory.createBoard(10, 2, "invalid_variant");

@@ -23,7 +23,7 @@ public class FirstPlayerViewManager {
   private final VBox boardBox;
   private final VBox sideBox;
 
-  private final int[] numsOfPlayers = {2,3,4,6};
+  private final int[] numsOfPlayers = {2, 3, 4, 6};
   private final String[] possibleVariants = {"standard", "order", "yinyang"};
   private String chosenVariant;
   private Integer numOfPlayers;
@@ -60,12 +60,12 @@ public class FirstPlayerViewManager {
   private void setFirstPlayerCenterPane() {
     Label chineseCheckersLabel = new Label("Chinese Checkers");
     chineseCheckersLabel.setTextFill(Color.WHITE);
-    chineseCheckersLabel.setFont(new Font("Verdana",50));
+    chineseCheckersLabel.setFont(new Font("Verdana", 50));
     chineseCheckersLabel.setStyle("-fx-font-weight: bold");
 
     Label infoLabel = new Label("Provide necessary game options on the left.");
     infoLabel.setTextFill(Color.WHITE);
-    infoLabel.setFont(new Font("Verdana",23));
+    infoLabel.setFont(new Font("Verdana", 23));
 
     boardBox.getChildren().addAll(chineseCheckersLabel, infoLabel);
   }
@@ -75,11 +75,11 @@ public class FirstPlayerViewManager {
    */
   private void setFirstPlayerSidePane() {
     Label titleLabel = new Label("GAME SETUP");
-    titleLabel.setStyle("-fx-font-family: Verdana; -fx-font-size: 35; " +
-                        "-fx-font-weight: bold; -fx-text-fill: black");
+    titleLabel.setStyle("-fx-font-family: Verdana; -fx-font-size: 35; "
+        + "-fx-font-weight: bold; -fx-text-fill: black");
 
     Label chooseVariantLabel = new Label("Choose game variant:");
-    chooseVariantLabel.setFont(new Font("Verdana",23));
+    chooseVariantLabel.setFont(new Font("Verdana", 23));
     chooseVariantLabel.setStyle("-fx-text-fill: black");
 
     ChoiceBox<String> chooseVariantChoiceBox = new ChoiceBox<>();
@@ -93,7 +93,7 @@ public class FirstPlayerViewManager {
     chooseVariantChoiceBox.setStyle("-fx-font-size : 23px;");
 
     Label choosePlayerNumLabel = new Label("Choose number of \nplayers:");
-    choosePlayerNumLabel.setFont(new Font("Verdana",23));
+    choosePlayerNumLabel.setFont(new Font("Verdana", 23));
     choosePlayerNumLabel.setStyle("-fx-text-fill: black");
 
     ChoiceBox<Integer> choosePlayerNumChoiceBox = new ChoiceBox<>();
@@ -112,7 +112,7 @@ public class FirstPlayerViewManager {
     applyButton.setMinWidth(250);
     applyButton.setCursor(Cursor.HAND);
     applyButton.setTextFill(Color.WHITE);
-    applyButton.setFont(new Font("Verdana",23));
+    applyButton.setFont(new Font("Verdana", 23));
     applyButton.setStyle("-fx-background-color: #1C2541;");
 
     applyButton.setOnAction(e -> {

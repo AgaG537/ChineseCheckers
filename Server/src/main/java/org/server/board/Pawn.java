@@ -5,7 +5,7 @@ package org.server.board;
  * Tracks the player to which the pawn belongs and its current position.
  */
 public class Pawn {
-  private int playerNum;
+  private final int playerNum;
   private Cell currCell = null;
 
   /**

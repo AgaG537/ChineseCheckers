@@ -6,8 +6,14 @@ import org.server.board.Pawn;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the OrderBoardManager class, specifically validating order-specific rules and zone setup.
+ */
 class OrderBoardManagerTest {
 
+  /**
+   * Verifies that player zones are correctly set up during initialization.
+   */
   @Test
   void testSetupPlayerZones() {
     int marbles = 10;
@@ -28,6 +34,9 @@ class OrderBoardManagerTest {
     assertTrue(playerZoneCells > 0, "Player zones should be set up");
   }
 
+  /**
+   * Tests move validation specific to the order board rules.
+   */
   @Test
   void testMakeMoveInOrderBoard() {
     OrderBoardManager boardManager = new OrderBoardManager(10, 2);

@@ -2,6 +2,10 @@ package org.client.Board;
 
 import javafx.scene.paint.Color;
 
+/**
+ * Abstract class representing the common functionality for managing different board types.
+ * Provides the structure for initializing the board.
+ */
 public abstract class AbstractBoard implements Board {
   protected final int playerZoneHeight;
   protected final int boardHeight;
@@ -11,7 +15,8 @@ public abstract class AbstractBoard implements Board {
 
 
   /**
-   * Constructs an AbstractBoard with the specified number of marbles per player and number of players.
+   * Constructs an AbstractBoard with the specified number of marbles
+   * per player and number of players.
    *
    * @param marblesPerPlayer The number of marbles each player has.
    * @param numOfPlayers The number of players in the game.
@@ -91,26 +96,48 @@ public abstract class AbstractBoard implements Board {
     }
   }
 
+  /**
+   * @return The size constraint used
+   * for cell rendering in the GUI.
+   */
   @Override
   public int getConstraintSize() {
     return constraintSize;
   }
 
+  /**
+   * @return The width of the board.
+   */
   @Override
   public int getBoardWidth() {
     return boardWidth;
   }
 
+  /**
+   * @return The height of the board.
+   */
   @Override
   public int getBoardHeight() {
     return boardHeight;
   }
 
+  /**
+   * Retrieves a specific cell from the board.
+   *
+   * @param row Row index of the cell.
+   * @param col Column index of the cell.
+   * @return The cell at the specified position.
+   */
   @Override
   public Cell getCell(int row, int col) {
     return cells[row][col];
   }
 
+  /**
+   * Processes a command to move a pawn from one cell to another.
+   *
+   * @param command The command string specifying the move.
+   */
   @Override
   public void handleCommand(String command) {
     int[] positions = decodeCommand(command);
@@ -119,6 +146,12 @@ public abstract class AbstractBoard implements Board {
     cells[positions[2]][positions[3]].pawnMoveIn(pawn);
   }
 
+  /**
+   * Decodes a command string into an array of integers representing positions and parameters.
+   *
+   * @param command The command string to decode.
+   * @return An array of integers representing decoded positions and parameters.
+   */
   private int[] decodeCommand(String command) {
     String[] tokens = command.split(" ");
     int[] result = new int[tokens.length - 1];
@@ -132,6 +165,9 @@ public abstract class AbstractBoard implements Board {
     return result;
   }
 
+  /**
+   * Sets the win by making board not clickable.
+   */
   @Override
   public void setWin() {
     for (int i = 0; i < boardHeight; i++) {

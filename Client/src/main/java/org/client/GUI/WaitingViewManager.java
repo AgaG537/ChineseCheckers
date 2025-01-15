@@ -44,12 +44,12 @@ public class WaitingViewManager {
 
     Label chineseCheckersLabel = new Label("Chinese Checkers");
     chineseCheckersLabel.setTextFill(Color.WHITE);
-    chineseCheckersLabel.setFont(new Font("Verdana",50));
+    chineseCheckersLabel.setFont(new Font("Verdana", 50));
     chineseCheckersLabel.setStyle("-fx-font-weight: bold");
 
     Label infoLabel = new Label("Game all set up. Waiting for other players to join...");
     infoLabel.setTextFill(Color.WHITE);
-    infoLabel.setFont(new Font("Verdana",23));
+    infoLabel.setFont(new Font("Verdana", 23));
 
     boardBox.getChildren().addAll(chineseCheckersLabel, infoLabel);
   }

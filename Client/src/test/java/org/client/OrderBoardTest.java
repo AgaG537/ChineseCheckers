@@ -5,8 +5,14 @@ import org.client.Board.OrderBoard;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the OrderBoard class.
+ */
 class OrderBoardTest {
 
+  /**
+   * Tests that the OrderBoard initializes with the correct dimensions and properties.
+   */
   @Test
   void testOrderBoardInitialization() {
     int marblesPerPlayer = 10;
@@ -20,6 +26,9 @@ class OrderBoardTest {
         "Board width should be calculated correctly");
   }
 
+  /**
+   * Verifies that player zones are properly set up in the OrderBoard.
+   */
   @Test
   void testPlayerZonesSetup() {
     int marblesPerPlayer = 10;

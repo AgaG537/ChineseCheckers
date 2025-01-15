@@ -5,8 +5,14 @@ import org.client.Board.YinYangBoard;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the YinYangBoard class.
+ */
 class YinYangBoardTest {
 
+  /**
+   * Tests that the YinYangBoard initializes with the correct dimensions and properties.
+   */
   @Test
   void testYinYangBoardInitialization() {
     int marblesPerPlayer = 6;
@@ -19,6 +25,9 @@ class YinYangBoardTest {
         "Board width should be calculated correctly");
   }
 
+  /**
+   * Verifies that Yin-Yang player zones are properly set up in the YinYangBoard.
+   */
   @Test
   void testPlayerZonesSetup() {
     int marblesPerPlayer = 6;

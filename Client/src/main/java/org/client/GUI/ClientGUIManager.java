@@ -12,7 +12,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import org.client.Client;
-
 import java.util.ArrayList;
 
 /**
@@ -117,9 +116,10 @@ public class ClientGUIManager {
     gameViewManager = new GameViewManager(client, playerNum, boardBox, playerInfoBox, numOfPlayers, variant);
     gameViewManager.setGamePanes();
 
-    infoBox.setStyle("-fx-border-color: black; -fx-border-insets: 5; -fx-border-width: 3; -fx-border-style: dashed;");
+    infoBox.setStyle("-fx-border-color: black; -fx-border-insets: 5; "
+        + "-fx-border-width: 3; -fx-border-style: dashed;");
     infoBox.getChildren().addAll(playerInfoBox, currPlayerInfoBox);
-    serverMessageBox.setPadding(new Insets(0,15,0,15));
+    serverMessageBox.setPadding(new Insets(0, 15, 0, 15));
     sideBox.getChildren().addAll(infoBox, serverMessageBox);
   }
 
@@ -131,7 +131,7 @@ public class ClientGUIManager {
   public void addLabel(String message) {
     Label messageLabel = new Label(message);
     messageLabel.setTextFill(Color.BLACK);
-    messageLabel.setFont(new Font("Verdana",18));
+    messageLabel.setFont(new Font("Verdana", 18));
     messageLabel.setWrapText(true);
     serverMessageBox.getChildren().add(messageLabel);
   }
@@ -151,15 +151,15 @@ public class ClientGUIManager {
       titleLabel = new Label("YOU FINISHED!");
     }
 
-    titleLabel.setStyle("-fx-font-family: Verdana; -fx-font-size: 25; " +
-        "-fx-font-weight: bold; -fx-text-fill: black");
+    titleLabel.setStyle("-fx-font-family: Verdana; -fx-font-size: 25; "
+        + "-fx-font-weight: bold; -fx-text-fill: black");
 
     Label messageLabel = new Label();
     messageLabel.setTextFill(Color.BLACK);
-    messageLabel.setFont(new Font("Verdana",20));
+    messageLabel.setFont(new Font("Verdana", 20));
     messageLabel.setWrapText(true);
     messageLabel.setAlignment(Pos.CENTER);
-    messageLabel.setPadding(new Insets(0,0,5,0));
+    messageLabel.setPadding(new Insets(0, 0, 5, 0));
 
     currPlayerInfoBox.setPadding(new Insets(15));
     currPlayerInfoBox.setPrefHeight(130);
@@ -234,13 +234,26 @@ public class ClientGUIManager {
     int finisherNum = finishedPlayers.size();
     String finisherNumString;
     switch (finisherNum) {
-      case 1: finisherNumString = "first"; break;
-      case 2: finisherNumString = "second"; break;
-      case 3: finisherNumString = "third"; break;
-      case 4: finisherNumString = "fourth"; break;
-      case 5: finisherNumString = "fifth"; break;
-      case 6: finisherNumString = "sixth"; break;
-      default: finisherNumString = "";
+      case 1:
+        finisherNumString = "first";
+        break;
+      case 2:
+        finisherNumString = "second";
+        break;
+      case 3:
+        finisherNumString = "third";
+        break;
+      case 4:
+        finisherNumString = "fourth";
+        break;
+      case 5:
+        finisherNumString = "fifth";
+        break;
+      case 6:
+        finisherNumString = "sixth";
+        break;
+      default:
+        finisherNumString = "";
     }
     return finisherNumString;
   }

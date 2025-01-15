@@ -7,15 +7,24 @@ import org.server.board.YinYangBoardManager;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the YinYangBoardManager class, ensuring compliance with YinYang-specific game rules and mechanics.
+ */
 class YinYangBoardManagerTest {
 
   private YinYangBoardManager yinYangBoardManager;
 
+  /**
+   * Initializes a new YinYang board manager before each test.
+   */
   @BeforeEach
   void setUp() {
     yinYangBoardManager = new YinYangBoardManager(10);
   }
 
+  /**
+   * Verifies the initialization of the YinYang board, including dimensions.
+   */
   @Test
   void testBoardInitialization() {
     // Check that the board is not null
@@ -28,7 +37,9 @@ class YinYangBoardManagerTest {
     assertTrue(boardWidth > 0, "Board width should be greater than 0");
   }
 
-
+  /**
+   * Validates moves according to YinYang-specific rules, including valid and invalid cases.
+   */
   @Test
   void testValidateMoveForYinYang() {
     // Place a pawn for player 1
