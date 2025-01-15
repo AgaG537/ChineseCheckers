@@ -1,6 +1,5 @@
 package org.client;
 
-import javafx.scene.paint.Color;
 import org.client.Board.Board;
 import org.client.Board.BoardFactory;
 import org.client.Board.Cell;
@@ -9,12 +8,18 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the AbstractBoard class and its subclasses.
+ */
 class AbstractBoardTest {
 
   private Board standardBoard;
   private Board orderBoard;
   private Board yinYangBoard;
 
+  /**
+   * Initializes a new board for given variant before each test.
+   */
   @BeforeEach
   void setUp() {
     int marblesPerPlayer = 10;
@@ -25,6 +30,9 @@ class AbstractBoardTest {
     yinYangBoard = BoardFactory.createBoard("yinyang", marblesPerPlayer, 0);
   }
 
+  /**
+   * Tests initialization of a StandardBoard and ensures its properties are set correctly.
+   */
   @Test
   void testStandardBoardInitialization() {
     assertNotNull(standardBoard, "StandardBoard should not be null");
@@ -35,6 +43,9 @@ class AbstractBoardTest {
     assertNotNull(cell, "Cells should be initialized");
   }
 
+  /**
+   * Tests initialization of an OrderBoard and ensures its properties are set correctly.
+   */
   @Test
   void testOrderBoardInitialization() {
     assertNotNull(orderBoard, "OrderBoard should not be null");
@@ -42,6 +53,9 @@ class AbstractBoardTest {
     assertTrue(orderBoard.getBoardHeight() > 0, "OrderBoard height should be greater than 0");
   }
 
+  /**
+   * Tests initialization of a YinYangBoard and ensures its properties are set correctly.
+   */
   @Test
   void testYinYangBoardInitialization() {
     assertNotNull(yinYangBoard, "YinYangBoard should not be null");
@@ -49,20 +63,29 @@ class AbstractBoardTest {
     assertTrue(yinYangBoard.getBoardHeight() > 0, "YinYangBoard height should be greater than 0");
   }
 
+  /**
+   * Verifies that player zones are correctly set up for different board types.
+   */
   @Test
   void testPlayerZoneSetup() {
     int numOfPlayers = 4;
 
     // Standard board player zones
     standardBoard = BoardFactory.createBoard("standard", 10, numOfPlayers);
-    assertTrue(playerZonesSetUpCorrectly(standardBoard, numOfPlayers), "Player zones should be set up correctly for StandardBoard");
+    assertTrue(playerZonesSetUpCorrectly(standardBoard), "Player zones should be set up correctly for StandardBoard");
 
     // Order board player zones
     orderBoard = BoardFactory.createBoard("order", 10, numOfPlayers);
-    assertTrue(playerZonesSetUpCorrectly(orderBoard, numOfPlayers), "Player zones should be set up correctly for OrderBoard");
+    assertTrue(playerZonesSetUpCorrectly(orderBoard), "Player zones should be set up correctly for OrderBoard");
   }
 
-  private boolean playerZonesSetUpCorrectly(Board board, int numOfPlayers) {
+  /**
+   * Verifies if player zones are correctly set up on the board.
+   *
+   * @param board The board to check.
+   * @return {@code true} if at least one cell is assigned to a player zone.
+   */
+  private boolean playerZonesSetUpCorrectly(Board board) {
     int zonesAssigned = 0;
 
     for (int i = 0; i < board.getBoardHeight(); i++) {
@@ -75,6 +98,9 @@ class AbstractBoardTest {
     return zonesAssigned > 0;
   }
 
+  /**
+   * Tests the functionality of the handleCommand method in AbstractBoard.
+   */
   @Test
   void testHandleCommand() {
     standardBoard.handleCommand("MOVE 4 4 5 5");
@@ -86,6 +112,9 @@ class AbstractBoardTest {
     assertTrue(endCell.isOccupied(), "End cell should be occupied after move");
   }
 
+  /**
+   * Ensures that the win condition is properly applied and affects all cells.
+   */
   @Test
   void testWinCondition() {
     yinYangBoard.setWin();

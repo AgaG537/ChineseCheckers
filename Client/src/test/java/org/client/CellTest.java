@@ -7,8 +7,14 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the Cell class, covering initialization and state transitions.
+ */
 class CellTest {
 
+  /**
+   * Verifies that a Cell is initialized with the correct default values.
+   */
   @Test
   void testCellInitialization() {
     Cell cell = new Cell(5, 10);
@@ -22,6 +28,9 @@ class CellTest {
     assertEquals(Color.TRANSPARENT, cell.getCurrentColor(), "Current color should be transparent initially");
   }
 
+  /**
+   * Ensures that the `setInsideBoard` method correctly updates the cell's state.
+   */
   @Test
   void testSetInsideBoard() {
     Cell cell = new Cell(0, 0);
@@ -31,6 +40,9 @@ class CellTest {
     assertTrue(cell.isInsideBoard(), "Cell should be inside the board after being set");
   }
 
+  /**
+   * Verifies that zone colors can be set and retrieved correctly.
+   */
   @Test
   void testSetAndGetZoneColor() {
     Cell cell = new Cell(0, 0);
@@ -40,6 +52,9 @@ class CellTest {
     assertEquals(zoneColor, cell.getZoneColor(), "Zone color should be set correctly");
   }
 
+  /**
+   * Tests the movement of a Pawn into and out of a Cell.
+   */
   @Test
   void testPawnMoveInAndOut() {
     Cell cell = new Cell(1, 1);
@@ -53,6 +68,9 @@ class CellTest {
     assertNull(cell.getPawn(), "Pawn should be null after moving out");
   }
 
+  /**
+   * Ensures that the flag value for a Cell can be set and retrieved correctly.
+   */
   @Test
   void testSetFlag() {
     Cell cell = new Cell(0, 0);

@@ -6,7 +6,6 @@ import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import org.client.Board.PlayerZoneFactory;
 import org.client.GUI.ClientGUIManager;
 
 import java.io.IOException;

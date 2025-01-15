@@ -157,10 +157,20 @@ public class Cell extends Circle {
     this.setFill(currentColor);
   }
 
+  /**
+   * Checks whether the cell is occupied by a pawn.
+   *
+   * @return {@code true} if the cell is occupied; {@code false} otherwise.
+   */
   public boolean isOccupied() {
     return occupied;
   }
 
+  /**
+   * Sets the flag for the cell.
+   *
+   * @param i The flag value to set.
+   */
   public void setFlag(int i) {
     this.flag = i;
   }

@@ -144,6 +144,11 @@ public class GameViewManager {
     playerInfoBox.getChildren().addAll(titleLabel, playerNumLabel);
   }
 
+  /**
+   * Function to get current board.
+   *
+   * @return board for the game.
+   */
   public Board getBoard() {
     return board;
   }

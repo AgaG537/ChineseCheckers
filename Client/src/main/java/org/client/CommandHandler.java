@@ -2,7 +2,17 @@ package org.client;
 
 import org.client.GUI.ClientGUIManager;
 
+/**
+ * Handles commands received from the server and updates the GUI accordingly.
+ */
 public class CommandHandler {
+
+  /**
+   * Processes a server command and updates the client GUI based on the message content.
+   *
+   * @param message    The message received from the server.
+   * @param guiManager The GUI manager to update the user interface.
+   */
   public static void handleCommand(String message, ClientGUIManager guiManager) {
     if (message.startsWith("User number ") || message.equals("You just moved")) {
       guiManager.clearServerMessageBox();

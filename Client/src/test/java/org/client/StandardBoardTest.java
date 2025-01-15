@@ -5,8 +5,14 @@ import org.client.Board.StandardBoard;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the StandardBoard class.
+ */
 class StandardBoardTest {
 
+  /**
+   * Tests that the StandardBoard initializes with the correct dimensions and properties.
+   */
   @Test
   void testStandardBoardInitialization() {
     int marblesPerPlayer = 15;
@@ -20,6 +26,9 @@ class StandardBoardTest {
         "Board width should be calculated correctly");
   }
 
+  /**
+   * Verifies that player zones are properly set up in the StandardBoard.
+   */
   @Test
   void testPlayerZonesSetup() {
     int marblesPerPlayer = 15;

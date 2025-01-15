@@ -7,8 +7,14 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the Pawn class.
+ */
 class PawnTest {
 
+  /**
+   * Verifies that a Pawn is correctly initialized with the appropriate attributes.
+   */
   @Test
   void testPawnInitialization() {
     Cell cell = new Cell(2, 3);
@@ -20,6 +26,9 @@ class PawnTest {
     assertTrue(cell.isOccupied(), "Cell should be occupied by pawn");
   }
 
+  /**
+   * Ensures that a Pawn's current cell can be updated correctly.
+   */
   @Test
   void testSetCurrCell() {
     Cell initialCell = new Cell(0, 0);
@@ -32,6 +41,9 @@ class PawnTest {
     assertTrue(newCell.isOccupied(), "New cell should be occupied by pawn");
   }
 
+  /**
+   * Verifies the string representation of a Pawn object.
+   */
   @Test
   void testPawnToString() {
     Cell cell = new Cell(2, 3);
