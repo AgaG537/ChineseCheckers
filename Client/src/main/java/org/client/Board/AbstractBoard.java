@@ -1,6 +1,7 @@
 package org.client.Board;
 
 import javafx.scene.paint.Color;
+import org.client.Client;
 
 /**
  * Abstract class representing the common functionality for managing different board types.
@@ -144,6 +145,24 @@ public abstract class AbstractBoard implements Board {
     Pawn pawn = cells[positions[0]][positions[1]].getPawn();
     cells[positions[0]][positions[1]].pawnMoveOut();
     cells[positions[2]][positions[3]].pawnMoveIn(pawn);
+  }
+
+  @Override
+  public void handleCreate(String command) {
+    int[] positions = decodeCommand(command);
+    int row = positions[0];
+    int col = positions[1];
+    int player = positions[2];
+    int numPlayers = positions[3];
+    Color color = Color.valueOf(ColorManager.getDefaultColorString(numPlayers,player));
+    int playerStart = positions[2];
+    if (playerStart != 0) {
+      Pawn pawn = new Pawn(playerStart,color,cells[row][col]);
+      cells[row][col].pawnMoveIn(pawn);
+    }
+    else {
+      cells[row][col].pawnMoveOut();
+    }
   }
 
   /**

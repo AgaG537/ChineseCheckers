@@ -1,5 +1,7 @@
 package org.client.Board;
 
+import org.client.Client;
+
 /**
  * Represents a YinYang game board with a specialized two-player zone setup.
  */
@@ -22,7 +24,7 @@ public class YinYangBoard extends AbstractBoard {
    */
   @Override
   protected void setupPlayerZones(int numOfPlayers) {
-    PlayerZoneFactory playerZoneFactory = new PlayerZoneFactory(2, boardWidth, boardHeight, playerZoneHeight);
-    cells =  playerZoneFactory.addYinYangZones(cells);
+    PlayerZoneFactory playerZoneFactory = new PlayerZoneFactory(numOfPlayers, boardWidth, boardHeight, playerZoneHeight);
+    cells =  playerZoneFactory.setEmptyZones(numOfPlayers, boardWidth, boardHeight, playerZoneHeight, cells);
   }
 }

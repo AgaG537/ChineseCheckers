@@ -12,6 +12,7 @@ public abstract class AbstractBoardManager implements Board {
   protected final int playerZoneHeight;
   protected final int boardHeight; //17
   protected final int boardWidth; //25
+  private int numPlayers;
   protected Cell[][] cells;
 
   protected final int constraintSize;
@@ -27,6 +28,7 @@ public abstract class AbstractBoardManager implements Board {
     boardHeight = playerZoneHeight * 4 + 1;
     boardWidth = (playerZoneHeight * 6) + 1;
     constraintSize = (1000 / boardWidth) / 2;
+    numPlayers = numOfPlayers;
 
     cells = new Cell[boardHeight][boardWidth];
     initializeBoard();
@@ -187,6 +189,16 @@ public abstract class AbstractBoardManager implements Board {
     cells[rowStart][colStart].pawnMoveOut();
     cells[rowEnd][colEnd].pawnMoveIn(pawn);
     return "[CMD] " + rowStart + " " + colStart + " " + rowEnd + " " + colEnd;
+  }
+
+  @Override
+  public String makeCreate(int row, int col) {
+    if (cells[row][col].getPawn() == null) {
+      return "[CREATE] " + row + " " + col + " " + 0 + " " + numPlayers;
+    }
+    else {
+      return "[CREATE] " + row + " " + col + " " + cells[row][col].getPawn().getPlayerNum() + " " + numPlayers;
+    }
   }
 
   /**
@@ -413,9 +425,11 @@ public abstract class AbstractBoardManager implements Board {
    *
    * @return A 2D array of Cell objects.
    */
+  @Override
   public Cell[][] getCells() {
     return cells;
   }
+
 
 }
 

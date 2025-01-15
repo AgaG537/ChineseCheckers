@@ -17,6 +17,7 @@ public class ClientHandler implements Runnable {
   private final BufferedWriter bufferedWriter;
   private final GameManager gameManager;
   private final int userNum;
+  private boolean setup;
 
   /**
    * Constructs a ClientHandler with the specified socket, game manager and user number.
@@ -30,6 +31,7 @@ public class ClientHandler implements Runnable {
     this.socket = socket;
     this.gameManager = gameManager;
     this.userNum = userNum;
+    this.setup = false;
 
     this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
@@ -86,6 +88,14 @@ public class ClientHandler implements Runnable {
       while (socket.isConnected()) {
         if (gameManager.isGameStarted() && userNum == gameManager.getCurrTurn()) {
           String message = bufferedReader.readLine();
+          if (message.startsWith("SETUP")) {
+            if (Integer.parseInt(message.split(" ")[1]) == userNum) {
+              this.setup = true;
+              System.out.println("Client " + userNum + " setup complete");
+              sendMessage("[SETUP]");
+            }
+            continue;
+          }
           int flag = gameManager.validateMove(userNum, message);
           switch (flag) {
             case 0:
@@ -153,5 +163,9 @@ public class ClientHandler implements Runnable {
       e.printStackTrace();
     }
     gameManager.removeUser(this);
+  }
+
+  public boolean getSetup() {
+    return setup;
   }
 }

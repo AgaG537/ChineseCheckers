@@ -9,7 +9,10 @@ import org.server.board.PlayerZoneFactory;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 import java.util.Random;
+
+import static java.lang.Thread.sleep;
 
 /**
  * The main server class responsible for accepting client connections
@@ -52,12 +55,30 @@ public class Server {
             Board board = BoardFactory.createBoard(10, gameManager.getMaxUsers(), gameManager.getVariant());
             gameManager.setBoard(board);
             gameManager.broadcastGameStarted();
+            sleep(1000);
+            gameManager.broadcastBoardCreate();
+//            if (allSetup(gameManager.getClientHandlers())) {
+////              gameManager.broadcastGameStarted();
+//              gameManager.broadcastBoardCreate();
+//            }
           }
         }
       }
     } catch (IOException e) {
       closeServerSocket();
     }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+    }
+  }
+
+  public boolean allSetup(List<ClientHandler> clientHandlers) {
+    for (ClientHandler clientHandler : clientHandlers) {
+      if (clientHandler.getSetup() == false) {
+        return false;
+      }
+    }
+    return true;
   }
 
   /**

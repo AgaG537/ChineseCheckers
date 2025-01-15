@@ -46,9 +46,15 @@ public class Client {
         bufferedWriter.flush();
       }
     } catch (IOException e) {
+      e.printStackTrace();
       closeEverything();
     }
   }
+
+  public Socket getSocket() {
+    return socket;
+  }
+
 
   public void setBoard(Board board) {
     this.board = board;
@@ -87,13 +93,17 @@ public class Client {
         while (socket.isConnected()) {
           try {
             messageFromServer = bufferedReader.readLine();
-            if (messageFromServer.startsWith("[CMD]")) {
-              board.handleCommand(messageFromServer);
-            } else if (messageFromServer.startsWith("SEED")) {
-              String[] tokens = messageFromServer.split(" ");
-              PlayerZoneFactory.setSeed(Integer.parseInt(tokens[1]));
-            } else {
-              clientApp.handleMessageFromServer(messageFromServer);
+            synchronized (this) {
+              if (messageFromServer.startsWith("[CMD]")) {
+                board.handleCommand(messageFromServer);
+              } else if (messageFromServer.startsWith("[CREATE]")) {
+                board.handleCreate(messageFromServer);
+              } else if (messageFromServer.startsWith("SEED")) {
+                String[] tokens = messageFromServer.split(" ");
+                PlayerZoneFactory.setSeed(Integer.parseInt(tokens[1]));
+              } else {
+                clientApp.handleMessageFromServer(messageFromServer);
+              }
             }
           } catch (IOException e) {
             closeEverything();
@@ -103,6 +113,7 @@ public class Client {
 
     }).start();
   }
+
 
   /**
    * Closes the socket and associated resources.

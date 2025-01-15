@@ -1,5 +1,7 @@
 package org.client.Board;
 
+import org.client.Client;
+
 /**
  * Factory class for creating game boards of different variants.
  */

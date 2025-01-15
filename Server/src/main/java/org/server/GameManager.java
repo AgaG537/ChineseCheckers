@@ -2,6 +2,7 @@ package org.server;
 
 
 import org.server.board.Board;
+import org.server.board.Cell;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,6 +23,8 @@ public class GameManager {
   private String variant;
   private ArrayList<Integer> finishedPlayers;
   private int seed;
+  private final Object setupLock = new Object();
+  private int setupCount = 0;
 
   /**
    * Constructs a GameManager.
@@ -330,5 +333,36 @@ public class GameManager {
    */
   public void setSeed(int seed) {
     this.seed = seed;
+  }
+
+  public synchronized void broadcastBoardCreate() {
+    for (ClientHandler clientHandler : clientHandlers) {
+      for (Cell[] cellRow : currentBoard.getCells()) {
+        for (Cell cell : cellRow) {
+          try {
+            clientHandler.sendMessage(currentBoard.makeCreate(cell.getRow(), cell.getCol()));
+          } catch (Exception e) {
+            clientHandler.closeEverything();
+          }
+        }
+      }
+    }
+  }
+
+  public void waitForAllSetups() throws InterruptedException {
+    synchronized(setupLock) {
+      while (setupCount < maxUsers) {
+        setupLock.wait();
+      }
+    }
+  }
+
+  public void clientSetupComplete() {
+    synchronized (setupLock) {
+      setupCount++;
+      if (setupCount == maxUsers) {
+        setupLock.notifyAll();
+      }
+    }
   }
 }

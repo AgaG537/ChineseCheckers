@@ -47,4 +47,6 @@ public interface Board {
    * Sets the win state for the board.
    */
   void setWin();
+
+  public void handleCreate(String command);
 }

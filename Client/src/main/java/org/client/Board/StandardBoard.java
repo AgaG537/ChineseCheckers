@@ -1,5 +1,7 @@
 package org.client.Board;
 
+import org.client.Client;
+
 /**
  * Represents a Standard game board with general player zone setup.
  */
@@ -23,6 +25,6 @@ public class StandardBoard extends AbstractBoard {
   @Override
   protected void setupPlayerZones(int numOfPlayers) {
     PlayerZoneFactory playerZoneFactory = new PlayerZoneFactory(numOfPlayers, boardWidth, boardHeight, playerZoneHeight);
-    cells =  playerZoneFactory.addPlayerZones(cells);
+    cells =  playerZoneFactory.setEmptyZones(numOfPlayers, boardWidth, boardHeight, playerZoneHeight, cells);
   }
 }

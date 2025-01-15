@@ -29,4 +29,8 @@ public interface Board {
    * @return The player number of the winner, or 0 if no winner is determined.
    */
   int checkWin();
+
+  public String makeCreate(int row, int col);
+  public Cell[][] getCells();
+
 }

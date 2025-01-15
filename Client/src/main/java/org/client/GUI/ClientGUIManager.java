@@ -113,6 +113,7 @@ public class ClientGUIManager {
     String[] optionsTable = options.split(",");
     currTurn = Integer.parseInt(optionsTable[2]);
     numOfPlayers = Integer.parseInt(optionsTable[0]);
+    System.out.println("GameViewManager setup " + playerNum);
     gameViewManager = new GameViewManager(client, playerNum, boardBox, playerInfoBox, numOfPlayers, variant);
     gameViewManager.setGamePanes();
 
