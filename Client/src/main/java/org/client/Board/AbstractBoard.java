@@ -15,7 +15,8 @@ public abstract class AbstractBoard implements Board {
 
 
   /**
-   * Constructs an AbstractBoard with the specified number of marbles per player and number of players.
+   * Constructs an AbstractBoard with the specified number of marbles
+   * per player and number of players.
    *
    * @param marblesPerPlayer The number of marbles each player has.
    * @param numOfPlayers The number of players in the game.
@@ -165,9 +166,7 @@ public abstract class AbstractBoard implements Board {
   }
 
   /**
-   * Checks the player zones for a win condition.
-   *
-   * @return The player number of the winner, or 0 if no winner is found.
+   * Sets the win by making board not clickable.
    */
   @Override
   public void setWin() {

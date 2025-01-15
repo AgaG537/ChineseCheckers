@@ -22,7 +22,7 @@ public class OrderBoard extends AbstractBoard {
    */
   @Override
   protected void setupPlayerZones(int numOfPlayers) {
-    PlayerZoneFactory playerZoneFactory = new PlayerZoneFactory(numOfPlayers,boardWidth,boardHeight,playerZoneHeight);
+    PlayerZoneFactory playerZoneFactory = new PlayerZoneFactory(numOfPlayers, boardWidth, boardHeight, playerZoneHeight);
     cells =  playerZoneFactory.addOrderPlayerZones(cells);
   }
 }

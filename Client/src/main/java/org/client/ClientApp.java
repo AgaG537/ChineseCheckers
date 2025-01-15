@@ -7,7 +7,6 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.client.GUI.ClientGUIManager;
-
 import java.io.IOException;
 import java.net.Socket;
 

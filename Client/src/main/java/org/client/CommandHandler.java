@@ -20,8 +20,7 @@ public class CommandHandler {
     } else if (message.startsWith("Turn skipped by user:") || message.equals("You just skipped")) {
       guiManager.clearServerMessageBox();
       guiManager.addCurrPlayerInfo();
-    }
-    else if (message.equals("Game options correct.")) {
+    } else if (message.equals("Game options correct.")) {
       guiManager.setWaitingPanes();
       guiManager.addLabel(message);
     } else if (message.startsWith("START")) {
@@ -33,13 +32,10 @@ public class CommandHandler {
       guiManager.showWin(message);
     } else if (message.equals("GAME FINISHED!")) {
       guiManager.addLabel(message);
-    } else if (message.startsWith("[CMD]")) {
-
     } else if (message.startsWith("VARIANT")) {
       String[] tokens = message.split(" ");
       guiManager.setVariant(tokens[1]);
-    }
-    else {
+    } else {
       guiManager.addLabel(message);
     }
   }

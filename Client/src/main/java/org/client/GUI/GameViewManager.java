@@ -13,7 +13,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import org.client.Board.*;
 import org.client.Client;
-
 import java.util.ArrayList;
 
 /**
@@ -34,7 +33,7 @@ public class GameViewManager {
   private final int vGapSize;
 
   private final Board board;
-  private ArrayList<String> rawCommand;
+  private final ArrayList<String> rawCommand;
 
   /**
    * Constructor for the GameViewManager class.
@@ -52,7 +51,7 @@ public class GameViewManager {
     this.numOfPlayers = numOfPlayers;
     this.boardBox = boardBox;
     this.playerInfoBox = playerInfoBox;
-    this.board = BoardFactory.createBoard(variant,10,numOfPlayers);
+    this.board = BoardFactory.createBoard(variant, 10, numOfPlayers);
     client.setBoard(board);
     rawCommand = new ArrayList<>();
 
@@ -75,51 +74,51 @@ public class GameViewManager {
    * Configures a grid layout and populates it with clickable cells representing the board.
    */
   private void setGameCentralPane() {
-      GridPane gridPane = new GridPane();
-      gridPane.setVgap(vGapSize);
-      gridPane.setPadding(new Insets(10, 10, 10, 10));
-      gridPane.setStyle("-fx-background-color: #1C2541");
-      gridPane.setAlignment(Pos.CENTER);
+    GridPane gridPane = new GridPane();
+    gridPane.setVgap(vGapSize);
+    gridPane.setPadding(new Insets(10, 10, 10, 10));
+    gridPane.setStyle("-fx-background-color: #1C2541");
+    gridPane.setAlignment(Pos.CENTER);
 
-      for (int i = 0; i < board.getBoardHeight(); i++) {
-        gridPane.getRowConstraints().add(new RowConstraints(constraintSize));
-        for (int j = 0; j < board.getBoardWidth(); j++) {
-          if (i == 0) {
-            gridPane.getColumnConstraints().add(new ColumnConstraints(constraintSize));
-          }
-          Cell cell = board.getCell(i,j);
+    for (int i = 0; i < board.getBoardHeight(); i++) {
+      gridPane.getRowConstraints().add(new RowConstraints(constraintSize));
+      for (int j = 0; j < board.getBoardWidth(); j++) {
+        if (i == 0) {
+          gridPane.getColumnConstraints().add(new ColumnConstraints(constraintSize));
+        }
+        Cell cell = board.getCell(i, j);
 
-          if (cell.isInsideBoard()){
-            cell.setRadius(cellRadius);
-            cell.setStyle("-fx-stroke-width: 2");
-            cell.setCursor(Cursor.HAND);
+        if (cell.isInsideBoard()) {
+          cell.setRadius(cellRadius);
+          cell.setStyle("-fx-stroke-width: 2");
+          cell.setCursor(Cursor.HAND);
 
-            cell.setStroke(cell.getZoneColor());
-            cell.setFill(cell.getCurrentColor());
+          cell.setStroke(cell.getZoneColor());
+          cell.setFill(cell.getCurrentColor());
 
-            cell.setOnMouseClicked(event -> {
-              if (cell.isInsideBoard()) {
-                String tmp;
-                try {
-                  tmp = String.format("%d %d %d", cell.getRow(), cell.getCol(), cell.getPawn().getPlayerNum());
-                } catch (NullPointerException e) {
-                  tmp = String.format("%d %d %d", cell.getRow(), cell.getCol(), 0);
-                }
-                rawCommand.add(tmp);
-                if (rawCommand.size() == 2) {
-                  String message = rawCommand.get(0) + " " + rawCommand.get(1);
-                  client.sendMessage(message);
-                  System.out.println("Message sent: " + message);
-                  rawCommand.clear();
-                }
-                System.out.printf("Clicked on cell: row=%d, col=%d, player=%d\n",cell.getRow(), cell.getCol(), cell.getInitialPlayerNum());
+          cell.setOnMouseClicked(event -> {
+            if (cell.isInsideBoard()) {
+              String tmp;
+              try {
+                tmp = String.format("%d %d %d", cell.getRow(), cell.getCol(), cell.getPawn().getPlayerNum());
+              } catch (NullPointerException e) {
+                tmp = String.format("%d %d %d", cell.getRow(), cell.getCol(), 0);
               }
-            });
+              rawCommand.add(tmp);
+              if (rawCommand.size() == 2) {
+                String message = rawCommand.get(0) + " " + rawCommand.get(1);
+                client.sendMessage(message);
+                System.out.println("Message sent: " + message);
+                rawCommand.clear();
+              }
+              System.out.printf("Clicked on cell: row=%d, col=%d, player=%d\n", cell.getRow(), cell.getCol(), cell.getInitialPlayerNum());
+            }
+          });
 
-            gridPane.add(cell, j, i);
-          }
+          gridPane.add(cell, j, i);
         }
       }
+    }
 
     boardBox.getChildren().clear();
     boardBox.getChildren().add(gridPane);
@@ -131,13 +130,13 @@ public class GameViewManager {
    */
   private void setGameSidePane() {
     Label titleLabel = new Label("PLAYER INFO:");
-    titleLabel.setStyle("-fx-font-family: Verdana; -fx-font-size: 25; " +
-        "-fx-font-weight: bold; -fx-text-fill: black");
+    titleLabel.setStyle("-fx-font-family: Verdana; -fx-font-size: 25; "
+        + "-fx-font-weight: bold; -fx-text-fill: black");
 
     String colorName = ColorManager.getDefaultColorString(numOfPlayers, playerNum);
     Label playerNumLabel = new Label("number: " + playerNum + "\ncolor: " + colorName);
     playerNumLabel.setTextFill(Color.BLACK);
-    playerNumLabel.setFont(new Font("Verdana",20));
+    playerNumLabel.setFont(new Font("Verdana", 20));
     playerNumLabel.setAlignment(Pos.CENTER);
     playerNumLabel.setWrapText(true);
     playerInfoBox.setPadding(new Insets(15));

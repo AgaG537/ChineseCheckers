@@ -187,7 +187,6 @@ public abstract class AbstractBoardManager implements Board {
     cells[rowStart][colStart].pawnMoveOut();
     cells[rowEnd][colEnd].pawnMoveIn(pawn);
     return "[CMD] " + rowStart + " " + colStart + " " + rowEnd + " " + colEnd;
-//    return input;
   }
 
   /**

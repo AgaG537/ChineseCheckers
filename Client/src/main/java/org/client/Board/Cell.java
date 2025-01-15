@@ -55,6 +55,8 @@ public class Cell extends Circle {
   }
 
   /**
+   * Checks if the cell is inside board.
+   *
    * @return True if the cell is inside
    * the playable area of the board.
    */
