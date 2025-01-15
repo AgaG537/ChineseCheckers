@@ -36,11 +36,16 @@ mvn clean install javafx:run
 
 5. Now you can run the Client program (commands for the Client folder given above) for the rest of the players, from separate terminals.
 
-### Implemented rules - standard version
+## Implemented rules
 1. When all clients are connected, one of them will be selected at random and asked to make a move. Then, the order of players' moves is determined clockwise.
 2. A player's movement can consist of individual moves or jumps over other pawns (their own or other players'). A player can also choose not to make a move by pressing the **SKIP TURN** button.
 3. When one of the players wins the game, an announcement is displayed. The remaining players can continue the game, competing for the remaining places (second, third, etc.).
-4. The game ends when all players reach opposite zones.
+### Standard version
+All players start the game with their pawns in assigned zones. The task of each player is to move all their pawns to the opposite zone.
+### Order Out Of Chaos
+Players' pawns are randomly assigned in the center of the board. The task of each player is to bring all the pawns to their zone.
+### Yin and Yang
+The game involves two players, but their zones do not have to be opposite each other. The task is to reach the zone initially occupied by the opponent.
 
 ## Authors
 - Agnieszka Głuszkiewicz (AgaG537)
