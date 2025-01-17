@@ -14,10 +14,7 @@ import javafx.scene.text.Font;
 import org.client.Board.*;
 import org.client.Client;
 
-import java.net.SocketException;
 import java.util.ArrayList;
-
-import static java.lang.Thread.sleep;
 
 /**
  * Handles the layout and functionality of the game view during play.

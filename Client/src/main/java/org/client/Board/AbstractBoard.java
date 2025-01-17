@@ -1,7 +1,9 @@
 package org.client.Board;
 
 import javafx.scene.paint.Color;
-import org.client.Client;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Abstract class representing the common functionality for managing different board types.
@@ -11,6 +13,14 @@ public abstract class AbstractBoard implements Board {
   protected final int playerZoneHeight;
   protected final int boardHeight;
   protected final int boardWidth;
+
+  protected int numOfPlayers;
+  protected int[][] playerZonesStartPoints;
+  protected int numOfCellsPerZone;
+  protected int[] activeZoneNums;
+  protected ArrayList<Integer> finishedPlayers;
+  protected int seed;
+
   protected final int constraintSize;
   protected Cell[][] cells;
 
@@ -29,33 +39,16 @@ public abstract class AbstractBoard implements Board {
     constraintSize = (1000 / boardWidth) / 2;
     cells = new Cell[boardHeight][boardWidth];
     initializeBoard();
-    setupPlayerZones(numOfPlayers);
+
+
+    this.numOfCellsPerZone = calculateCellsPerZone(playerZoneHeight);
+    this.finishedPlayers = new ArrayList<>();
+    this.playerZonesStartPoints = initializeZoneStartPoints(boardWidth, boardHeight, playerZoneHeight);
+    this.activeZoneNums = new int[6];
+    markActiveZones();
+    setupPlayerZones();
   }
 
-  /**
-   * Abstract method for setting up player zones.
-   * Must be implemented by subclasses.
-   *
-   * @param numOfPlayers The number of players in the game.
-   */
-  protected abstract void setupPlayerZones(int numOfPlayers);
-
-
-  /**
-   * Calculates the height of a player's zone based on the number of marbles.
-   *
-   * @param marblesPerPlayer The number of marbles per player.
-   * @return The height of the player zone, or 0 if invalid.
-   */
-  public int calculatePlayerZoneHeight(int marblesPerPlayer) {
-    int sum = 0;
-    int heightCounter = 0;
-    while (sum < marblesPerPlayer) {
-      heightCounter++;
-      sum += heightCounter;
-    }
-    return sum == marblesPerPlayer ? heightCounter : 0;
-  }
 
   /**
    * Initializes the game board by creating and marking valid cells.
@@ -95,6 +88,112 @@ public abstract class AbstractBoard implements Board {
       cells[row][col].setInsideBoard();
       cells[row][col].setZoneColor(Color.web("#ffa64d"));
     }
+  }
+
+
+  protected int[][] initializeZoneStartPoints(int boardWidth, int boardHeight, int playerZoneHeight) {
+    return new int[][]{
+        {0, (boardWidth / 2)},                            // Upper zone
+        {playerZoneHeight * 2 - 1, boardWidth - playerZoneHeight}, // Right upper zone
+        {boardHeight - playerZoneHeight * 2, boardWidth - playerZoneHeight}, // Right bottom zone
+        {boardHeight - 1, (boardWidth / 2)},              // Bottom zone
+        {boardHeight - playerZoneHeight * 2, playerZoneHeight - 1}, // Left bottom zone
+        {playerZoneHeight * 2 - 1, playerZoneHeight - 1}  // Left upper zone
+    };
+  }
+
+  protected int calculateCellsPerZone(int playerZoneHeight) {
+    int counter = playerZoneHeight;
+    int numOfCells = 0;
+    while (counter > 0) {
+      numOfCells += counter;
+      counter--;
+    }
+    return numOfCells;
+  }
+
+  protected void markActiveZones() {
+    Arrays.fill(activeZoneNums, 0);
+    switch (numOfPlayers) {
+      case 2 -> activeZoneNums[0] = activeZoneNums[3] = 1;
+      case 3 -> activeZoneNums[0] = activeZoneNums[2] = activeZoneNums[4] = 1;
+      case 4 -> activeZoneNums[1] = activeZoneNums[2] = activeZoneNums[4] = activeZoneNums[5] = 1;
+      default -> Arrays.fill(activeZoneNums, 1);
+    }
+  }
+
+  protected void setupPlayerZones() {
+    int defaultPlayerNum = 1;
+
+    for (int i = 0; i < playerZonesStartPoints.length; i++) {
+      int[] zoneStartPoint = playerZonesStartPoints[i];
+      int rowStart = zoneStartPoint[0];
+      int colStart = zoneStartPoint[1];
+      int k = 0;
+
+      for (int row = rowStart; checkRow(i, row, rowStart); row = advanceRow(i, row)) {
+        for (int col = colStart - k; col <= colStart + k; col += 2) {
+          Color color = ColorManager.generateDefaultColor(i + 1);
+          int playerNum;
+          if (activeZoneNums[i] == 1) {
+            playerNum = defaultPlayerNum;
+          } else {
+            playerNum = 0;
+          }
+          assignCellToZone(cells[row][col], color, playerNum);
+        }
+        k++;
+      }
+
+      if (activeZoneNums[i] == 1) {
+        defaultPlayerNum++;
+      }
+    }
+  }
+
+  private boolean checkRow(int i, int row, int rowStart) {
+    if (i % 2 == 0) {
+      return row < rowStart + playerZoneHeight;
+    } else {
+      return row > rowStart - playerZoneHeight;
+    }
+  }
+
+  private int advanceRow(int i, int row) {
+    if (i % 2 == 0) {
+      return row + 1;
+    } else {
+      return row - 1;
+    }
+  }
+
+  protected void assignCellToZone(Cell cell, Color color, int playerNum) {
+    cell.setFlag(5);
+    cell.setInitialPlayerNum(playerNum);
+    cell.setZoneColor(color);
+  }
+
+  protected void assignPawnToCell(Cell cell, int playerNum, Color color) {
+    if (playerNum != 0) {
+      Pawn pawn = new Pawn(playerNum, color, cell);
+      cell.pawnMoveIn(pawn);
+    }
+  }
+
+  /**
+   * Calculates the height of a player's zone based on the number of marbles.
+   *
+   * @param marblesPerPlayer The number of marbles per player.
+   * @return The height of the player zone, or 0 if invalid.
+   */
+  public int calculatePlayerZoneHeight(int marblesPerPlayer) {
+    int sum = 0;
+    int heightCounter = 0;
+    while (sum < marblesPerPlayer) {
+      heightCounter++;
+      sum += heightCounter;
+    }
+    return sum == marblesPerPlayer ? heightCounter : 0;
   }
 
   /**
@@ -155,15 +254,10 @@ public abstract class AbstractBoard implements Board {
     int player = positions[2];
     int numPlayers = positions[3];
     Color color = Color.valueOf(ColorManager.getDefaultColorString(numPlayers,player));
-    int playerStart = positions[2];
-    if (playerStart != 0) {
-      Pawn pawn = new Pawn(playerStart,color,cells[row][col]);
-      cells[row][col].pawnMoveIn(pawn);
-    }
-    else {
-      cells[row][col].pawnMoveOut();
-    }
+    setupPawn(player, color, cells[row][col]);
   }
+
+  protected abstract void setupPawn(int playerNum, Color color, Cell cell);
 
   /**
    * Decodes a command string into an array of integers representing positions and parameters.

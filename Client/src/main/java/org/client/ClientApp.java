@@ -54,7 +54,11 @@ public class ClientApp extends Application {
     Platform.runLater(new Runnable() {
       @Override
       public void run() {
-        CommandHandler.handleCommand(message, guiManager);
+        try {
+          CommandHandler.handleCommand(message, guiManager);
+        } catch (InterruptedException e) {
+          throw new RuntimeException(e);
+        }
       }
     });
   }

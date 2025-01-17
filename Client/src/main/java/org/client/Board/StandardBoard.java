@@ -1,6 +1,6 @@
 package org.client.Board;
 
-import org.client.Client;
+import javafx.scene.paint.Color;
 
 /**
  * Represents a Standard game board with general player zone setup.
@@ -17,14 +17,8 @@ public class StandardBoard extends AbstractBoard {
     super(marblesPerPlayer, numOfPlayers);
   }
 
-  /**
-   * Sets up the player zones for the standard game variant.
-   *
-   * @param numOfPlayers Number of players in the game.
-   */
   @Override
-  protected void setupPlayerZones(int numOfPlayers) {
-    PlayerZoneFactory playerZoneFactory = new PlayerZoneFactory(numOfPlayers, boardWidth, boardHeight, playerZoneHeight);
-    cells =  playerZoneFactory.setEmptyZones(numOfPlayers, boardWidth, boardHeight, playerZoneHeight, cells);
+  protected void setupPawn(int playerNum, Color color, Cell cell) {
+    assignPawnToCell(cell, playerNum, color);
   }
 }

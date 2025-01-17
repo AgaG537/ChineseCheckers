@@ -27,7 +27,7 @@ public class FirstPlayerViewManager {
   private final String[] possibleVariants = {"standard", "order", "yinyang"};
   private String chosenVariant;
   private Integer numOfPlayers;
-  private ClientGUIManager guiManager;
+  private final ClientGUIManager guiManager;
 
   /**
    * Constructor for the FirstPlayerViewManager class.

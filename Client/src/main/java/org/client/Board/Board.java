@@ -48,5 +48,5 @@ public interface Board {
    */
   void setWin();
 
-  public void handleCreate(String command);
+  void handleCreate(String command);
 }
