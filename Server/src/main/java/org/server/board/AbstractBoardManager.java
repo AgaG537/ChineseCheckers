@@ -75,9 +75,7 @@ public abstract class AbstractBoardManager implements Board {
       case 2 -> activeZoneNums[0] = activeZoneNums[3] = 1;
       case 3 -> activeZoneNums[0] = activeZoneNums[2] = activeZoneNums[4] = 1;
       case 4 -> activeZoneNums[1] = activeZoneNums[2] = activeZoneNums[4] = activeZoneNums[5] = 1;
-      default -> {
-        Arrays.fill(activeZoneNums, 1);
-      }
+      default -> Arrays.fill(activeZoneNums, 1);
     }
   }
 

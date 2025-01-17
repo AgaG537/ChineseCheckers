@@ -74,7 +74,7 @@ public class GameManager {
    */
   public void setVariant(String variant) {
     this.variant=variant;
-  };
+  }
 
   /**
    * Retrieves the currently selected game variant.
