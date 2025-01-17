@@ -13,18 +13,11 @@ public class BoardFactory {
    * @param variant      The game variant (e.g., "standard", "order", "yinyang").
    * @return A {@link Board} instance corresponding to the specified variant, or null if the variant is invalid.
    */
-  public static Board createBoard(int marbles, int numOfPlayers, String variant) {
-    Board board;
-    switch (variant) {
-      case "standard":
-        board = new BoardManager(marbles,numOfPlayers); break;
-      case "order":
-        board = new OrderBoardManager(marbles,numOfPlayers); break;
-      case "yinyang":
-        board = new YinYangBoardManager(marbles); break;
-      default:
-        board = null;
-    }
-    return board;
+  public static Board createBoard(int marbles, int numOfPlayers, String variant, int seed) {
+    return switch (variant) {
+      case "order" -> new OrderBoardManager(marbles, numOfPlayers, seed);
+      case "yinyang" -> new YinYangBoardManager(marbles, seed);
+      default ->  new BoardManager(marbles, numOfPlayers, seed);
+    };
   }
 }

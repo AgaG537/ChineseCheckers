@@ -12,28 +12,25 @@ public class BoardManager extends AbstractBoardManager {
    * @param marblesPerPlayer The number of marbles assigned to each player.
    * @param numOfPlayers     The number of players participating in the game.
    */
-  public BoardManager(int marblesPerPlayer, int numOfPlayers) {
-    super(marblesPerPlayer, numOfPlayers);
+  public BoardManager(int marblesPerPlayer, int numOfPlayers, int seed) {
+    super(marblesPerPlayer, numOfPlayers, seed);
+    setupPlayerZones();
   }
 
-  /**
-   * Configures player zones for a standard board game.
-   *
-   * @param numOfPlayers The number of players in the game.
-   */
   @Override
-  protected void setupPlayerZones(int numOfPlayers) {
-    PlayerZoneFactory playerZoneFactory = new PlayerZoneFactory(numOfPlayers, boardWidth, boardHeight, playerZoneHeight);
-    this.cells = playerZoneFactory.addPlayerZones(cells);
+  protected void setupCell(Cell cell, int zoneNum, int defaultPlayerNum, int[] activeZoneNums) {
+    int playerNum;
+    if (activeZoneNums[zoneNum - 1] == 1) {
+      playerNum = defaultPlayerNum;
+    } else {
+      playerNum = 0;
+    }
+    assignCellToZone(cell, zoneNum, playerNum);
+    assignPawnToCell(cell, playerNum);
   }
 
-  /**
-   * Checks for a winning condition on the board.
-   *
-   * @return The player number of the winner, or 0 if no winner is determined.
-   */
   @Override
-  public int checkWin() {
-    return PlayerZoneFactory.checkZoneForWin(cells,"standard");
+  protected int getTargetPlayer(int numOfPlayers, int zoneNum) {
+    return TargetPlayerHandler.getOppositeTargetPlayerNum(numOfPlayers, zoneNum);
   }
 }

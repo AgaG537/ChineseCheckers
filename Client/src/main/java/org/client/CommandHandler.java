@@ -19,6 +19,7 @@ public class CommandHandler {
       guiManager.addCurrPlayerInfo();
     } else if (message.startsWith("Turn skipped by user:") || message.equals("You just skipped")) {
       guiManager.clearServerMessageBox();
+      guiManager.addLabel(message);
       guiManager.addCurrPlayerInfo();
     } else if (message.equals("Game options correct.")) {
       guiManager.setWaitingPanes();
