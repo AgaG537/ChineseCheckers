@@ -3,6 +3,7 @@ package org.server;
 
 import org.server.board.Board;
 import org.server.board.Cell;
+import org.server.board.MoveValidator;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,8 +21,9 @@ public class GameManager {
   private int currTurn;
   private boolean gameStarted;
   private Board currentBoard;
+  private MoveValidator moveValidator;
   private String variant;
-  private ArrayList<Integer> finishedPlayers;
+  private final ArrayList<Integer> finishedPlayers;
   private int seed;
   private final Object setupLock = new Object();
   private int setupCount = 0;
@@ -46,6 +48,10 @@ public class GameManager {
     this.currentBoard = board;
   }
 
+  public void setMoveValidator(Cell[][] cells) {
+    this.moveValidator = new MoveValidator(cells);
+  }
+
   /**
    * Adds a client handler to the user manager and notifies the client of the selected variant.
    *
@@ -68,7 +74,7 @@ public class GameManager {
    */
   public void setVariant(String variant) {
     this.variant=variant;
-  };
+  }
 
   /**
    * Retrieves the currently selected game variant.
@@ -228,7 +234,7 @@ public class GameManager {
     if (!gameStarted) {
       return;
     }
-    String move = currentBoard.makeMove(input);
+    String move = moveValidator.makeMove(input);
     for (ClientHandler clientHandler : clientHandlers) {
       try {
         if (!Objects.equals(clientHandler.getUserNum(), userNum)) {
@@ -261,7 +267,6 @@ public class GameManager {
         } else {
           clientHandler.sendMessage("You just skipped");
         }
-        clientHandler.sendMessage("SKIPPED");
       } catch (Exception e) {
         clientHandler.closeEverything();
       }
@@ -295,7 +300,7 @@ public class GameManager {
       System.out.println("returning 2");
       return 2;
     }
-    boolean valid = currentBoard.validateMove(userNum, input);
+    boolean valid = moveValidator.validateMove(userNum, input);
     if (valid) {
       return 0;
     }
@@ -310,7 +315,7 @@ public class GameManager {
    * @return The user number of the winning player, or 0 if no winner yet.
    */
   public int checkWin() {
-    return currentBoard.checkWin();
+    return currentBoard.checkWinCondition();
   }
 
   /**

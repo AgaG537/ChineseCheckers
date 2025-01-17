@@ -48,10 +48,10 @@ public class ColorManager {
    *
    * @param colorNum The color's number (1 to 6).
    * @return The {@link Color} corresponding to the zone's number.
-   *  Returns {@link Color#GREY} for invalid numbers.
+   *  Returns Color.web("#ffa64d") for invalid numbers.
    */
   public static Color generateDefaultColor(int colorNum) {
-    return DEFAULT_COLORS.getOrDefault(colorNum, Color.GREY);
+    return DEFAULT_COLORS.getOrDefault(colorNum, Color.web("#ffa64d"));
   }
 
   /**
@@ -60,11 +60,10 @@ public class ColorManager {
    * @param numOfPlayers The number of players in the game.
    * @param playerNum The player's number.
    * @return The string representation of the player's color.
-   *  Returns "GREY" for invalid numbers or configurations.
    */
   public static String getDefaultColorString(int numOfPlayers, int playerNum) {
     return GAME_PLAYER_COLORS.getOrDefault(numOfPlayers, Map.of())
-        .getOrDefault(playerNum, "GREY");
+        .getOrDefault(playerNum, String.valueOf(Color.web("#ffa64d")));
   }
 
 }

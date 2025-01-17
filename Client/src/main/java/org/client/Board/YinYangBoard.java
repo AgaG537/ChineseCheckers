@@ -1,6 +1,6 @@
 package org.client.Board;
 
-import org.client.Client;
+import javafx.scene.paint.Color;
 
 /**
  * Represents a YinYang game board with a specialized two-player zone setup.
@@ -16,15 +16,11 @@ public class YinYangBoard extends AbstractBoard {
     super(marblesPerPlayer, 0);
   }
 
-  /**
-   * Sets up the player zones for the YinYang game variant.
-   * Player zones are tailored for two players.
-   *
-   * @param numOfPlayers Number of players (ignored, as this variant always uses two players).
-   */
   @Override
-  protected void setupPlayerZones(int numOfPlayers) {
-    PlayerZoneFactory playerZoneFactory = new PlayerZoneFactory(numOfPlayers, boardWidth, boardHeight, playerZoneHeight);
-    cells =  playerZoneFactory.setEmptyZones(numOfPlayers, boardWidth, boardHeight, playerZoneHeight, cells);
+  protected void setupPawn(int playerNum, Color color, Cell cell) {
+    if (playerNum != 0) {
+      assignPawnToCell(cell, playerNum, color);
+    }
+    cell.setZoneColor(color);
   }
 }

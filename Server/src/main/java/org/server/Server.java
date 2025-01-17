@@ -3,8 +3,6 @@ package org.server;
 
 import org.server.board.Board;
 import org.server.board.BoardFactory;
-import org.server.board.BoardManager;
-import org.server.board.PlayerZoneFactory;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -22,6 +20,7 @@ import static java.lang.Thread.sleep;
 public class Server {
   private final ServerSocket serverSocket;
   private final GameManager gameManager;
+  private final int seed;
 
   /**
    * Constructs a Server with the specified server socket.
@@ -32,9 +31,8 @@ public class Server {
     this.serverSocket = serverSocket;
     this.gameManager = new GameManager();
     Random random = new Random();
-    int seed = random.nextInt(1000000);
+    seed = random.nextInt(1000000);
     this.gameManager.setSeed(seed);
-    PlayerZoneFactory.setSeed(seed);
   }
 
   /**
@@ -52,7 +50,8 @@ public class Server {
 
           if (gameManager.getClientHandlers().size() == gameManager.getMaxUsers()) {
             gameManager.startGame();
-            Board board = BoardFactory.createBoard(10, gameManager.getMaxUsers(), gameManager.getVariant());
+            Board board = BoardFactory.createBoard(10, gameManager.getMaxUsers(), gameManager.getVariant(), seed);
+            gameManager.setMoveValidator(board.getCells());
             gameManager.setBoard(board);
             gameManager.broadcastGameStarted();
             while (!allSetup(gameManager.getClientHandlers())) {
@@ -74,7 +73,7 @@ public class Server {
 
   public boolean allSetup(List<ClientHandler> clientHandlers) {
     for (ClientHandler clientHandler : clientHandlers) {
-      if (clientHandler.getSetup() == false) {
+      if (!clientHandler.getSetup()) {
         System.out.println("ret false");
         return false;
       }

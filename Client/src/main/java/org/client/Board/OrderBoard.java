@@ -1,6 +1,6 @@
 package org.client.Board;
 
-import org.client.Client;
+import javafx.scene.paint.Color;
 
 /**
  * Represents an Order game board with specific player zone setup for Order variant rules.
@@ -17,14 +17,8 @@ public class OrderBoard extends AbstractBoard {
     super(marblesPerPlayer, numOfPlayers);
   }
 
-  /**
-   * Sets up the player zones for the Order game variant.
-   *
-   * @param numOfPlayers Number of players in the game.
-   */
   @Override
-  protected void setupPlayerZones(int numOfPlayers) {
-    PlayerZoneFactory playerZoneFactory = new PlayerZoneFactory(numOfPlayers, boardWidth, boardHeight, playerZoneHeight);
-    cells =  playerZoneFactory.setEmptyZones(numOfPlayers, boardWidth, boardHeight, playerZoneHeight,cells);
+  protected void setupPawn(int playerNum, Color color, Cell cell) {
+    assignPawnToCell(cell, playerNum, color);
   }
 }

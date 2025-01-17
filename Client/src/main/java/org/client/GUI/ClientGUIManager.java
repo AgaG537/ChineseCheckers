@@ -14,6 +14,8 @@ import javafx.scene.text.Font;
 import org.client.Client;
 import java.util.ArrayList;
 
+import static java.lang.Thread.sleep;
+
 /**
  * Manages the setup and functionality of the client GUI components.
  * Includes views for the initial setup, waiting phase, and gameplay.
@@ -106,7 +108,7 @@ public class ClientGUIManager {
    *
    * @param message A message containing game configuration details from the server.
    */
-  public void setGamePanes(String message) {
+  public void setGamePanes(String message) throws InterruptedException {
     sideBox.getChildren().clear();
     serverMessageBox.getChildren().clear();
     String options = message.substring("START.".length());
@@ -115,6 +117,7 @@ public class ClientGUIManager {
     numOfPlayers = Integer.parseInt(optionsTable[0]);
     System.out.println("GameViewManager setup " + playerNum);
     gameViewManager = new GameViewManager(client, playerNum, boardBox, playerInfoBox, numOfPlayers, variant);
+    sleep(1000);
     gameViewManager.setGamePanes();
 
     infoBox.setStyle("-fx-border-color: black; -fx-border-insets: 5; "

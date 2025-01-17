@@ -2,7 +2,6 @@ package org.client;
 
 
 import org.client.Board.Board;
-import org.client.Board.PlayerZoneFactory;
 import java.io.*;
 import java.net.Socket;
 
@@ -104,7 +103,7 @@ public class Client {
               }
               else if (messageFromServer.startsWith("SEED")) {
                 String[] tokens = messageFromServer.split(" ");
-                PlayerZoneFactory.setSeed(Integer.parseInt(tokens[1]));
+                //PlayerZoneFactory.setSeed(Integer.parseInt(tokens[1]));
               } else {
                 clientApp.handleMessageFromServer(messageFromServer);
               }
