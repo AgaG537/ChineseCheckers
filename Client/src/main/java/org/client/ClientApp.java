@@ -1,14 +1,14 @@
 package org.client;
 
 
+import java.io.IOException;
+import java.net.Socket;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.client.GUI.ClientGUIManager;
-import java.io.IOException;
-import java.net.Socket;
 
 /**
  * Represents the graphical user interface for the client application.

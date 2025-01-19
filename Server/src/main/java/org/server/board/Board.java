@@ -7,7 +7,9 @@ package org.server.board;
 public interface Board {
 
   int checkWinCondition();
+
   String makeCreate(int row, int col);
+
   Cell[][] getCells();
 
 }

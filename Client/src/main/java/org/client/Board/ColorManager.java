@@ -1,7 +1,7 @@
 package org.client.Board;
 
-import javafx.scene.paint.Color;
 import java.util.Map;
+import javafx.scene.paint.Color;
 
 /**
  * Utility class for managing colors associated with players.
@@ -48,7 +48,7 @@ public class ColorManager {
    *
    * @param colorNum The color's number (1 to 6).
    * @return The {@link Color} corresponding to the zone's number.
-   *  Returns Color.web("#ffa64d") for invalid numbers.
+   *     Returns Color.web("#ffa64d") for invalid numbers.
    */
   public static Color generateDefaultColor(int colorNum) {
     return DEFAULT_COLORS.getOrDefault(colorNum, Color.web("#ffa64d"));

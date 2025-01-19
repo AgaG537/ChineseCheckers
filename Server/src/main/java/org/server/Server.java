@@ -1,16 +1,15 @@
 package org.server;
 
 
-import org.server.board.Board;
-import org.server.board.BoardFactory;
+import static java.lang.Thread.sleep;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.List;
 import java.util.Random;
-
-import static java.lang.Thread.sleep;
+import org.server.board.Board;
+import org.server.board.BoardFactory;
 
 /**
  * The main server class responsible for accepting client connections
@@ -66,9 +65,6 @@ public class Server {
     } catch (InterruptedException e) {
       throw new RuntimeException(e);
     }
-//    catch (InterruptedException e) {
-//      Thread.currentThread().interrupt();
-//    }
   }
 
   public boolean allSetup(List<ClientHandler> clientHandlers) {

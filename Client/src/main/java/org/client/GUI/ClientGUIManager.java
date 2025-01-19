@@ -1,6 +1,9 @@
 package org.client.GUI;
 
 
+import static java.lang.Thread.sleep;
+
+import java.util.ArrayList;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
@@ -12,9 +15,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import org.client.Client;
-import java.util.ArrayList;
-
-import static java.lang.Thread.sleep;
 
 /**
  * Manages the setup and functionality of the client GUI components.

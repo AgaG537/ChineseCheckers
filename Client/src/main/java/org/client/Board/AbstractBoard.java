@@ -1,9 +1,9 @@
 package org.client.Board;
 
-import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import javafx.scene.paint.Color;
 
 /**
  * Abstract class representing the common functionality for managing different board types.
@@ -197,8 +197,7 @@ public abstract class AbstractBoard implements Board {
   }
 
   /**
-   * @return The size constraint used
-   * for cell rendering in the GUI.
+   * @return The size constraint used for cell rendering in the GUI.
    */
   @Override
   public int getConstraintSize() {
@@ -253,7 +252,7 @@ public abstract class AbstractBoard implements Board {
     int col = positions[1];
     int player = positions[2];
     int numPlayers = positions[3];
-    Color color = Color.valueOf(ColorManager.getDefaultColorString(numPlayers,player));
+    Color color = Color.valueOf(ColorManager.getDefaultColorString(numPlayers, player));
     setupPawn(player, color, cells[row][col]);
   }
 

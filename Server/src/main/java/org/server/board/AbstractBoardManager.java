@@ -256,9 +256,9 @@ public abstract class AbstractBoardManager implements Board {
    * @return True if the cell is valid and inside the board; false otherwise.
    */
   private boolean isValidCell(int row, int col) {
-    return row >= 0 && row < boardHeight &&
-        col >= 0 && col < boardWidth &&
-        cells[row][col].isInsideBoard();
+    return row >= 0 && row < boardHeight
+        && col >= 0 && col < boardWidth
+        && cells[row][col].isInsideBoard();
   }
 
   /**
@@ -291,8 +291,7 @@ public abstract class AbstractBoardManager implements Board {
   public String makeCreate(int row, int col) {
     if (cells[row][col].getPawn() == null) {
       return "[CREATE] " + row + " " + col + " " + 0 + " " + numOfPlayers;
-    }
-    else {
+    } else {
       return "[CREATE] " + row + " " + col + " " + cells[row][col].getPawn().getPlayerNum() + " " + numOfPlayers;
     }
   }

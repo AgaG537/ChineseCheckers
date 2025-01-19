@@ -11,7 +11,8 @@ public class BoardFactory {
    * @param marbles      The number of marbles to place on the board.
    * @param numOfPlayers The number of players in the game.
    * @param variant      The game variant (e.g., "standard", "order", "yinyang").
-   * @return A {@link Board} instance corresponding to the specified variant, or null if the variant is invalid.
+   * @return A {@link Board} instance corresponding to the specified variant,
+   *     or null if the variant is invalid.
    */
   public static Board createBoard(int marbles, int numOfPlayers, String variant, int seed) {
     return switch (variant) {

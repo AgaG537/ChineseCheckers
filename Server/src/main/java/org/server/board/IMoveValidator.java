@@ -2,7 +2,7 @@ package org.server.board;
 
 public interface IMoveValidator {
 
-    /**
+  /**
    * Makes a move on the board based on the input string.
    *
    * @param input The move details encoded as a string (e.g., "rowStart colStart rowEnd colEnd").
@@ -17,5 +17,5 @@ public interface IMoveValidator {
    * @param input  The move details encoded as a string (e.g., "startRow startCol endRow endCol").
    * @return True if the move is valid; false otherwise.
    */
-  boolean validateMove(int userId,String input);
+  boolean validateMove(int userId, String input);
 }

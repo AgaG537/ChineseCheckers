@@ -1,10 +1,9 @@
 package org.server;
 
 
-import org.server.board.MaxUserHandler;
-
 import java.io.*;
 import java.net.Socket;
+import org.server.board.MaxUserHandler;
 
 /**
  * Handles communication with a single client in the game.
@@ -116,6 +115,7 @@ public class ClientHandler implements Runnable {
             case 2:
               gameManager.advanceTurn(gameManager.getClientHandlers().size());
               gameManager.broadcastSkip(userNum);
+              break;
             default:
               System.out.println("Something went wrong");
           }

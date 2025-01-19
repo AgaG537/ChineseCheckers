@@ -57,24 +57,21 @@ public class Cell extends Circle {
   /**
    * Checks if the cell is inside board.
    *
-   * @return True if the cell is inside
-   * the playable area of the board.
+   * @return True if the cell is inside the playable area of the board.
    */
   public boolean isInsideBoard() {
     return insideBoard;
   }
 
   /**
-   * Marks the cell as being inside
-   * the playable area of the board.
+   * Marks the cell as being inside the playable area of the board.
    */
   public void setInsideBoard() {
     insideBoard = true;
   }
 
   /**
-   * @return The player number initially
-   * assigned to the cell (0 if unoccupied).
+   * @return The player number initially assigned to the cell (0 if unoccupied).
    */
   public int getInitialPlayerNum() {
     return initialPlayerNum;

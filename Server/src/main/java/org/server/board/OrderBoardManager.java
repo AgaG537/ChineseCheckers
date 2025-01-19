@@ -37,14 +37,14 @@ public class OrderBoardManager extends AbstractBoardManager {
     Random random = new Random(seed);
     int player = 0;
     for (int j : activeZoneNums) {
-      if (j!=0) {
+      if (j != 0) {
         player++;
         int i = 0;
         while (i < numOfCellsPerZone) {
           int row = random.nextInt(boardHeight);
           int col = random.nextInt(boardWidth);
 
-          if (cells[row][col].getPawn() == null && cells[row][col].getZoneNum()==0 && cells[row][col].isInsideBoard()) {
+          if (cells[row][col].getPawn() == null && cells[row][col].getZoneNum() == 0 && cells[row][col].isInsideBoard()) {
             assignPawnToCell(cells[row][col], player);
             System.out.println("row: " + row + ", col: " + col + ", isOccupied: " + cells[row][col].isOccupied());
             i++;

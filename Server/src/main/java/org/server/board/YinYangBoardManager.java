@@ -17,7 +17,7 @@ public class YinYangBoardManager extends AbstractBoardManager {
    * @param marblesPerPlayer The number of marbles assigned to each player.
    */
   public YinYangBoardManager(int marblesPerPlayer, int seed) {
-    super(marblesPerPlayer,2, seed);
+    super(marblesPerPlayer, 2, seed);
     playerZoneNums = chooseRandomZones();
     setupPlayerZones();
   }

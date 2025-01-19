@@ -1,14 +1,13 @@
 package org.server;
 
 
-import org.server.board.Board;
-import org.server.board.Cell;
-import org.server.board.MoveValidator;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import org.server.board.Board;
+import org.server.board.Cell;
+import org.server.board.MoveValidator;
 
 /**
  * Manages the state of the game, including player turns, broadcasting messages,
@@ -73,7 +72,7 @@ public class GameManager {
    * @param variant The variant to set (e.g., "standard", "order", "yinyang").
    */
   public void setVariant(String variant) {
-    this.variant=variant;
+    this.variant = variant;
   }
 
   /**
@@ -238,7 +237,7 @@ public class GameManager {
     for (ClientHandler clientHandler : clientHandlers) {
       try {
         if (!Objects.equals(clientHandler.getUserNum(), userNum)) {
-        clientHandler.sendMessage("User number " + userNum + " moved: " + move);
+          clientHandler.sendMessage("User number " + userNum + " moved: " + move);
         } else {
           clientHandler.sendMessage("You just moved");
         }
@@ -303,8 +302,7 @@ public class GameManager {
     boolean valid = moveValidator.validateMove(userNum, input);
     if (valid) {
       return 0;
-    }
-    else {
+    } else {
       return 1;
     }
   }
@@ -355,7 +353,7 @@ public class GameManager {
   }
 
   public void waitForAllSetups() throws InterruptedException {
-    synchronized(setupLock) {
+    synchronized (setupLock) {
       while (setupCount < maxUsers) {
         setupLock.wait();
       }

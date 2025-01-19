@@ -1,9 +1,9 @@
 package org.client;
 
 
-import org.client.Board.Board;
 import java.io.*;
 import java.net.Socket;
+import org.client.Board.Board;
 
 /**
  * Represents a client connecting to the server.
@@ -100,8 +100,7 @@ public class Client {
                 board.handleCreate(messageFromServer);
               } else if (messageFromServer.equals("[SETUP]")) {
                 setup = true;
-              }
-              else if (messageFromServer.startsWith("SEED")) {
+              } else if (messageFromServer.startsWith("SEED")) {
                 String[] tokens = messageFromServer.split(" ");
                 //PlayerZoneFactory.setSeed(Integer.parseInt(tokens[1]));
               } else {
