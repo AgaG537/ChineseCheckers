@@ -102,9 +102,7 @@ public class FirstPlayerViewManager {
     for (int num : numsOfPlayers) {
       choosePlayerNumChoiceBox.getItems().add(num);
     }
-    choosePlayerNumChoiceBox.setOnAction(e -> {
-      numOfPlayers = choosePlayerNumChoiceBox.getValue();
-    });
+    choosePlayerNumChoiceBox.setOnAction(e -> numOfPlayers = choosePlayerNumChoiceBox.getValue());
     choosePlayerNumChoiceBox.setMinWidth(250);
     choosePlayerNumChoiceBox.setCursor(Cursor.HAND);
     choosePlayerNumChoiceBox.setStyle("-fx-font-size : 23px;");

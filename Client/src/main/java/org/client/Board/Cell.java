@@ -126,15 +126,6 @@ public class Cell extends Circle {
   }
 
   /**
-   * Updates the current color of the cell (represents pawn).
-   *
-   * @param color The new color to assign.
-   */
-  public void setCurrentColor(Color color) {
-    currentColor = color;
-  }
-
-  /**
    * Returns the pawn currently occupying the cell.
    *
    * @return The pawn currently occupying the cell.

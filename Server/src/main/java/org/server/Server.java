@@ -31,7 +31,6 @@ public class Server {
     this.gameManager = new GameManager();
     Random random = new Random();
     seed = random.nextInt(1000000);
-    this.gameManager.setSeed(seed);
   }
 
   /**

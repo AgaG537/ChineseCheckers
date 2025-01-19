@@ -23,9 +23,6 @@ public class GameManager {
   private MoveValidator moveValidator;
   private String variant;
   private final ArrayList<Integer> finishedPlayers;
-  private int seed;
-  private final Object setupLock = new Object();
-  private int setupCount = 0;
 
   /**
    * Constructs a GameManager.
@@ -331,15 +328,6 @@ public class GameManager {
     if (finishedPlayers.size() == clientHandlers.size()) {
       broadcastGameFinished();
     }
-  }
-
-  /**
-   * Sets the seed for the game, which may affect randomness in gameplay mechanics.
-   *
-   * @param seed The seed value to set.
-   */
-  public void setSeed(int seed) {
-    this.seed = seed;
   }
 
   /**

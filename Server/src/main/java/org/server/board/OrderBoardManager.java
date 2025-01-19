@@ -46,7 +46,6 @@ public class OrderBoardManager extends AbstractBoardManager {
    */
   private void distributePawns() {
     // Randomly distribute pawns in the middle of the board.
-    System.out.println(seed);
     Random random = new Random(seed);
     int player = 0;
     for (int j : activeZoneNums) {
@@ -59,7 +58,6 @@ public class OrderBoardManager extends AbstractBoardManager {
 
           if (cells[row][col].getPawn() == null && cells[row][col].getZoneNum() == 0 && cells[row][col].isInsideBoard()) {
             assignPawnToCell(cells[row][col], player);
-            System.out.println("row: " + row + ", col: " + col + ", isOccupied: " + cells[row][col].isOccupied());
             i++;
           }
         }

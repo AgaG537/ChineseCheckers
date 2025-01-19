@@ -2,8 +2,6 @@ package org.client.GUI;
 
 
 import java.util.ArrayList;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -106,9 +104,8 @@ public class ClientGUIManager {
    * Parses game settings from the server message and initializes game components.
    *
    * @param message A message containing game configuration details from the server.
-   * @throws InterruptedException If the thread is interrupted during setup.
    */
-  public void setGamePanes(String message) throws InterruptedException {
+  public void setGamePanes(String message) {
     sideBox.getChildren().clear();
     serverMessageBox.getChildren().clear();
     String options = message.substring("START.".length());
@@ -174,9 +171,7 @@ public class ClientGUIManager {
         skipButton.setMinWidth(125);
         skipButton.setCursor(Cursor.HAND);
         skipButton.setStyle("-fx-font-size : 15px;");
-        skipButton.setOnMouseClicked(event -> {
-          client.sendMessage("SKIP");
-        });
+        skipButton.setOnMouseClicked(event -> client.sendMessage("SKIP"));
 
         currPlayerInfoBox.getChildren().addAll(titleLabel, messageLabel, skipButton);
       } else {
@@ -267,12 +262,7 @@ public class ClientGUIManager {
 
     sideBox.setSpacing(20);
     sideBox.setPadding(new Insets(15));
-    sideBox.heightProperty().addListener(new ChangeListener<Number>() {
-      @Override
-      public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-        sidePane.setVvalue(newValue.doubleValue());
-      }
-    });
+    sideBox.heightProperty().addListener((observable, oldValue, newValue) -> sidePane.setVvalue(newValue.doubleValue()));
 
     serverMessageBox.setSpacing(15);
     serverMessageBox.setPadding(new Insets(15));

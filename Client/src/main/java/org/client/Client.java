@@ -52,11 +52,11 @@ public class Client {
     }
   }
 
-  public Socket getSocket() {
-    return socket;
-  }
-
-
+  /**
+   * Sets the current board.
+   *
+   * @param board The current board.
+   */
   public void setBoard(Board board) {
     this.board = board;
   }

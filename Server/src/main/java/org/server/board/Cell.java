@@ -34,7 +34,7 @@ public class Cell {
     zoneNum = 0;
     occupied = false;
     pawn = null;
-    neighbors = new ArrayList<Cell>();
+    neighbors = new ArrayList<>();
   }
 
   /**

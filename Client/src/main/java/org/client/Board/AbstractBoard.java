@@ -19,7 +19,6 @@ public abstract class AbstractBoard implements Board {
   protected int numOfCellsPerZone;
   public int[] activeZoneNums;
   protected ArrayList<Integer> finishedPlayers;
-  protected int seed;
 
   protected final int constraintSize;
   protected Cell[][] cells;
