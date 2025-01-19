@@ -120,7 +120,6 @@ public class ClientGUIManager {
     numOfPlayers = Integer.parseInt(optionsTable[0]);
     System.out.println("GameViewManager setup " + playerNum);
     gameViewManager = new GameViewManager(client, playerNum, boardBox, playerInfoBox, numOfPlayers, variant);
-    sleep(1000);
     gameViewManager.setGamePanes();
 
     infoBox.setStyle("-fx-border-color: black; -fx-border-insets: 5; "

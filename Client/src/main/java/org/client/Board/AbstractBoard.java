@@ -154,7 +154,8 @@ public abstract class AbstractBoard implements Board {
 
       for (int row = rowStart; checkRow(i, row, rowStart); row = advanceRow(i, row)) {
         for (int col = colStart - k; col <= colStart + k; col += 2) {
-          Color color = ColorManager.generateDefaultColor(i + 1);
+//          Color color = ColorManager.generateDefaultColor(i + 1);
+          Color color = getColor(i+1);
           int playerNum;
           if (activeZoneNums[i] == 1) {
             playerNum = defaultPlayerNum;
@@ -172,6 +173,18 @@ public abstract class AbstractBoard implements Board {
     }
   }
 
+
+  /**
+   * Function generating a Color object based on player number
+   *
+   * @param colorNum integer number associated with the desired color
+   * @return Color object associated with the given integer
+   */
+  protected Color getColor(int colorNum) {
+    return ColorManager.generateDefaultColor(colorNum);
+  }
+
+
   /**
    * Verifies whether the current row index is within the bounds of the player zone.
    *
@@ -180,7 +193,7 @@ public abstract class AbstractBoard implements Board {
    * @param rowStart  The starting row index for the zone.
    * @return True if the row index is within the bounds of the zone; false otherwise.
    */
-  private boolean checkRow(int i, int row, int rowStart) {
+  protected boolean checkRow(int i, int row, int rowStart) {
     if (i % 2 == 0) {
       return row < rowStart + playerZoneHeight;
     } else {
@@ -195,7 +208,7 @@ public abstract class AbstractBoard implements Board {
    * @param row The current row index.
    * @return The updated row index.
    */
-  private int advanceRow(int i, int row) {
+  protected int advanceRow(int i, int row) {
     if (i % 2 == 0) {
       return row + 1;
     } else {
@@ -225,6 +238,7 @@ public abstract class AbstractBoard implements Board {
    */
   protected void assignPawnToCell(Cell cell, int playerNum, Color color) {
     if (playerNum != 0) {
+      System.out.println("assignPawnToCell color: " + color);
       Pawn pawn = new Pawn(playerNum, color, cell);
       cell.pawnMoveIn(pawn);
     }
@@ -332,7 +346,7 @@ public abstract class AbstractBoard implements Board {
    * @param command The command string to decode.
    * @return An array of integers representing decoded positions and parameters.
    */
-  private int[] decodeCommand(String command) {
+  protected int[] decodeCommand(String command) {
     String[] tokens = command.split(" ");
     int[] result = new int[tokens.length - 1];
     try {

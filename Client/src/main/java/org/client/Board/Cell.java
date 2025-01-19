@@ -113,6 +113,7 @@ public class Cell extends Circle {
    */
   public void setZoneColor(Color color) {
     zoneColor = color;
+    updateCircle();
   }
 
   /**
@@ -166,10 +167,11 @@ public class Cell extends Circle {
 
 
   /**
-   * Updates the Circle to reflect the current color of the cell.
+   * Updates the Circle to reflect the current color of the cell and zone.
    */
   public void updateCircle() {
     this.setFill(currentColor);
+    this.setStroke(this.zoneColor);
   }
 
   /**
