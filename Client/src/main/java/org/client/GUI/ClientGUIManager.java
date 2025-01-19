@@ -1,6 +1,9 @@
 package org.client.GUI;
 
 
+import static java.lang.Thread.sleep;
+
+import java.util.ArrayList;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
@@ -12,9 +15,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import org.client.Client;
-import java.util.ArrayList;
-
-import static java.lang.Thread.sleep;
 
 /**
  * Manages the setup and functionality of the client GUI components.
@@ -93,7 +93,8 @@ public class ClientGUIManager {
   }
 
   /**
-   * Sets the GUI to a waiting state until the game starts.
+   * Sets the GUI to the initial waiting state until the game starts.
+   * Prepares the layout and displays messages from the server.
    */
   public void setWaitingPanes() {
     sideBox.getChildren().clear();
@@ -104,9 +105,11 @@ public class ClientGUIManager {
   }
 
   /**
-   * Configures the GUI for the gameplay phase.
+   * Configures the GUI to transition from the waiting phase to gameplay.
+   * Parses game settings from the server message and initializes game components.
    *
    * @param message A message containing game configuration details from the server.
+   * @throws InterruptedException If the thread is interrupted during setup.
    */
   public void setGamePanes(String message) throws InterruptedException {
     sideBox.getChildren().clear();
@@ -141,9 +144,9 @@ public class ClientGUIManager {
   }
 
   /**
-   * Updates the current player's information box based on the game state.
-   * Displays whether it's the current player's turn or if they have finished.
-   * Adds a "SKIP TURN" button for the active player to skip their turn.
+   * Updates the GUI to reflect the current player's turn. Adds relevant messages
+   * and an option to skip the turn for the active player. Handles end-of-game scenarios
+   * for finished players.
    */
   public void addCurrPlayerInfo() {
     currPlayerInfoBox.getChildren().clear();
@@ -203,7 +206,8 @@ public class ClientGUIManager {
   }
 
   /**
-   * Clears the side pane's part used for displaying messages frm server.
+   * Clears all messages from the server message box in the side pane.
+   * This is typically used before updating the pane with new messages.
    */
   public void clearServerMessageBox() {
     serverMessageBox.getChildren().clear();
@@ -236,30 +240,15 @@ public class ClientGUIManager {
    */
   private String getPlaceNumString() {
     int finisherNum = finishedPlayers.size();
-    String finisherNumString;
-    switch (finisherNum) {
-      case 1:
-        finisherNumString = "first";
-        break;
-      case 2:
-        finisherNumString = "second";
-        break;
-      case 3:
-        finisherNumString = "third";
-        break;
-      case 4:
-        finisherNumString = "fourth";
-        break;
-      case 5:
-        finisherNumString = "fifth";
-        break;
-      case 6:
-        finisherNumString = "sixth";
-        break;
-      default:
-        finisherNumString = "";
-    }
-    return finisherNumString;
+    return switch (finisherNum) {
+      case 1 -> "first";
+      case 2 -> "second";
+      case 3 -> "third";
+      case 4 -> "fourth";
+      case 5 -> "fifth";
+      case 6 -> "sixth";
+      default -> "";
+    };
   }
 
   /**

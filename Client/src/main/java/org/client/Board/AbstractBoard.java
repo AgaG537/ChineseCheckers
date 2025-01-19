@@ -1,9 +1,9 @@
 package org.client.Board;
 
-import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import javafx.scene.paint.Color;
 
 /**
  * Abstract class representing the common functionality for managing different board types.
@@ -90,7 +90,14 @@ public abstract class AbstractBoard implements Board {
     }
   }
 
-
+  /**
+   * Initializes the start points for player zones on the board.
+   *
+   * @param boardWidth       The total width of the board.
+   * @param boardHeight      The total height of the board.
+   * @param playerZoneHeight The height of each player's zone.
+   * @return A 2D array where each entry represents the starting coordinates for a player zone.
+   */
   protected int[][] initializeZoneStartPoints(int boardWidth, int boardHeight, int playerZoneHeight) {
     return new int[][]{
         {0, (boardWidth / 2)},                            // Upper zone
@@ -102,6 +109,12 @@ public abstract class AbstractBoard implements Board {
     };
   }
 
+  /**
+   * Calculates the height of a player's zone based on the number of marbles.
+   *
+   * @param playerZoneHeight The height of a single player zone.
+   * @return The number of cells in a single player zone.
+   */
   protected int calculateCellsPerZone(int playerZoneHeight) {
     int counter = playerZoneHeight;
     int numOfCells = 0;
@@ -112,6 +125,10 @@ public abstract class AbstractBoard implements Board {
     return numOfCells;
   }
 
+  /**
+   * Marks zones as active or inactive based on the number of players.
+   * Updates the active zone numbers array to indicate active zones.
+   */
   protected void markActiveZones() {
     Arrays.fill(activeZoneNums, 0);
     switch (numOfPlayers) {
@@ -122,6 +139,10 @@ public abstract class AbstractBoard implements Board {
     }
   }
 
+  /**
+   * Sets up player zones on the board by assigning cells to zones based on the number of players.
+   * Colors zones and initializes player numbers in active zones.
+   */
   protected void setupPlayerZones() {
     int defaultPlayerNum = 1;
 
@@ -151,6 +172,14 @@ public abstract class AbstractBoard implements Board {
     }
   }
 
+  /**
+   * Verifies whether the current row index is within the bounds of the player zone.
+   *
+   * @param i         The index of the player zone.
+   * @param row       The current row index.
+   * @param rowStart  The starting row index for the zone.
+   * @return True if the row index is within the bounds of the zone; false otherwise.
+   */
   private boolean checkRow(int i, int row, int rowStart) {
     if (i % 2 == 0) {
       return row < rowStart + playerZoneHeight;
@@ -159,6 +188,13 @@ public abstract class AbstractBoard implements Board {
     }
   }
 
+  /**
+   * Advances the row index based on the direction of the zone.
+   *
+   * @param i   The index of the player zone.
+   * @param row The current row index.
+   * @return The updated row index.
+   */
   private int advanceRow(int i, int row) {
     if (i % 2 == 0) {
       return row + 1;
@@ -167,12 +203,26 @@ public abstract class AbstractBoard implements Board {
     }
   }
 
+  /**
+   * Assigns a cell to a specific player zone, setting its flag, player number, and color.
+   *
+   * @param cell       The cell to assign.
+   * @param color      The color of the zone.
+   * @param playerNum  The player number associated with the zone.
+   */
   protected void assignCellToZone(Cell cell, Color color, int playerNum) {
     cell.setFlag(5);
     cell.setInitialPlayerNum(playerNum);
     cell.setZoneColor(color);
   }
 
+  /**
+   * Assigns a pawn to a specific cell, setting its player number and color.
+   *
+   * @param cell       The cell to assign.
+   * @param playerNum  The player number associated with the pawn.
+   * @param color      The color of the pawn.
+   */
   protected void assignPawnToCell(Cell cell, int playerNum, Color color) {
     if (playerNum != 0) {
       Pawn pawn = new Pawn(playerNum, color, cell);
@@ -197,8 +247,9 @@ public abstract class AbstractBoard implements Board {
   }
 
   /**
-   * @return The size constraint used
-   * for cell rendering in the GUI.
+   * Returns the size constraint used for cell rendering in the GUI.
+   *
+   * @return The size constraint used for cell rendering in the GUI.
    */
   @Override
   public int getConstraintSize() {
@@ -206,6 +257,8 @@ public abstract class AbstractBoard implements Board {
   }
 
   /**
+   * Returns the width of the board.
+   *
    * @return The width of the board.
    */
   @Override
@@ -214,6 +267,8 @@ public abstract class AbstractBoard implements Board {
   }
 
   /**
+   * Returns the height of the board.
+   *
    * @return The height of the board.
    */
   @Override
@@ -246,6 +301,11 @@ public abstract class AbstractBoard implements Board {
     cells[positions[2]][positions[3]].pawnMoveIn(pawn);
   }
 
+  /**
+   * Handles a command to create game elements such as pawns or zones on the board.
+   *
+   * @param command The command string specifying creation instructions.
+   */
   @Override
   public void handleCreate(String command) {
     int[] positions = decodeCommand(command);
@@ -253,11 +313,18 @@ public abstract class AbstractBoard implements Board {
     int col = positions[1];
     int player = positions[2];
     int numPlayers = positions[3];
-    Color color = Color.valueOf(ColorManager.getDefaultColorString(numPlayers,player));
+    Color color = Color.valueOf(ColorManager.getDefaultColorString(numPlayers, player));
     setupPawn(player, color, cells[row][col]);
   }
 
-  protected abstract void setupPawn(int playerNum, Color color, Cell cell);
+  /**
+   * Configures the cell with the pawn's properties.
+   *
+   * @param playerNum The number of the player owning the pawn.
+   * @param color     The color associated with the pawn.
+   * @param cell      The cell where the pawn is to be placed.
+   */
+  public abstract void setupPawn(int playerNum, Color color, Cell cell);
 
   /**
    * Decodes a command string into an array of integers representing positions and parameters.

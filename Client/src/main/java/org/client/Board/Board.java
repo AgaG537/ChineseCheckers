@@ -1,5 +1,7 @@
 package org.client.Board;
 
+import javafx.scene.paint.Color;
+
 /**
  * Interface representing a generic game board with methods for handling commands,
  * accessing board properties, and managing game state.
@@ -48,5 +50,19 @@ public interface Board {
    */
   void setWin();
 
+  /**
+   * Handles a command to create game elements such as pawns or zones on the board.
+   *
+   * @param command The command string specifying creation instructions.
+   */
   void handleCreate(String command);
+
+  /**
+   * Configures the cell with the pawn's properties.
+   *
+   * @param playerNum The number of the player owning the pawn.
+   * @param color     The color associated with the pawn.
+   * @param cell      The cell where the pawn is to be placed.
+   */
+  void setupPawn(int playerNum, Color color, Cell cell);
 }

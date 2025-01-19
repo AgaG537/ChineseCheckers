@@ -3,7 +3,8 @@ package org.client;
 import org.client.GUI.ClientGUIManager;
 
 /**
- * Handles commands received from the server and updates the GUI accordingly.
+ * Handles commands received from the server and updates the GUI state accordingly.
+ * Commands include game state updates, player actions, and system notifications.
  */
 public class CommandHandler {
 
@@ -12,6 +13,7 @@ public class CommandHandler {
    *
    * @param message    The message received from the server.
    * @param guiManager The GUI manager to update the user interface.
+   * @throws InterruptedException If the thread is interrupted during message handling.
    */
   public static void handleCommand(String message, ClientGUIManager guiManager) throws InterruptedException {
     if (message.startsWith("User number ") || message.equals("You just moved")) {

@@ -1,6 +1,7 @@
 package org.client.GUI;
 
 
+import java.util.ArrayList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -13,8 +14,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import org.client.Board.*;
 import org.client.Client;
-
-import java.util.ArrayList;
 
 /**
  * Handles the layout and functionality of the game view during play.

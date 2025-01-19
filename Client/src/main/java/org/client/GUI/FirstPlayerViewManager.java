@@ -35,6 +35,7 @@ public class FirstPlayerViewManager {
    * @param client The client responsible for server communication.
    * @param boardBox The VBox for displaying the central pane.
    * @param sideBox The VBox for displaying the side panel.
+   * @param clientGUIManager The manager for displaying client GUI.
    */
   public FirstPlayerViewManager(Client client, VBox boardBox, VBox sideBox, ClientGUIManager clientGUIManager) {
     this.client = client;

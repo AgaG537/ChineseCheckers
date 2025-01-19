@@ -17,8 +17,17 @@ public class BoardManager extends AbstractBoardManager {
     setupPlayerZones();
   }
 
+  /**
+   * Sets up the specified cell by assigning it to the appropriate zone and player.
+   * This method overrides the abstract setupCell method to implement the specific behavior for the standard game.
+   *
+   * @param cell The cell to be set up.
+   * @param zoneNum The zone number the cell belongs to.
+   * @param defaultPlayerNum The default player number for the zone.
+   * @param activeZoneNums An array of active zone numbers indicating which zones are active.
+   */
   @Override
-  protected void setupCell(Cell cell, int zoneNum, int defaultPlayerNum, int[] activeZoneNums) {
+  public void setupCell(Cell cell, int zoneNum, int defaultPlayerNum, int[] activeZoneNums) {
     int playerNum;
     if (activeZoneNums[zoneNum - 1] == 1) {
       playerNum = defaultPlayerNum;
@@ -29,6 +38,14 @@ public class BoardManager extends AbstractBoardManager {
     assignPawnToCell(cell, playerNum);
   }
 
+  /**
+   * Retrieves the target player based on the number of players and the zone number.
+   * This method is used to determine the player number who should be targeted for a specific zone.
+   *
+   * @param numOfPlayers The number of players in the game.
+   * @param zoneNum The zone number to check.
+   * @return The player number who is the target for the zone.
+   */
   @Override
   protected int getTargetPlayer(int numOfPlayers, int zoneNum) {
     return TargetPlayerHandler.getOppositeTargetPlayerNum(numOfPlayers, zoneNum);

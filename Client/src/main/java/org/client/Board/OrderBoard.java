@@ -3,7 +3,8 @@ package org.client.Board;
 import javafx.scene.paint.Color;
 
 /**
- * Represents an Order game board with specific player zone setup for Order variant rules.
+ * Represents an Order Out of Chaos game board with specific player zone
+ * setup for Order Out of Chaos variant rules.
  */
 public class OrderBoard extends AbstractBoard {
 
@@ -17,8 +18,16 @@ public class OrderBoard extends AbstractBoard {
     super(marblesPerPlayer, numOfPlayers);
   }
 
+  /**
+   * Assigns a pawn to a cell in the OrderBoard variant.
+   * Configures the cell with the pawn's properties.
+   *
+   * @param playerNum The number of the player owning the pawn.
+   * @param color     The color associated with the pawn.
+   * @param cell      The cell where the pawn is to be placed.
+   */
   @Override
-  protected void setupPawn(int playerNum, Color color, Cell cell) {
+  public void setupPawn(int playerNum, Color color, Cell cell) {
     assignPawnToCell(cell, playerNum, color);
   }
 }

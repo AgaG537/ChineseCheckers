@@ -1,7 +1,8 @@
 package org.server.board;
 
 /**
- * Utility class to handle the maximum number of users allowed in the game based on the selected variant.
+ * Utility class to handle the maximum number of users allowed in the game
+ * based on the selected variant.
  */
 public class MaxUserHandler {
 
@@ -12,7 +13,7 @@ public class MaxUserHandler {
    * @param variant  The game variant (e.g., "standard", "order", "yinyang").
    * @return The adjusted maximum number of users for the specified variant.
    */
-  public static int handleMaxUsers (int maxUsers, String variant) {
+  public static int handleMaxUsers(int maxUsers, String variant) {
     if (variant.equals("yinyang")) {
       return 2;
     }

@@ -36,11 +36,18 @@ public class Cell extends Circle {
     flag = 0;
   }
 
+  /**
+   * Returns the flag of the cell.
+   *
+   * @return The flag of the cell.
+   */
   public int getFlag() {
     return flag;
   }
 
   /**
+   * Returns the row index of the cell.
+   *
    * @return The row index of the cell.
    */
   public int getRow() {
@@ -48,6 +55,8 @@ public class Cell extends Circle {
   }
 
   /**
+   * Returns the column index of the cell.
+   *
    * @return The column index of the cell.
    */
   public int getCol() {
@@ -57,24 +66,23 @@ public class Cell extends Circle {
   /**
    * Checks if the cell is inside board.
    *
-   * @return True if the cell is inside
-   * the playable area of the board.
+   * @return True if the cell is inside the playable area of the board.
    */
   public boolean isInsideBoard() {
     return insideBoard;
   }
 
   /**
-   * Marks the cell as being inside
-   * the playable area of the board.
+   * Marks the cell as being inside the playable area of the board.
    */
   public void setInsideBoard() {
     insideBoard = true;
   }
 
   /**
-   * @return The player number initially
-   * assigned to the cell (0 if unoccupied).
+   * Returns the player number initially assigned to the cell (0 if unoccupied).
+   *
+   * @return The player number initially assigned to the cell (0 if unoccupied).
    */
   public int getInitialPlayerNum() {
     return initialPlayerNum;
@@ -90,6 +98,8 @@ public class Cell extends Circle {
   }
 
   /**
+   * Returns the initial color of the cell.
+   *
    * @return The initial color of the cell.
    */
   public Color getZoneColor() {
@@ -106,6 +116,8 @@ public class Cell extends Circle {
   }
 
   /**
+   * Returns the current color of the cell (represents pawn).
+   *
    * @return The current color of the cell (represents pawn).
    */
   public Color getCurrentColor() {
@@ -122,6 +134,8 @@ public class Cell extends Circle {
   }
 
   /**
+   * Returns the pawn currently occupying the cell.
+   *
    * @return The pawn currently occupying the cell.
    */
   public Pawn getPawn() {
@@ -141,8 +155,7 @@ public class Cell extends Circle {
   }
 
   /**
-   * Removes the pawn from the cell, marking it as unoccupied.
-   *
+   * Moves a pawn out of the cell, marking it as unoccupied and clearing its current color.
    */
   public void pawnMoveOut() {
     this.pawn = null;

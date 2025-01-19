@@ -1,14 +1,13 @@
 package org.server;
 
 
-import org.server.board.Board;
-import org.server.board.Cell;
-import org.server.board.MoveValidator;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import org.server.board.Board;
+import org.server.board.Cell;
+import org.server.board.MoveValidator;
 
 /**
  * Manages the state of the game, including player turns, broadcasting messages,
@@ -48,6 +47,11 @@ public class GameManager {
     this.currentBoard = board;
   }
 
+  /**
+   * Sets the move validator for the game.
+   *
+   * @param cells A 2D array of cells representing the board's current state.
+   */
   public void setMoveValidator(Cell[][] cells) {
     this.moveValidator = new MoveValidator(cells);
   }
@@ -73,7 +77,7 @@ public class GameManager {
    * @param variant The variant to set (e.g., "standard", "order", "yinyang").
    */
   public void setVariant(String variant) {
-    this.variant=variant;
+    this.variant = variant;
   }
 
   /**
@@ -238,7 +242,7 @@ public class GameManager {
     for (ClientHandler clientHandler : clientHandlers) {
       try {
         if (!Objects.equals(clientHandler.getUserNum(), userNum)) {
-        clientHandler.sendMessage("User number " + userNum + " moved: " + move);
+          clientHandler.sendMessage("User number " + userNum + " moved: " + move);
         } else {
           clientHandler.sendMessage("You just moved");
         }
@@ -303,8 +307,7 @@ public class GameManager {
     boolean valid = moveValidator.validateMove(userNum, input);
     if (valid) {
       return 0;
-    }
-    else {
+    } else {
       return 1;
     }
   }
@@ -340,6 +343,9 @@ public class GameManager {
     this.seed = seed;
   }
 
+  /**
+   * Broadcasts a message about the cell to be created in clients' GUI.
+   */
   public synchronized void broadcastBoardCreate() {
     for (ClientHandler clientHandler : clientHandlers) {
       for (Cell[] cellRow : currentBoard.getCells()) {
@@ -354,14 +360,23 @@ public class GameManager {
     }
   }
 
+  /**
+   * Waits for all connected clients to complete their setup phase.
+   *
+   * @throws InterruptedException If the thread waiting is interrupted.
+   */
   public void waitForAllSetups() throws InterruptedException {
-    synchronized(setupLock) {
+    synchronized (setupLock) {
       while (setupCount < maxUsers) {
         setupLock.wait();
       }
     }
   }
 
+  /**
+   * Marks a client as having completed their setup phase.
+   * If all clients are ready, notifies any waiting threads.
+   */
   public void clientSetupComplete() {
     synchronized (setupLock) {
       setupCount++;
