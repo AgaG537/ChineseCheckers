@@ -58,7 +58,7 @@ public class ColorManager {
    * Retrieves the string representation of the default color for a given player in a specific game.
    *
    * @param numOfPlayers The number of players in the game.
-   * @param playerNum The player's number.
+   * @param playerNum The player number to fetch the color for.
    * @return The string representation of the player's color.
    */
   public static String getDefaultColorString(int numOfPlayers, int playerNum) {

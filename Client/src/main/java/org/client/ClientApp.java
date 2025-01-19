@@ -12,7 +12,8 @@ import org.client.GUI.ClientGUIManager;
 
 /**
  * Represents the graphical user interface for the client application.
- * Handles the connection to the server and the initialization of the GUI.
+ * Handles the connection to the server, initialization of the GUI, and
+ * processing of messages received from the server.
  */
 public class ClientApp extends Application {
 
@@ -20,7 +21,8 @@ public class ClientApp extends Application {
   private ClientGUIManager guiManager;
 
   /**
-   * Entry point for JavaFX application.
+   * Entry point for the JavaFX application. Initializes the client connection,
+   * sets up the graphical user interface, and starts listening for server messages.
    *
    * @param stage The primary stage for the application.
    */
@@ -45,7 +47,8 @@ public class ClientApp extends Application {
   }
 
   /**
-   * Handles messages received from the server and updates the GUI accordingly.
+   * Handles messages received from the server. Updates the GUI based on the
+   * message content by delegating the processing to the command handler.
    *
    * @param message The message received from the server.
    */

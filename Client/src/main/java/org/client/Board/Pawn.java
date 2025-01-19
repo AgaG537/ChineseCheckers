@@ -68,8 +68,6 @@ public class Pawn {
     currCell.pawnMoveIn(this);
   }
 
-
-
   /**
    * Provides a string representation of the pawn.
    *

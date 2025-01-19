@@ -17,8 +17,16 @@ public class StandardBoard extends AbstractBoard {
     super(marblesPerPlayer, numOfPlayers);
   }
 
+  /**
+   * Assigns a pawn to a cell in the StandardBoard variant.
+   * Configures the cell with the pawn's properties.
+   *
+   * @param playerNum The number of the player owning the pawn.
+   * @param color     The color associated with the pawn.
+   * @param cell      The cell where the pawn is to be placed.
+   */
   @Override
-  protected void setupPawn(int playerNum, Color color, Cell cell) {
+  public void setupPawn(int playerNum, Color color, Cell cell) {
     assignPawnToCell(cell, playerNum, color);
   }
 }

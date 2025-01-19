@@ -6,7 +6,8 @@ import java.net.Socket;
 import org.client.Board.Board;
 
 /**
- * Represents a client connecting to the server.
+ * Represents a client connecting to the server. Manages communication between
+ * the client and server, including message handling and game board updates.
  */
 public class Client {
   private Socket socket;
@@ -62,7 +63,8 @@ public class Client {
 
 
   /**
-   * Retrieves the user's number from the server.
+   * Retrieves the user's number assigned by the server upon connection.
+   * This number uniquely identifies the player within the game.
    *
    * @return The user number assigned by the server.
    */
@@ -81,7 +83,8 @@ public class Client {
 
 
   /**
-   * Listens for messages from the server.
+   * Listens for messages from the server on a separate thread. Processes these
+   * messages based on their content and updates the game state or GUI as needed.
    */
   public void listenForMessages() {
     new Thread(new Runnable() {
@@ -118,7 +121,8 @@ public class Client {
 
 
   /**
-   * Closes the socket and associated resources.
+   * Closes the socket and associated resources to terminate the connection
+   * with the server safely.
    */
   public void closeEverything() {
     try {
