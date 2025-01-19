@@ -20,14 +20,18 @@ public class Pawn {
   }
 
   /**
-   * @return player number.
+   * Retrieves the player number.
+   *
+   * @return The player number.
    */
   public int getPlayerNum() {
     return playerNum;
   }
 
   /**
-   * @return current cell.
+   * Retrieves the current cell.
+   *
+   * @return The current cell.
    */
   public Cell getCurrCell() {
     return currCell;

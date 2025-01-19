@@ -22,6 +22,12 @@ public class YinYangBoardManager extends AbstractBoardManager {
     setupPlayerZones();
   }
 
+  /**
+   * Randomly selects two player zones and ensures they are not the same or invalid.
+   * This method assigns the selected zones to the two players.
+   *
+   * @return An array containing the two randomly selected zones for the players.
+   */
   private int[] chooseRandomZones() {
     Random random = new Random(seed);
 
@@ -38,8 +44,17 @@ public class YinYangBoardManager extends AbstractBoardManager {
     return new int[]{player1ZoneNum, player2ZoneNum};
   }
 
+  /**
+   * Sets up the specified cell by assigning it to the appropriate zone and player.
+   * This method overrides the abstract setupCell method to implement the behavior for the "Yin-Yang" game variant.
+   *
+   * @param cell The cell to be set up.
+   * @param zoneNum The zone number the cell belongs to.
+   * @param defaultPlayerNum The default player number for the zone.
+   * @param activeZoneNums An array of active zone numbers indicating which zones are active.
+   */
   @Override
-  protected void setupCell(Cell cell, int zoneNum, int defaultPlayerNum, int[] activeZoneNums) {
+  public void setupCell(Cell cell, int zoneNum, int defaultPlayerNum, int[] activeZoneNums) {
     if (activeZoneNums[zoneNum - 1] == 1) {
       int playerNum;
       if (zoneNum - 1 == playerZoneNums[0]) {
@@ -52,6 +67,14 @@ public class YinYangBoardManager extends AbstractBoardManager {
     }
   }
 
+  /**
+   * Retrieves the target player based on the zone number.
+   * This method is used to determine the player number who should be targeted for a specific zone in the "Yin-Yang" game mode.
+   *
+   * @param numOfPlayers The number of players in the game.
+   * @param zoneNum The zone number to check.
+   * @return The player number who is the target for the zone.
+   */
   @Override
   protected int getTargetPlayer(int numOfPlayers, int zoneNum) {
     if (zoneNum - 1 == playerZoneNums[0]) {

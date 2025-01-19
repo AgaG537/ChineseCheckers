@@ -47,6 +47,11 @@ public class GameManager {
     this.currentBoard = board;
   }
 
+  /**
+   * Sets the move validator for the game.
+   *
+   * @param cells A 2D array of cells representing the board's current state.
+   */
   public void setMoveValidator(Cell[][] cells) {
     this.moveValidator = new MoveValidator(cells);
   }
@@ -338,6 +343,9 @@ public class GameManager {
     this.seed = seed;
   }
 
+  /**
+   * Broadcasts a message about the cell to be created in clients' GUI.
+   */
   public synchronized void broadcastBoardCreate() {
     for (ClientHandler clientHandler : clientHandlers) {
       for (Cell[] cellRow : currentBoard.getCells()) {
@@ -352,6 +360,11 @@ public class GameManager {
     }
   }
 
+  /**
+   * Waits for all connected clients to complete their setup phase.
+   *
+   * @throws InterruptedException If the thread waiting is interrupted.
+   */
   public void waitForAllSetups() throws InterruptedException {
     synchronized (setupLock) {
       while (setupCount < maxUsers) {
@@ -360,6 +373,10 @@ public class GameManager {
     }
   }
 
+  /**
+   * Marks a client as having completed their setup phase.
+   * If all clients are ready, notifies any waiting threads.
+   */
   public void clientSetupComplete() {
     synchronized (setupLock) {
       setupCount++;

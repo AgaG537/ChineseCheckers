@@ -5,8 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Abstract class representing the common functionality for managing different board types.
- * Provides the structure for initializing the board, managing moves, and validating gameplay.
+ * Abstract class for managing board functionality, including board initialization,
+ * player zones setup, pawn management, and gameplay validation.
  */
 public abstract class AbstractBoardManager implements Board {
   protected final int playerZoneHeight;
@@ -21,19 +21,17 @@ public abstract class AbstractBoardManager implements Board {
 
   protected Cell[][] cells;
 
-  protected final int constraintSize;
-
   /**
-   * Constructor for the BoardManager class.
+   * Constructor for initializing the board manager with the given game parameters.
    *
-   * @param marblesPerPlayer The number of marbles per player.
-   * @param numOfPlayers     The number of players in the game.
+   * @param marblesPerPlayer The number of marbles each player has.
+   * @param numOfPlayers The number of players in the game.
+   * @param seed The seed value for randomization (if required).
    */
   public AbstractBoardManager(int marblesPerPlayer, int numOfPlayers, int seed) {
     playerZoneHeight = countPlayerZoneHeight(marblesPerPlayer);
     boardHeight = playerZoneHeight * 4 + 1;
     boardWidth = (playerZoneHeight * 6) + 1;
-    constraintSize = (1000 / boardWidth) / 2;
     this.numOfPlayers = numOfPlayers;
     this.seed = seed;
 
@@ -48,6 +46,14 @@ public abstract class AbstractBoardManager implements Board {
     markActiveZones();
   }
 
+  /**
+   * Initializes the start points for each player's zone on the board.
+   *
+   * @param boardWidth The width of the board.
+   * @param boardHeight The height of the board.
+   * @param playerZoneHeight The height of each player's zone.
+   * @return A 2D array representing the starting coordinates for each player's zone.
+   */
   protected int[][] initializeZoneStartPoints(int boardWidth, int boardHeight, int playerZoneHeight) {
     return new int[][]{
         {0, (boardWidth / 2)},                            // Upper zone
@@ -59,6 +65,12 @@ public abstract class AbstractBoardManager implements Board {
     };
   }
 
+  /**
+   * Calculates the number of cells that a player's zone occupies.
+   *
+   * @param playerZoneHeight The height of the player's zone.
+   * @return The number of cells in the player's zone.
+   */
   protected int calculateCellsPerZone(int playerZoneHeight) {
     int counter = playerZoneHeight;
     int numOfCells = 0;
@@ -69,6 +81,9 @@ public abstract class AbstractBoardManager implements Board {
     return numOfCells;
   }
 
+  /**
+   * Marks the active zones based on the number of players.
+   */
   protected void markActiveZones() {
     Arrays.fill(activeZoneNums, 0);
     switch (numOfPlayers) {
@@ -79,6 +94,10 @@ public abstract class AbstractBoardManager implements Board {
     }
   }
 
+  /**
+   * Sets up player zones on the board by assigning cells to zones based on the number of players.
+   * Initializes player numbers in active zones.
+   */
   protected void setupPlayerZones() {
     int defaultPlayerNum = 1;
 
@@ -101,13 +120,36 @@ public abstract class AbstractBoardManager implements Board {
     }
   }
 
-  protected abstract void setupCell(Cell cell, int zoneNum, int playerNum, int[] activeZoneNums);
+  /**
+   * Sets up the specified cell by assigning it to a zone and placing a pawn if necessary.
+   * Depending on the active zone, the cell is either assigned to the default player or left empty.
+   * If the cell belongs to an active zone, it is also assigned a pawn representing the player.
+   *
+   * @param cell The cell to be set up.
+   * @param zoneNum The zone number where the cell belongs.
+   * @param defaultPlayerNum The player number to be assigned to the cell if it is part of the active zone.
+   * @param activeZoneNums An array indicating which zones are active (1 for active, 0 for inactive).
+   */
+  public abstract void setupCell(Cell cell, int zoneNum, int defaultPlayerNum, int[] activeZoneNums);
 
+  /**
+   * Assigns a cell to a specific player zone, setting its zone number and player number.
+   *
+   * @param cell       The cell to assign.
+   * @param zoneNum    The number of the zone.
+   * @param playerNum  The player number associated with the zone.
+   */
   protected void assignCellToZone(Cell cell, int zoneNum, int playerNum) {
     cell.setZoneNum(zoneNum);
     cell.setInitialPlayerNum(playerNum);
   }
 
+  /**
+   * Assigns a pawn to a specific cell, setting its player number.
+   *
+   * @param cell       The cell to assign.
+   * @param playerNum  The player number associated with the pawn.
+   */
   protected void assignPawnToCell(Cell cell, int playerNum) {
     if (playerNum != 0) {
       Pawn pawn = new Pawn(playerNum, cell);
@@ -115,6 +157,11 @@ public abstract class AbstractBoardManager implements Board {
     }
   }
 
+  /**
+   * Verifies whether a player has completed their zone and won.
+   *
+   * @return The number of the winning player if a win condition is met, otherwise 0.
+   */
   public int checkWinCondition() {
     for (int i = 0; i < playerZonesStartPoints.length; i++) {
       int targetPlayer = getTargetPlayer(numOfPlayers, i + 1);
@@ -145,8 +192,23 @@ public abstract class AbstractBoardManager implements Board {
     return 0;
   }
 
+  /**
+   * Abstract method to get the target player for checking win condition based on the player zone.
+   *
+   * @param numOfPlayers The number of players.
+   * @param zoneNum The zone number to check.
+   * @return The player number for the target player.
+   */
   protected abstract int getTargetPlayer(int numOfPlayers, int zoneNum);
 
+  /**
+   * Verifies whether the current row index is within the bounds of the player zone.
+   *
+   * @param i         The index of the player zone.
+   * @param row       The current row index.
+   * @param rowStart  The starting row index for the zone.
+   * @return True if the row index is within the bounds of the zone; false otherwise.
+   */
   private boolean checkRow(int i, int row, int rowStart) {
     if (i % 2 == 0) {
       return row < rowStart + playerZoneHeight;
@@ -155,19 +217,19 @@ public abstract class AbstractBoardManager implements Board {
     }
   }
 
+  /**
+   * Advances the row index based on the direction of the zone.
+   *
+   * @param i   The index of the player zone.
+   * @param row The current row index.
+   * @return The updated row index.
+   */
   private int advanceRow(int i, int row) {
     if (i % 2 == 0) {
       return row + 1;
     } else {
       return row - 1;
     }
-  }
-
-  /**
-   * @return The size constraint used for cell rendering in the GUI.
-   */
-  public int getConstraintSize() {
-    return constraintSize;
   }
 
   /**
@@ -262,14 +324,18 @@ public abstract class AbstractBoardManager implements Board {
   }
 
   /**
-   * @return The width of the board.
+   * Retrieves the width of the board.
+   *
+   * @return Board width.
    */
   public int getBoardWidth() {
     return boardWidth;
   }
 
   /**
-   * @return The height of the board.
+   * Retrieves the height of the board.
+   *
+   * @return Board height.
    */
   public int getBoardHeight() {
     return boardHeight;
@@ -278,8 +344,8 @@ public abstract class AbstractBoardManager implements Board {
   /**
    * Retrieves a specific cell from the board.
    *
-   * @param i Row index of the cell.
-   * @param j Column index of the cell.
+   * @param i Row index.
+   * @param j Column index.
    * @return The cell at the specified position.
    */
   public Cell getCell(int i, int j) {
@@ -287,6 +353,13 @@ public abstract class AbstractBoardManager implements Board {
     return cells[i][j];
   }
 
+  /**
+   * Creates a string for pawn creation at a specified position.
+   *
+   * @param row Row index.
+   * @param col Column index.
+   * @return String representation of pawn creation.
+   */
   @Override
   public String makeCreate(int row, int col) {
     if (cells[row][col].getPawn() == null) {

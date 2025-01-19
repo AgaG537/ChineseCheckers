@@ -56,6 +56,8 @@ public class Cell {
   }
 
   /**
+   * Returns the row index of the cell.
+   *
    * @return The row index of the cell.
    */
   public int getRow() {
@@ -63,6 +65,8 @@ public class Cell {
   }
 
   /**
+   * Returns the column index of the cell.
+   *
    * @return The column index of the cell.
    */
   public int getCol() {
@@ -70,6 +74,8 @@ public class Cell {
   }
 
   /**
+   * Returns true if the cell is inside the playable area of the board.
+   *
    * @return True if the cell is inside the playable area of the board.
    */
   public boolean isInsideBoard() {
@@ -84,6 +90,8 @@ public class Cell {
   }
 
   /**
+   * Returns the player number initially assigned to the cell (0 if unoccupied).
+   *
    * @return The player number initially assigned to the cell (0 if unoccupied).
    */
   public int getInitialPlayerNum() {
@@ -100,6 +108,8 @@ public class Cell {
   }
 
   /**
+   * Returns the zone number initially assigned to the cell (0 if unoccupied).
+   *
    * @return The zone number initially assigned to the cell (0 if unoccupied).
    */
   public int getZoneNum() {
@@ -117,6 +127,8 @@ public class Cell {
 
 
   /**
+   * Retrieves the pawn currently occupying the cell.
+   *
    * @return The pawn currently occupying the cell.
    */
   public Pawn getPawn() {

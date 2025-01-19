@@ -3,10 +3,19 @@ package org.server.board;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Responsible for validating and executing moves in the game.
+ * Validates whether a move is allowed based on the game rules and moves the corresponding pawn.
+ */
 public class MoveValidator implements IMoveValidator {
 
   private final Cell[][] cells;
 
+  /**
+   * Constructs a move validator with specified move checking methods' implementations.
+   *
+   * @param cells The cells representing a game board.
+   */
   public MoveValidator(Cell[][] cells) {
     this.cells = cells;
   }
@@ -15,7 +24,7 @@ public class MoveValidator implements IMoveValidator {
    * Executes a move by relocating a pawn from a starting cell to a target cell.
    *
    * @param input The move details encoded as a string (e.g., "rowStart colStart rowEnd colEnd").
-   * @return A command string describing the move made.
+   * @return A command string describing the move made (e.g., "[CMD] rowStart colStart rowEnd colEnd").
    */
   @Override
   public String makeMove(String input) {

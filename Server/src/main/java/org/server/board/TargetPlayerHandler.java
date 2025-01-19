@@ -2,6 +2,10 @@ package org.server.board;
 
 import java.util.Map;
 
+/**
+ * Utility class to retrieve the target player numbers for each zone in the game
+ * based on the number of players and the game configuration.
+ */
 public class TargetPlayerHandler {
 
   private static final Map<Integer, Map<Integer, Integer>> OPPOSITE_TARGET_PLAYER_NUMBERS = Map.of(
@@ -59,6 +63,7 @@ public class TargetPlayerHandler {
   /**
    * Retrieves the player number corresponding to the target zone in a standard game.
    *
+   * @param numOfPlayers The number of players in the game.
    * @param zoneNum The zone number for which to retrieve the target player number.
    * @return The player number of the target zone.
    */
@@ -69,6 +74,7 @@ public class TargetPlayerHandler {
   /**
    * Retrieves the player number corresponding to the opposite target zone in a standard game.
    *
+   * @param numOfPlayers The number of players in the game.
    * @param zoneNum The zone number for which to retrieve the opposite target player number.
    * @return The player number of the opposite target zone.
    */

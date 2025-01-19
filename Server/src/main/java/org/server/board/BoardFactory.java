@@ -2,6 +2,8 @@ package org.server.board;
 
 /**
  * A factory class for creating board instances based on the specified game variant.
+ * This class allows the creation of different types of boards (e.g., standard, order, or Yin-Yang),
+ * with the appropriate setup for each game variant.
  */
 public class BoardFactory {
 

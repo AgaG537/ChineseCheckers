@@ -165,6 +165,11 @@ public class ClientHandler implements Runnable {
     gameManager.removeUser(this);
   }
 
+  /**
+   * Returns whether the client has completed its setup phase.
+   *
+   * @return true if the client has completed setup; false otherwise.
+   */
   public boolean getSetup() {
     return setup;
   }

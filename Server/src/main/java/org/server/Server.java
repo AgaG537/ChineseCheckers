@@ -67,6 +67,12 @@ public class Server {
     }
   }
 
+  /**
+   * Checks if all connected clients have completed their setup.
+   *
+   * @param clientHandlers The list of connected client handlers.
+   * @return true if all clients have completed their setup; false otherwise.
+   */
   public boolean allSetup(List<ClientHandler> clientHandlers) {
     for (ClientHandler clientHandler : clientHandlers) {
       if (!clientHandler.getSetup()) {
