@@ -1,8 +1,6 @@
 package org.client.GUI;
 
 
-import static java.lang.Thread.sleep;
-
 import java.util.ArrayList;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -89,7 +87,6 @@ public class ClientGUIManager {
    */
   public void setVariant(String variant) {
     this.variant = variant;
-    System.out.println(variant);
   }
 
   /**
@@ -118,7 +115,6 @@ public class ClientGUIManager {
     String[] optionsTable = options.split(",");
     currTurn = Integer.parseInt(optionsTable[2]);
     numOfPlayers = Integer.parseInt(optionsTable[0]);
-    System.out.println("GameViewManager setup " + playerNum);
     gameViewManager = new GameViewManager(client, playerNum, boardBox, playerInfoBox, numOfPlayers, variant);
     gameViewManager.setGamePanes();
 

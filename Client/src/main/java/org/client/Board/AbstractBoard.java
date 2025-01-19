@@ -154,8 +154,7 @@ public abstract class AbstractBoard implements Board {
 
       for (int row = rowStart; checkRow(i, row, rowStart); row = advanceRow(i, row)) {
         for (int col = colStart - k; col <= colStart + k; col += 2) {
-//          Color color = ColorManager.generateDefaultColor(i + 1);
-          Color color = getColor(i+1);
+          Color color = getColor(i + 1);
           int playerNum;
           if (activeZoneNums[i] == 1) {
             playerNum = defaultPlayerNum;
@@ -175,7 +174,7 @@ public abstract class AbstractBoard implements Board {
 
 
   /**
-   * Function generating a Color object based on player number
+   * Function generating a Color object based on player number.
    *
    * @param colorNum integer number associated with the desired color
    * @return Color object associated with the given integer
@@ -238,7 +237,6 @@ public abstract class AbstractBoard implements Board {
    */
   public void assignPawnToCell(Cell cell, int playerNum, Color color) {
     if (playerNum != 0) {
-      System.out.println("assignPawnToCell color: " + color);
       Pawn pawn = new Pawn(playerNum, color, cell);
       cell.pawnMoveIn(pawn);
     }

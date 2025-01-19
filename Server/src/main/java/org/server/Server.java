@@ -76,11 +76,9 @@ public class Server {
   public boolean allSetup(List<ClientHandler> clientHandlers) {
     for (ClientHandler clientHandler : clientHandlers) {
       if (!clientHandler.getSetup()) {
-        System.out.println("ret false");
         return false;
       }
     }
-    System.out.println("ret true");
     return true;
   }
 

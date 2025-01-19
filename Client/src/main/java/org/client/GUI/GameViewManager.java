@@ -46,7 +46,6 @@ public class GameViewManager {
    * @param variant The variant of the game being played.
    */
   public GameViewManager(Client client, int playerNum, VBox boardBox, VBox playerInfoBox, int numOfPlayers, String variant) {
-    System.out.println("GameViewManager constructor " + playerNum);
     this.client = client;
     this.playerNum = playerNum;
     this.numOfPlayers = numOfPlayers;

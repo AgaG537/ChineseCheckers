@@ -358,30 +358,4 @@ public class GameManager {
       }
     }
   }
-
-  /**
-   * Waits for all connected clients to complete their setup phase.
-   *
-   * @throws InterruptedException If the thread waiting is interrupted.
-   */
-  public void waitForAllSetups() throws InterruptedException {
-    synchronized (setupLock) {
-      while (setupCount < maxUsers) {
-        setupLock.wait();
-      }
-    }
-  }
-
-  /**
-   * Marks a client as having completed their setup phase.
-   * If all clients are ready, notifies any waiting threads.
-   */
-  public void clientSetupComplete() {
-    synchronized (setupLock) {
-      setupCount++;
-      if (setupCount == maxUsers) {
-        setupLock.notifyAll();
-      }
-    }
-  }
 }

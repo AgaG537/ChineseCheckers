@@ -40,7 +40,6 @@ public class ClientHandler implements Runnable {
     if (userNum == 1) {
       requestMaxUsers();
       gameManager.setRandomTurn();
-      System.out.println(gameManager.getCurrTurn());
       sendMessage("Game options correct.");
     }
 
@@ -65,7 +64,6 @@ public class ClientHandler implements Runnable {
         String[] message = (bufferedReader.readLine()).split(",");
         maxUsers = Integer.parseInt(message[0]);
         variant = message[1];
-        System.out.println(variant);
         maxUsers = MaxUserHandler.handleMaxUsers(maxUsers, variant);
 
         gameManager.setMaxUsers(maxUsers);
@@ -89,7 +87,6 @@ public class ClientHandler implements Runnable {
         if (message.startsWith("SETUP")) {
           if (Integer.parseInt(message.split(" ")[1]) == userNum) {
             this.setup = true;
-            System.out.println("Client " + userNum + " setup complete");
             sendMessage("[SETUP]");
           }
           continue;
