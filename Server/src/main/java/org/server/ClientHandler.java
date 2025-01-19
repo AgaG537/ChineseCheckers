@@ -57,7 +57,7 @@ public class ClientHandler implements Runnable {
    *
    * @throws IOException If an I/O error occurs when reading from the client.
    */
-  private void requestMaxUsers() throws IOException {
+  void requestMaxUsers() throws IOException {
     int maxUsers = 0;
     String variant;
     do {

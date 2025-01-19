@@ -54,7 +54,7 @@ public abstract class AbstractBoardManager implements Board {
    * @param playerZoneHeight The height of each player's zone.
    * @return A 2D array representing the starting coordinates for each player's zone.
    */
-  protected int[][] initializeZoneStartPoints(int boardWidth, int boardHeight, int playerZoneHeight) {
+  public int[][] initializeZoneStartPoints(int boardWidth, int boardHeight, int playerZoneHeight) {
     return new int[][]{
         {0, (boardWidth / 2)},                            // Upper zone
         {playerZoneHeight * 2 - 1, boardWidth - playerZoneHeight}, // Right upper zone
@@ -98,7 +98,7 @@ public abstract class AbstractBoardManager implements Board {
    * Sets up player zones on the board by assigning cells to zones based on the number of players.
    * Initializes player numbers in active zones.
    */
-  protected void setupPlayerZones() {
+  public void setupPlayerZones() {
     int defaultPlayerNum = 1;
 
     for (int i = 0; i < playerZonesStartPoints.length; i++) {
@@ -379,5 +379,8 @@ public abstract class AbstractBoardManager implements Board {
     return cells;
   }
 
+  public int[] getActiveZoneNums() {
+    return activeZoneNums;
+  }
 }
 

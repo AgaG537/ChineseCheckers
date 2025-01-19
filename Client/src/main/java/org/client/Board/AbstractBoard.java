@@ -17,7 +17,7 @@ public abstract class AbstractBoard implements Board {
   protected int numOfPlayers;
   protected int[][] playerZonesStartPoints;
   protected int numOfCellsPerZone;
-  protected int[] activeZoneNums;
+  public int[] activeZoneNums;
   protected ArrayList<Integer> finishedPlayers;
   protected int seed;
 
@@ -98,7 +98,7 @@ public abstract class AbstractBoard implements Board {
    * @param playerZoneHeight The height of each player's zone.
    * @return A 2D array where each entry represents the starting coordinates for a player zone.
    */
-  protected int[][] initializeZoneStartPoints(int boardWidth, int boardHeight, int playerZoneHeight) {
+  public int[][] initializeZoneStartPoints(int boardWidth, int boardHeight, int playerZoneHeight) {
     return new int[][]{
         {0, (boardWidth / 2)},                            // Upper zone
         {playerZoneHeight * 2 - 1, boardWidth - playerZoneHeight}, // Right upper zone
@@ -236,7 +236,7 @@ public abstract class AbstractBoard implements Board {
    * @param playerNum  The player number associated with the pawn.
    * @param color      The color of the pawn.
    */
-  protected void assignPawnToCell(Cell cell, int playerNum, Color color) {
+  public void assignPawnToCell(Cell cell, int playerNum, Color color) {
     if (playerNum != 0) {
       System.out.println("assignPawnToCell color: " + color);
       Pawn pawn = new Pawn(playerNum, color, cell);

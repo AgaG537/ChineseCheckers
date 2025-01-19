@@ -97,18 +97,7 @@ public class Client {
           try {
             messageFromServer = bufferedReader.readLine();
             synchronized (this) {
-              if (messageFromServer.startsWith("[CMD]")) {
-                board.handleCommand(messageFromServer);
-              } else if (messageFromServer.startsWith("[CREATE]")) {
-                board.handleCreate(messageFromServer);
-              } else if (messageFromServer.equals("[SETUP]")) {
-                setup = true;
-              } else if (messageFromServer.startsWith("SEED")) {
-                String[] tokens = messageFromServer.split(" ");
-                //PlayerZoneFactory.setSeed(Integer.parseInt(tokens[1]));
-              } else {
-                clientApp.handleMessageFromServer(messageFromServer);
-              }
+              handleLogicCommad(messageFromServer);
             }
           } catch (IOException e) {
             closeEverything();
@@ -117,6 +106,20 @@ public class Client {
       }
 
     }).start();
+  }
+
+
+
+  private void handleLogicCommad(String messageFromServer) {
+    if (messageFromServer.startsWith("[CMD]")) {
+      board.handleCommand(messageFromServer);
+    } else if (messageFromServer.startsWith("[CREATE]")) {
+      board.handleCreate(messageFromServer);
+    } else if (messageFromServer.equals("[SETUP]")) {
+      setup = true;
+    } else {
+      clientApp.handleMessageFromServer(messageFromServer);
+    }
   }
 
 

@@ -65,7 +65,6 @@ public class GameManager {
     clientHandlers.add(clientHandler);
     try {
       clientHandler.sendMessage("VARIANT " + variant);
-      clientHandler.sendMessage("SEED " + seed);
     } catch (IOException e) {
       e.printStackTrace();
     }

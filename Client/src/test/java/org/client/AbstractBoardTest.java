@@ -1,129 +1,95 @@
-//package org.client;
-//
-//import org.client.Board.Board;
-//import org.client.Board.BoardFactory;
-//import org.client.Board.Cell;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
-//
-//import static org.junit.jupiter.api.Assertions.*;
-//
-///**
-// * Unit tests for the AbstractBoard class and its subclasses.
-// */
-//class AbstractBoardTest {
-//
-//  private Board standardBoard;
-//  private Board orderBoard;
-//  private Board yinYangBoard;
-//
-//  /**
-//   * Initializes a new board for given variant before each test.
-//   */
-//  @BeforeEach
-//  void setUp() {
-//    int marblesPerPlayer = 10;
-//    int numOfPlayers = 4;
-//
-//    standardBoard = BoardFactory.createBoard("standard", marblesPerPlayer, numOfPlayers);
-//    orderBoard = BoardFactory.createBoard("order", marblesPerPlayer, numOfPlayers);
-//    yinYangBoard = BoardFactory.createBoard("yinyang", marblesPerPlayer, 0);
-//  }
-//
-//  /**
-//   * Tests initialization of a StandardBoard and ensures its properties are set correctly.
-//   */
-//  @Test
-//  void testStandardBoardInitialization() {
-//    assertNotNull(standardBoard, "StandardBoard should not be null");
-//    assertTrue(standardBoard.getBoardWidth() > 0, "StandardBoard width should be greater than 0");
-//    assertTrue(standardBoard.getBoardHeight() > 0, "StandardBoard height should be greater than 0");
-//
-//    Cell cell = standardBoard.getCell(0, 0);
-//    assertNotNull(cell, "Cells should be initialized");
-//  }
-//
-//  /**
-//   * Tests initialization of an OrderBoard and ensures its properties are set correctly.
-//   */
-//  @Test
-//  void testOrderBoardInitialization() {
-//    assertNotNull(orderBoard, "OrderBoard should not be null");
-//    assertTrue(orderBoard.getBoardWidth() > 0, "OrderBoard width should be greater than 0");
-//    assertTrue(orderBoard.getBoardHeight() > 0, "OrderBoard height should be greater than 0");
-//  }
-//
-//  /**
-//   * Tests initialization of a YinYangBoard and ensures its properties are set correctly.
-//   */
-//  @Test
-//  void testYinYangBoardInitialization() {
-//    assertNotNull(yinYangBoard, "YinYangBoard should not be null");
-//    assertTrue(yinYangBoard.getBoardWidth() > 0, "YinYangBoard width should be greater than 0");
-//    assertTrue(yinYangBoard.getBoardHeight() > 0, "YinYangBoard height should be greater than 0");
-//  }
-//
-//  /**
-//   * Verifies that player zones are correctly set up for different board types.
-//   */
-//  @Test
-//  void testPlayerZoneSetup() {
-//    int numOfPlayers = 4;
-//
-//    // Standard board player zones
-//    standardBoard = BoardFactory.createBoard("standard", 10, numOfPlayers);
-//    assertTrue(playerZonesSetUpCorrectly(standardBoard), "Player zones should be set up correctly for StandardBoard");
-//
-//    // Order board player zones
-//    orderBoard = BoardFactory.createBoard("order", 10, numOfPlayers);
-//    assertTrue(playerZonesSetUpCorrectly(orderBoard), "Player zones should be set up correctly for OrderBoard");
-//  }
-//
-//  /**
-//   * Verifies if player zones are correctly set up on the board.
-//   *
-//   * @param board The board to check.
-//   * @return {@code true} if at least one cell is assigned to a player zone.
-//   */
-//  private boolean playerZonesSetUpCorrectly(Board board) {
-//    int zonesAssigned = 0;
-//
-//    for (int i = 0; i < board.getBoardHeight(); i++) {
-//      for (int j = 0; j < board.getBoardWidth(); j++) {
-//        if (board.getCell(i, j).getInitialPlayerNum() > 0) {
-//          zonesAssigned++;
-//        }
-//      }
-//    }
-//    return zonesAssigned > 0;
-//  }
-//
-//  /**
-//   * Tests the functionality of the handleCommand method in AbstractBoard.
-//   */
-//  @Test
-//  void testHandleCommand() {
-//    standardBoard.handleCommand("MOVE 4 4 5 5");
-//
-//    Cell startCell = standardBoard.getCell(4, 4);
-//    Cell endCell = standardBoard.getCell(5, 5);
-//
-//    assertFalse(startCell.isOccupied(), "Start cell should be empty after move");
-//    assertTrue(endCell.isOccupied(), "End cell should be occupied after move");
-//  }
-//
-//  /**
-//   * Ensures that the win condition is properly applied and affects all cells.
-//   */
-//  @Test
-//  void testWinCondition() {
-//    yinYangBoard.setWin();
-//
-//    // Ensure cells no longer have actions
-//    for (int i = 0; i < yinYangBoard.getBoardHeight(); i++) {
-//      for (int j = 0; j < yinYangBoard.getBoardWidth(); j++) {
-//        assertNull(yinYangBoard.getCell(i, j).getOnMouseClicked(), "All cells should have no mouse click actions after win");
-//      }
-//    }
-//  }
-//}
+package org.client;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import javafx.scene.paint.Color;
+import org.client.Board.AbstractBoard;
+import org.client.Board.Cell;
+import org.client.Board.OrderBoard;
+import org.client.Board.StandardBoard;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+class AbstractBoardTest {
+
+  private AbstractBoard orderBoard;
+  private AbstractBoard standardBoard;
+
+  @BeforeEach
+  void setup() {
+    orderBoard = new OrderBoard(10, 2); // 10 marbles, 2 players
+    standardBoard = new StandardBoard(10, 6); // 10 marbles, 6 players
+  }
+
+  @Test
+  void testBoardDimensions() {
+    assertEquals(17, orderBoard.getBoardHeight()); // Expected based on player zone height and formula
+    assertEquals(25, orderBoard.getBoardWidth());
+    assertEquals(17, standardBoard.getBoardHeight());
+    assertEquals(25, standardBoard.getBoardWidth());
+  }
+
+  @Test
+  void testPlayerZoneSetup() {
+    assertNotNull(orderBoard.getCells());
+    assertNotNull(standardBoard.getCells());
+
+    Cell[][] cells = orderBoard.getCells();
+    // Check that valid positions are initialized
+    assertTrue(cells[9][11].isInsideBoard());
+    assertFalse(cells[0][0].isInsideBoard());
+  }
+
+  @Test
+  void testAssignPawnToCell() {
+    Cell cell = orderBoard.getCell(0, 6);
+    orderBoard.assignPawnToCell(cell, 1, Color.RED);
+
+    assertNotNull(cell.getPawn());
+    assertEquals(1, cell.getPawn().getPlayerNum());
+    assertEquals(Color.RED, cell.getPawn().getColor());
+  }
+
+
+  @Test
+  void testHandleCommand() {
+    Cell startCell = orderBoard.getCell(0, 6);
+    Cell endCell = orderBoard.getCell(8, 6);
+
+    orderBoard.assignPawnToCell(startCell, 1, Color.BLUE);
+    assertNotNull(startCell.getPawn());
+    assertNull(endCell.getPawn());
+
+    orderBoard.handleCommand("MOVE 0 6 8 6");
+    assertNull(startCell.getPawn());
+    assertNotNull(endCell.getPawn());
+    assertEquals(1, endCell.getPawn().getPlayerNum());
+  }
+
+  @Test
+  void testHandleCreate() {
+    orderBoard.handleCreate("CREATE 0 6 1 2");
+    Cell cell = orderBoard.getCell(0, 6);
+    assertNotNull(cell.getPawn());
+    assertEquals(1, cell.getPawn().getPlayerNum());
+    assertEquals(Color.BLACK, cell.getPawn().getColor());
+  }
+
+  @Test
+  void testCalculatePlayerZoneHeight() {
+    assertEquals(4, orderBoard.calculatePlayerZoneHeight(10)); // Sum of 1 + 2 + 3 + 4 = 10
+    assertEquals(0, orderBoard.calculatePlayerZoneHeight(11)); // No matching height
+  }
+
+  @Test
+  void testSetWin() {
+    orderBoard.setWin();
+    Cell[][] cells = orderBoard.getCells();
+
+    for (int i = 0; i < orderBoard.getBoardHeight(); i++) {
+      for (int j = 0; j < orderBoard.getBoardWidth(); j++) {
+        assertNull(cells[i][j].getOnMouseClicked());
+      }
+    }
+  }
+}
