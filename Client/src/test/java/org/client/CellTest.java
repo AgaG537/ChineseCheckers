@@ -1,8 +1,8 @@
 package org.client;
 
 import javafx.scene.paint.Color;
-import org.client.Board.Cell;
-import org.client.Board.Pawn;
+import org.client.Board.boardObjects.Cell;
+import org.client.Board.boardObjects.Pawn;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

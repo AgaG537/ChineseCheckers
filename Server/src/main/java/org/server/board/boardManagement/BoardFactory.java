@@ -1,4 +1,4 @@
-package org.server.board;
+package org.server.board.boardManagement;
 
 /**
  * A factory class for creating board instances based on the specified game variant.

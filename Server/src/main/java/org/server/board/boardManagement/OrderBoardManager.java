@@ -1,4 +1,8 @@
-package org.server.board;
+package org.server.board.boardManagement;
+
+import org.server.board.boardObjects.Cell;
+import org.server.board.utilityHandlers.TargetPlayerHandler;
+import org.server.board.utilityHandlers.TargetZoneHandler;
 
 import java.util.Random;
 
@@ -76,5 +80,23 @@ public class OrderBoardManager extends AbstractBoardManager {
   @Override
   protected int getTargetPlayer(int numOfPlayers, int zoneNum) {
     return TargetPlayerHandler.getTargetPlayerNum(numOfPlayers, zoneNum);
+  }
+
+  @Override
+  public int[] getDestinationPoint(int playerNum) {
+    int counter = 0;
+    int zoneNum = 0;
+    while (counter != playerNum) {
+      if (activeZoneNums[zoneNum] == 1) {
+        counter++;
+      }
+      zoneNum++;
+    }
+    return playerZonesEdgePoints[zoneNum - 1];
+  }
+
+  @Override
+  public int getDestinationZoneNum(int playerNum) {
+    return TargetZoneHandler.getTargetZoneNum(numOfPlayers, playerNum);
   }
 }

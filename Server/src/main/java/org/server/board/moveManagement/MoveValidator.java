@@ -1,4 +1,7 @@
-package org.server.board;
+package org.server.board.moveManagement;
+
+import org.server.board.boardObjects.Cell;
+import org.server.board.boardObjects.Pawn;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,6 +13,7 @@ import java.util.Arrays;
 public class MoveValidator implements IMoveValidator {
 
   private final Cell[][] cells;
+  int[][] directions;
 
   /**
    * Constructs a move validator with specified move checking methods' implementations.
@@ -18,6 +22,10 @@ public class MoveValidator implements IMoveValidator {
    */
   public MoveValidator(Cell[][] cells) {
     this.cells = cells;
+    directions = new int[][]{
+        {-1, -1}, {0, -2}, {1, -1},  // Upper left, left, bottom left
+        {1, 1}, {0, 2}, {-1, 1}      // Bottom right, right, upper right
+    };
   }
 
   /**
@@ -69,21 +77,15 @@ public class MoveValidator implements IMoveValidator {
       return false;
     }
 
-    // Directions for movement
-    int[][] directions = {
-        {-1, -1}, {0, -2}, {1, -1},  // Upper left, left, bottom left
-        {1, 1}, {0, 2}, {-1, 1}      // Bottom right, right, upper right
-    };
-
     ArrayList<int[]> visited = new ArrayList<>();
 
     // Check single-step moves
-    if (isValidSingleStep(startRow, startCol, endRow, endCol, directions)) {
+    if (isValidSingleStep(startRow, startCol, endRow, endCol)) {
       return true;
     }
 
     // Check jumps
-    return isValidJump(startRow, startCol, endRow, endCol, directions, visited);
+    return isValidJump(startRow, startCol, endRow, endCol, visited);
   }
 
   /**
@@ -122,10 +124,9 @@ public class MoveValidator implements IMoveValidator {
    * @param startCol   Starting column index.
    * @param endRow     Target row index.
    * @param endCol     Target column index.
-   * @param directions Possible movement directions for the pawn.
    * @return True if the move is a valid single-step move; false otherwise.
    */
-  private boolean isValidSingleStep(int startRow, int startCol, int endRow, int endCol, int[][] directions) {
+  private boolean isValidSingleStep(int startRow, int startCol, int endRow, int endCol) {
     for (int[] direction : directions) {
       int targetRow = startRow + direction[0];
       int targetCol = startCol + direction[1];
@@ -144,11 +145,10 @@ public class MoveValidator implements IMoveValidator {
    * @param startCol Starting column index.
    * @param endRow   Target row index.
    * @param endCol   Target column index.
-   * @param directions Possible jump directions for the pawn.
    * @param visited  A list of already visited cells to avoid cycles.
    * @return True if the move is a valid jump move; false otherwise.
    */
-  private boolean isValidJump(int startRow, int startCol, int endRow, int endCol, int[][] directions, ArrayList<int[]> visited) {
+  private boolean isValidJump(int startRow, int startCol, int endRow, int endCol, ArrayList<int[]> visited) {
     for (int[] direction : directions) {
       int jumpOverRow = startRow + direction[0];
       int jumpOverCol = startCol + direction[1];
@@ -201,10 +201,6 @@ public class MoveValidator implements IMoveValidator {
     }
 
     visited.add(new int[]{currentRow, currentCol});
-    int[][] directions = {
-        {-1, -1}, {0, -2}, {1, -1},  // Upper left, left, bottom left
-        {1, 1}, {0, 2}, {-1, 1}      // Bottom right, right, upper right
-    };
 
     for (int[] direction : directions) {
       int jumpOverRow = currentRow + direction[0];

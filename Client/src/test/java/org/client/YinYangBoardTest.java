@@ -1,9 +1,9 @@
 package org.client;
 
 import javafx.scene.paint.Color;
-import org.client.Board.Cell;
-import org.client.Board.ColorManager;
-import org.client.Board.YinYangBoard;
+import org.client.Board.boardObjects.Cell;
+import org.client.Board.utilityHandlers.ColorManager;
+import org.client.Board.boardManagement.YinYangBoard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

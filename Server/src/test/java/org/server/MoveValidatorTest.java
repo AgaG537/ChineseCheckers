@@ -3,9 +3,9 @@ package org.server;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.server.board.Cell;
-import org.server.board.MoveValidator;
-import org.server.board.Pawn;
+import org.server.board.boardObjects.Cell;
+import org.server.board.moveManagement.MoveValidator;
+import org.server.board.boardObjects.Pawn;
 
 import java.util.ArrayList;
 

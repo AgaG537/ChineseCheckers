@@ -8,6 +8,15 @@ import java.util.Objects;
 import java.util.Random;
 
 import org.server.board.*;
+import org.server.board.boardManagement.Board;
+import org.server.board.boardManagement.BoardFactory;
+import org.server.board.boardObjects.Cell;
+import org.server.board.boardObjects.Pawn;
+import org.server.board.moveManagement.BotMoveOptimizer;
+import org.server.board.moveManagement.MoveValidator;
+import org.server.playerHandlers.BotHandler;
+import org.server.playerHandlers.ClientHandler;
+import org.server.playerHandlers.PlayerHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,8 +27,9 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class GameManager {
-  private final List<ClientHandler> clientHandlers;
+  private final List<PlayerHandler> playerHandlers;
   private int maxUsers;
+  private int maxBots;
   private int currTurn;
   private boolean gameStarted;
   private Board currentBoard;
@@ -40,7 +50,7 @@ public class GameManager {
    * Constructs a GameManager.
    */
   public GameManager() {
-    this.clientHandlers = new ArrayList<>();
+    this.playerHandlers = new ArrayList<>();
     this.maxUsers = 0;
     this.currTurn = 0;
     this.gameStarted = false;
@@ -85,16 +95,20 @@ public class GameManager {
     this.moveValidator = new MoveValidator(cells);
   }
 
+  public MoveValidator getMoveValidator() {
+    return moveValidator;
+  }
+
   /**
-   * Adds a client handler to the user manager and notifies the client of the selected variant.
+   * Adds a player handler to the ArrayList and notifies the client of the selected variant.
    *
-   * @param clientHandler The client handler to add.
+   * @param playerHandler The player handler to add.
    */
-  public synchronized void addUser(ClientHandler clientHandler) {
-    clientHandlers.add(clientHandler);
+  public synchronized void addPlayer(PlayerHandler playerHandler) {
+    playerHandlers.add(playerHandler);
     try {
-      clientHandler.sendMessage("VARIANT " + variant);
-    } catch (IOException e) {
+      playerHandler.sendMessage("VARIANT " + variant);
+    } catch (IOException | InterruptedException e) {
       e.printStackTrace();
     }
   }
@@ -118,21 +132,21 @@ public class GameManager {
   }
 
   /**
-   * Removes a client handler from the user manager.
+   * Removes a player handler from the ArrayList.
    *
-   * @param clientHandler The client handler to remove.
+   * @param playerHandler The player handler to remove.
    */
-  public synchronized void removeUser(ClientHandler clientHandler) {
-    clientHandlers.remove(clientHandler);
+  public synchronized void removePlayer(PlayerHandler playerHandler) {
+    playerHandlers.remove(playerHandler);
   }
 
   /**
-   * Returns the list of all connected client handlers.
+   * Returns the list of all player handlers.
    *
-   * @return A list of client handlers.
+   * @return A list of player handlers.
    */
-  public synchronized List<ClientHandler> getClientHandlers() {
-    return new ArrayList<>(clientHandlers);
+  public synchronized List<PlayerHandler> getPlayerHandlers() {
+    return new ArrayList<>(playerHandlers);
   }
 
   /**
@@ -154,6 +168,24 @@ public class GameManager {
       maxUsers = moveRecordRepository.getMaxUsersByGameNum(gameNumCpy);
     }
     return maxUsers;
+  }
+
+  /**
+   * Returns the maximum number of bots allowed.
+   *
+   * @return The maximum number of bots.
+   */
+  public synchronized int getMaxBots() {
+    return maxBots;
+  }
+
+  /**
+   * Sets the maximum number of bots allowed.
+   *
+   * @param maxBots The maximum number of bots.
+   */
+  public synchronized void setMaxBots(int maxBots) {
+    this.maxBots = maxBots;
   }
 
   /**
@@ -222,12 +254,14 @@ public class GameManager {
    * Broadcasts a message about the number of users still needed.
    */
   public synchronized void broadcastNumOfUsers() {
-    for (ClientHandler clientHandler : clientHandlers) {
+    for (PlayerHandler playerHandler : playerHandlers) {
       try {
-        int missingNumOfUsers = maxUsers - clientHandlers.size();
-        clientHandler.sendMessage("Waiting for " + missingNumOfUsers + " more player(s).");
+        int missingNumOfUsers = maxUsers - playerHandlers.size();
+        playerHandler.sendMessage("Waiting for " + missingNumOfUsers + " more player(s).");
       } catch (Exception e) {
-        clientHandler.closeEverything();
+        if (playerHandler instanceof ClientHandler) {
+          ((ClientHandler) playerHandler).closeEverything();
+        }
       }
     }
   }
@@ -236,24 +270,29 @@ public class GameManager {
    * Broadcasts a message that the game has started.
    */
   public synchronized void broadcastGameStarted() {
-    for (ClientHandler clientHandler : clientHandlers) {
+    int numOfPlayers = getMaxUsers() + getMaxBots();
+    for (PlayerHandler playerHandler : playerHandlers) {
       try {
-        clientHandler.sendMessage("START." + maxUsers + "," + "variant" + "," + getCurrTurn());
+        playerHandler.sendMessage("START." + numOfPlayers + "," + "currTurn" + "," + getCurrTurn());
       } catch (Exception e) {
-        clientHandler.closeEverything();
+        if (playerHandler instanceof ClientHandler) {
+          ((ClientHandler) playerHandler).closeEverything();
+        }
       }
     }
   }
 
   /**
-   * Broadcasts a message that the game has started.
+   * Broadcasts a message that the game has finished.
    */
   public synchronized void broadcastGameFinished() {
-    for (ClientHandler clientHandler : clientHandlers) {
+    for (PlayerHandler playerHandler : playerHandlers) {
       try {
-        clientHandler.sendMessage("GAME FINISHED!");
+        playerHandler.sendMessage("GAME FINISHED!");
       } catch (Exception e) {
-        clientHandler.closeEverything();
+        if (playerHandler instanceof ClientHandler) {
+          ((ClientHandler) playerHandler).closeEverything();
+        }
       }
     }
   }
@@ -286,18 +325,21 @@ public class GameManager {
 //    System.out.println(2);
 
     String move = moveValidator.makeMove(input);
-    for (ClientHandler clientHandler : clientHandlers) {
+    for (PlayerHandler playerHandler : playerHandlers) {
       try {
-        if (!Objects.equals(clientHandler.getUserNum(), userNum)) {
-          clientHandler.sendMessage("User number " + userNum + " moved: " + move);
+        if (!Objects.equals(playerHandler.getUserNum(), userNum)) {
+          playerHandler.sendMessage("User number " + userNum + " moved: " + move);
         } else {
-          clientHandler.sendMessage("You just moved");
+          if (playerHandler instanceof ClientHandler) {
+            playerHandler.sendMessage("You just moved");
+          }
         }
-        clientHandler.sendMessage(move);
+        playerHandler.sendMessage(move);
 
       } catch (Exception e) {
-        e.printStackTrace();
-        clientHandler.closeEverything();
+        if (playerHandler instanceof ClientHandler) {
+          ((ClientHandler) playerHandler).closeEverything();
+        }
       }
     }
   }
@@ -349,15 +391,19 @@ public class GameManager {
       return;
     }
 
-    for (ClientHandler clientHandler : clientHandlers) {
+    for (PlayerHandler playerHandler : playerHandlers) {
       try {
-        if (!Objects.equals(clientHandler.getUserNum(), userNum)) {
-          clientHandler.sendMessage("Turn skipped by user: " + userNum);
+        if (!Objects.equals(playerHandler.getUserNum(), userNum)) {
+          playerHandler.sendMessage("Turn skipped by user: " + userNum);
         } else {
-          clientHandler.sendMessage("You just skipped");
+          if (playerHandler instanceof ClientHandler) {
+            playerHandler.sendMessage("You just skipped");
+          }
         }
       } catch (Exception e) {
-        clientHandler.closeEverything();
+        if (playerHandler instanceof ClientHandler) {
+          ((ClientHandler) playerHandler).closeEverything();
+        }
       }
     }
   }
@@ -366,11 +412,13 @@ public class GameManager {
    * Broadcasts a message that the player has won.
    */
   public synchronized void broadcastPlayerWon(int playerNum) {
-    for (ClientHandler clientHandler : clientHandlers) {
+    for (PlayerHandler playerHandler : playerHandlers) {
       try {
-        clientHandler.sendMessage("WIN." + playerNum);
+        playerHandler.sendMessage("WIN." + playerNum);
       } catch (Exception e) {
-        clientHandler.closeEverything();
+        if (playerHandler instanceof ClientHandler) {
+          ((ClientHandler) playerHandler).closeEverything();
+        }
       }
     }
   }
@@ -416,7 +464,7 @@ public class GameManager {
    */
   public void addFinishedPlayer(int playerNum) {
     finishedPlayers.add(playerNum);
-    if (finishedPlayers.size() == clientHandlers.size()) {
+    if (finishedPlayers.size() == playerHandlers.size()) {
       broadcastGameFinished();
     }
   }
@@ -425,13 +473,17 @@ public class GameManager {
    * Broadcasts a message about the cell to be created in clients' GUI.
    */
   public synchronized void broadcastBoardCreate() {
-    for (ClientHandler clientHandler : clientHandlers) {
+    for (PlayerHandler playerHandler : playerHandlers) {
       for (Cell[] cellRow : currentBoard.getCells()) {
         for (Cell cell : cellRow) {
           try {
-            clientHandler.sendMessage(currentBoard.makeCreate(cell.getRow(), cell.getCol()));
+            if (playerHandler instanceof ClientHandler) {
+              playerHandler.sendMessage(currentBoard.makeCreate(cell.getRow(), cell.getCol()));
+            }
           } catch (Exception e) {
-            clientHandler.closeEverything();
+            if (playerHandler instanceof ClientHandler) {
+              ((ClientHandler) playerHandler).closeEverything();
+            }
           }
         }
       }
@@ -481,5 +533,17 @@ public class GameManager {
     System.out.println("setting board");
     currentBoard = board;
     System.out.println("board set");
+  }
+
+
+  public void initializeBots() {
+    while (getPlayerHandlers().size() < maxUsers + maxBots) {
+      int botNum = getPlayerHandlers().size() + 1;
+      int[] destinationPoint = getBoard().getDestinationPoint(botNum);
+      int destinationZoneNum = getBoard().getDestinationZoneNum(botNum);
+      BotMoveOptimizer botMoveOptimizer = new BotMoveOptimizer(getBoard().getCells());
+      BotHandler botHandler = new BotHandler(botNum, botMoveOptimizer, this, destinationPoint, destinationZoneNum);
+      addPlayer(botHandler);
+    }
   }
 }

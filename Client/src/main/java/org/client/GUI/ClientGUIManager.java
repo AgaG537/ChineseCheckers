@@ -73,7 +73,7 @@ public class ClientGUIManager {
    * Sets up the GUI for the first player, including options to configure the game.
    */
   public void setFirstPlayerPanes() {
-    FirstPlayerViewManager manager = new FirstPlayerViewManager(client, boardBox, sideBox, this);
+    FirstPlayerViewManager manager = new FirstPlayerViewManager(client, boardBox, sideBox, serverMessageBox, this);
     manager.setFirstPlayerPanes();
   }
 
@@ -260,12 +260,11 @@ public class ClientGUIManager {
     boardBox.setPadding(new Insets(15));
     boardBox.setAlignment(Pos.CENTER);
 
-    sideBox.setSpacing(20);
+    sideBox.setSpacing(15);
     sideBox.setPadding(new Insets(15));
     sideBox.heightProperty().addListener((observable, oldValue, newValue) -> sidePane.setVvalue(newValue.doubleValue()));
 
-    serverMessageBox.setSpacing(15);
-    serverMessageBox.setPadding(new Insets(15));
+    serverMessageBox.setStyle("-fx-font-size : 10px;");
   }
 
 }

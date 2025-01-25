@@ -1,24 +1,26 @@
-package org.client.Board;
+package org.client.Board.boardManagement;
 
 import javafx.scene.paint.Color;
+import org.client.Board.boardObjects.Cell;
 
 /**
- * Represents a Standard game board with general player zone setup.
+ * Represents an Order Out of Chaos game board with specific player zone
+ * setup for Order Out of Chaos variant rules.
  */
-public class StandardBoard extends AbstractBoard {
+public class OrderBoard extends AbstractBoard {
 
   /**
-   * Constructs a StandardBoard with the specified number of marbles per player and players.
+   * Constructs an OrderBoard with the specified number of marbles per player and players.
    *
    * @param marblesPerPlayer Number of marbles allocated to each player.
    * @param numOfPlayers     Number of players in the game.
    */
-  public StandardBoard(int marblesPerPlayer, int numOfPlayers) {
+  public OrderBoard(int marblesPerPlayer, int numOfPlayers) {
     super(marblesPerPlayer, numOfPlayers);
   }
 
   /**
-   * Assigns a pawn to a cell in the StandardBoard variant.
+   * Assigns a pawn to a cell in the OrderBoard variant.
    * Configures the cell with the pawn's properties.
    *
    * @param playerNum The number of the player owning the pawn.

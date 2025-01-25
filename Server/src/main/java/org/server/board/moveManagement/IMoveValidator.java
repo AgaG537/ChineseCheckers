@@ -1,4 +1,4 @@
-package org.server.board;
+package org.server.board.moveManagement;
 
 /**
  * Interface with methods for validating and executing moves in the game.
