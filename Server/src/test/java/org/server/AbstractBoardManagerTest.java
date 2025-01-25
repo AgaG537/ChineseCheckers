@@ -3,9 +3,8 @@ package org.server;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.server.board.*;
-
-import java.util.ArrayList;
+import org.server.board.boardManagement.AbstractBoardManager;
+import org.server.board.boardObjects.Cell;
 
 import static org.junit.jupiter.api.Assertions.*;
 

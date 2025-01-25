@@ -1,6 +1,8 @@
-package org.client.Board;
+package org.client.Board.boardManagement;
 
 import javafx.scene.paint.Color;
+import org.client.Board.boardObjects.Cell;
+import org.client.Board.utilityHandlers.ColorManager;
 
 /**
  * Represents a YinYang game board with a specialized two-player zone setup.

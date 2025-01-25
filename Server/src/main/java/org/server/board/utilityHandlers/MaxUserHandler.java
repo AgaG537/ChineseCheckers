@@ -1,4 +1,4 @@
-package org.server.board;
+package org.server.board.utilityHandlers;
 
 /**
  * Utility class to handle the maximum number of users allowed in the game
@@ -15,7 +15,9 @@ public class MaxUserHandler {
    */
   public static int handleMaxUsers(int maxUsers, String variant) {
     if (variant.equals("yinyang")) {
-      return 2;
+      if (maxUsers > 1) {
+        return 2;
+      }
     }
     return maxUsers;
   }

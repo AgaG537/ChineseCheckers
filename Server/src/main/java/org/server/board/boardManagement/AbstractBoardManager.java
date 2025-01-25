@@ -1,4 +1,7 @@
-package org.server.board;
+package org.server.board.boardManagement;
+
+import org.server.board.boardObjects.Cell;
+import org.server.board.boardObjects.Pawn;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,6 +17,7 @@ public abstract class AbstractBoardManager implements Board {
   protected final int boardWidth; //25
   protected final int numOfPlayers;
   protected int[][] playerZonesStartPoints;
+  protected int[][] playerZonesEdgePoints;
   protected int numOfCellsPerZone;
   protected int[] activeZoneNums;
   protected ArrayList<Integer> finishedPlayers;
@@ -42,6 +46,7 @@ public abstract class AbstractBoardManager implements Board {
     this.numOfCellsPerZone = calculateCellsPerZone(playerZoneHeight);
     this.finishedPlayers = new ArrayList<>();
     this.playerZonesStartPoints = initializeZoneStartPoints(boardWidth, boardHeight, playerZoneHeight);
+    this.playerZonesEdgePoints = initializeZoneEdgePoints(boardWidth, boardHeight, playerZoneHeight);
     this.activeZoneNums = new int[6];
     markActiveZones();
   }
@@ -62,6 +67,17 @@ public abstract class AbstractBoardManager implements Board {
         {boardHeight - 1, (boardWidth / 2)},              // Bottom zone
         {boardHeight - playerZoneHeight * 2, playerZoneHeight - 1}, // Left bottom zone
         {playerZoneHeight * 2 - 1, playerZoneHeight - 1}  // Left upper zone
+    };
+  }
+
+  public int[][] initializeZoneEdgePoints(int boardWidth, int boardHeight, int playerZoneHeight) {
+    return new int[][]{
+        {0, (boardWidth / 2)},                  // Upper zone
+        {playerZoneHeight, boardWidth - 1},     // Right upper zone
+        {boardHeight - playerZoneHeight - 1, boardWidth - 1}, // Right bottom zone
+        {boardHeight - 1, (boardWidth / 2)},    // Bottom zone
+        {boardHeight - playerZoneHeight - 1, 0},              // Left bottom zone
+        {playerZoneHeight, 0}                   // Left upper zone
     };
   }
 
@@ -396,5 +412,11 @@ public abstract class AbstractBoardManager implements Board {
   public void setCells(Cell[][] cells) {
     this.cells = cells;
   }
+
+  @Override
+  public abstract int[] getDestinationPoint(int playerNum);
+
+  @Override
+  public abstract int getDestinationZoneNum(int playerNum);
 }
 

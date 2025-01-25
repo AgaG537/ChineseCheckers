@@ -3,7 +3,7 @@ package org.client;
 
 import java.io.*;
 import java.net.Socket;
-import org.client.Board.Board;
+import org.client.Board.boardManagement.Board;
 
 /**
  * Represents a client connecting to the server. Manages communication between

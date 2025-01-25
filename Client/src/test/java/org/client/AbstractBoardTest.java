@@ -3,10 +3,10 @@ package org.client;
 import static org.junit.jupiter.api.Assertions.*;
 
 import javafx.scene.paint.Color;
-import org.client.Board.AbstractBoard;
-import org.client.Board.Cell;
-import org.client.Board.OrderBoard;
-import org.client.Board.StandardBoard;
+import org.client.Board.boardManagement.AbstractBoard;
+import org.client.Board.boardObjects.Cell;
+import org.client.Board.boardManagement.OrderBoard;
+import org.client.Board.boardManagement.StandardBoard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

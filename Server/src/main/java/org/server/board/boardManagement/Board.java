@@ -1,4 +1,6 @@
-package org.server.board;
+package org.server.board.boardManagement;
+
+import org.server.board.boardObjects.Cell;
 
 /**
  * Interface for game board managers, defining core functionalities such as making moves,
@@ -42,6 +44,10 @@ public interface Board {
   Cell[][] getCells();
 
   void setCells(Cell[][] cells);
+
+  int[] getDestinationPoint(int playerNum);
+
+  int getDestinationZoneNum(int playerNum);
 
   void removePawns();
 }

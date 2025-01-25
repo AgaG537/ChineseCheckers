@@ -1,10 +1,8 @@
 package org.server;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.server.board.Cell;
-import org.server.board.Pawn;
-import org.server.board.YinYangBoardManager;
+import org.server.board.boardObjects.Cell;
+import org.server.board.boardManagement.YinYangBoardManager;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -1,6 +1,7 @@
 package org.client.GUI;
 
 
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -59,6 +60,7 @@ public class WaitingViewManager {
    */
   private void setWaitingSidePane() {
     serverMessageBox.setSpacing(10);
+    serverMessageBox.setPadding(new Insets(15));
     serverMessageBox.getChildren().clear();
   }
 }

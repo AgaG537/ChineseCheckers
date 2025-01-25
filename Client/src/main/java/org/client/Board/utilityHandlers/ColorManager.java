@@ -1,4 +1,4 @@
-package org.client.Board;
+package org.client.Board.utilityHandlers;
 
 import java.util.Map;
 import javafx.scene.paint.Color;

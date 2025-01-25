@@ -1,4 +1,6 @@
-package org.server.board;
+package org.server.board.boardManagement;
+
+import org.server.board.boardObjects.Cell;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -33,7 +35,7 @@ public class YinYangBoardManager extends AbstractBoardManager {
 
     int player1ZoneNum = random.nextInt(6);
     int player2ZoneNum = random.nextInt(6);
-    while (player1ZoneNum == player2ZoneNum || player1ZoneNum == 0 || player2ZoneNum == 3) {
+    while (player1ZoneNum == player2ZoneNum) {
       player1ZoneNum = random.nextInt(6);
       player2ZoneNum = random.nextInt(6);
     }
@@ -85,4 +87,23 @@ public class YinYangBoardManager extends AbstractBoardManager {
     return 0;
   }
 
+
+  @Override
+  public int[] getDestinationPoint(int playerNum) {
+    if (playerNum == 1) {
+      return playerZonesEdgePoints[playerZoneNums[1]];
+    } else {
+      return playerZonesEdgePoints[playerZoneNums[0]];
+    }
+  }
+
+  @Override
+  public int getDestinationZoneNum(int playerNum) {
+    if (playerNum == 1) {
+      return playerZoneNums[1] + 1;
+    } else if (playerNum == 2) {
+      return playerZoneNums[0] + 1;
+    }
+    return 0;
+  }
 }

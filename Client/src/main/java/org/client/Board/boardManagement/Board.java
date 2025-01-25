@@ -1,6 +1,7 @@
-package org.client.Board;
+package org.client.Board.boardManagement;
 
 import javafx.scene.paint.Color;
+import org.client.Board.boardObjects.Cell;
 
 /**
  * Interface representing a generic game board with methods for handling commands,

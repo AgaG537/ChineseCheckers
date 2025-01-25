@@ -23,6 +23,8 @@ public class CommandHandler {
       guiManager.clearServerMessageBox();
       guiManager.addLabel(message);
       guiManager.addCurrPlayerInfo();
+    } else if (message.equals("Wrong number of players!")) {
+      guiManager.addLabel(message);
     } else if (message.equals("Game options correct.")) {
       guiManager.setWaitingPanes();
       guiManager.addLabel(message);

@@ -1,4 +1,4 @@
-package org.server.board;
+package org.server.board.boardObjects;
 
 /**
  * Represents a pawn in the game.

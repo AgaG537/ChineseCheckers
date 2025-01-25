@@ -1,21 +1,23 @@
-package org.server;
+package org.server.playerHandlers;
 
 
 import java.io.*;
 import java.net.Socket;
-import org.server.board.MaxUserHandler;
+
+import org.server.GameManager;
+import org.server.board.utilityHandlers.MaxUserHandler;
 
 /**
  * Handles communication with a single client in the game.
  * Each instance of this class manages one client connection,
  * including receiving input and sending messages.
  */
-public class ClientHandler implements Runnable{
+public class ClientHandler extends PlayerHandler implements Runnable {
   private final Socket socket;
   private final BufferedReader bufferedReader;
   private final BufferedWriter bufferedWriter;
   private final GameManager gameManager;
-  private final int userNum;
+  //private final int userNum;
   private boolean setup;
 
   /**
@@ -29,6 +31,7 @@ public class ClientHandler implements Runnable{
   public ClientHandler(Socket socket, GameManager gameManager, int userNum) throws IOException {
     this.socket = socket;
     this.gameManager = gameManager;
+    setUserNum(userNum);
     this.userNum = userNum;
     this.setup = false;
 
@@ -38,15 +41,15 @@ public class ClientHandler implements Runnable{
     sendMessage(String.valueOf(userNum));
 
     if (userNum == 1) {
-      requestMaxUsers();
+      requestMaxPlayers();
       gameManager.setRandomTurn();
       sendMessage("Game options correct.");
     }
 
-    gameManager.addUser(this);
+    gameManager.addPlayer(this);
     sendMessage("You have successfully joined.");
 
-    if (gameManager.getMaxUsers() != gameManager.getClientHandlers().size()) {
+    if (gameManager.getMaxUsers() != gameManager.getPlayerHandlers().size()) {
       gameManager.broadcastNumOfUsers();
     }
   }
@@ -57,30 +60,40 @@ public class ClientHandler implements Runnable{
    *
    * @throws IOException If an I/O error occurs when reading from the client.
    */
-  void requestMaxUsers() throws IOException {
+  void requestMaxPlayers() throws IOException {
     int maxUsers = 0;
-    String variant;
-    do {
-      try {
-        String[] message = (bufferedReader.readLine()).split(",");
-        if (message[0].equals("DB")) {
+    int maxBots = 0;
+    String variant = "";
+
+    try {
+      String[] message = (bufferedReader.readLine()).split(",");
+      if (message[0].equals("DB")) {
 //          gameManager.initFromDatabase(Integer.parseInt(message[1]));
-          gameManager.createFromDatabase(Integer.parseInt(message[1]));
-          maxUsers = 2;
-        }
-        else {
-          maxUsers = Integer.parseInt(message[0]);
-          variant = message[1];
-          maxUsers = MaxUserHandler.handleMaxUsers(maxUsers, variant);
-
-          gameManager.setMaxUsers(maxUsers);
-          gameManager.setVariant(variant);
-        }
-      } catch (NumberFormatException e) {
-        sendMessage("Wrong number of users!");
+        gameManager.createFromDatabase(Integer.parseInt(message[1]));
+        //maxUsers = 2;
       }
-    } while (maxUsers != 2 && maxUsers != 3 && maxUsers != 4 && maxUsers != 6);
+      else {
+        while (isNumOfPlayersInvalid(maxUsers, maxBots)) {
+          maxUsers = Integer.parseInt(message[0]);
+          maxBots = Integer.parseInt(message[1]);
+          variant = message[2];
+          maxUsers = MaxUserHandler.handleMaxUsers(maxUsers, variant);
+          if (isNumOfPlayersInvalid(maxUsers, maxBots)) {
+            sendMessage("Wrong number of players!");
+            message = (bufferedReader.readLine()).split(",");
+          }
+        }
+        gameManager.setMaxUsers(maxUsers);
+        gameManager.setMaxBots(maxBots);
+        gameManager.setVariant(variant);
+      }
+    } catch (NumberFormatException e) {
+      sendMessage("Wrong number of players!");
+    }
+  }
 
+  private boolean isNumOfPlayersInvalid(int maxUsers, int maxBots) {
+    return (maxUsers + maxBots != 2 && maxUsers + maxBots != 3 && maxUsers + maxBots != 4 && maxUsers + maxBots != 6) || maxUsers < 1;
   }
 
   /**
@@ -108,7 +121,7 @@ public class ClientHandler implements Runnable{
               System.out.println("Broadcasting move");
               gameManager.broadcastMove(userNum, message);
               System.out.println("advancing turn");
-              gameManager.advanceTurn(gameManager.getClientHandlers().size());
+              gameManager.advanceTurn(gameManager.getPlayerHandlers().size());
               int playerCheckedForWin = gameManager.checkWin();
               if (playerCheckedForWin != 0) {
                 gameManager.broadcastPlayerWon(playerCheckedForWin);
@@ -120,7 +133,7 @@ public class ClientHandler implements Runnable{
               System.out.println("wrong move");
               break;
             case 2:
-              gameManager.advanceTurn(gameManager.getClientHandlers().size());
+              gameManager.advanceTurn(gameManager.getPlayerHandlers().size());
               gameManager.broadcastSkip(userNum);
               break;
             default:
@@ -169,7 +182,7 @@ public class ClientHandler implements Runnable{
     } catch (IOException e) {
       e.printStackTrace();
     }
-    gameManager.removeUser(this);
+    gameManager.removePlayer(this);
   }
 
   /**

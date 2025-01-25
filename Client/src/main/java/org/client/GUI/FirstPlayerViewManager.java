@@ -11,6 +11,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import org.client.Client;
 
+import java.util.Objects;
+
 /**
  * Manages the view for the first player
  * to configure game options.
@@ -23,8 +25,8 @@ public class FirstPlayerViewManager {
 
   private final VBox boardBox;
   private final VBox sideBox;
+  private final VBox serverMessageBox;
 
-  private final int[] numsOfPlayers = {2, 3, 4, 6};
   private final String[] possibleVariants = {"standard", "order", "yinyang"};
   private String chosenVariant;
   private Integer numOfPlayers;
@@ -38,10 +40,11 @@ public class FirstPlayerViewManager {
    * @param sideBox The VBox for displaying the side panel.
    * @param clientGUIManager The manager for displaying client GUI.
    */
-  public FirstPlayerViewManager(Client client, VBox boardBox, VBox sideBox, ClientGUIManager clientGUIManager) {
+  public FirstPlayerViewManager(Client client, VBox boardBox, VBox sideBox, VBox serverMessageBox, ClientGUIManager clientGUIManager) {
     this.client = client;
     this.boardBox = boardBox;
     this.sideBox = sideBox;
+    this.serverMessageBox = serverMessageBox;
     this.guiManager = clientGUIManager;
 
     chosenVariant = "standard";
@@ -81,7 +84,7 @@ public class FirstPlayerViewManager {
         + "-fx-font-weight: bold; -fx-text-fill: black");
 
     Label chooseVariantLabel = new Label("Choose game variant:");
-    chooseVariantLabel.setFont(new Font("Verdana", 23));
+    chooseVariantLabel.setFont(new Font("Verdana", 18));
     chooseVariantLabel.setStyle("-fx-text-fill: black");
 
     ChoiceBox<String> chooseVariantChoiceBox = new ChoiceBox<>();
@@ -92,47 +95,57 @@ public class FirstPlayerViewManager {
     chooseVariantChoiceBox.setOnAction(e -> chosenVariant = chooseVariantChoiceBox.getValue());
     chooseVariantChoiceBox.setMinWidth(250);
     chooseVariantChoiceBox.setCursor(Cursor.HAND);
-    chooseVariantChoiceBox.setStyle("-fx-font-size : 23px;");
+    chooseVariantChoiceBox.setStyle("-fx-font-size : 18px;");
 
-    Label choosePlayerNumLabel = new Label("Choose number of \nplayers:");
-    choosePlayerNumLabel.setFont(new Font("Verdana", 23));
-    choosePlayerNumLabel.setStyle("-fx-text-fill: black");
+    Label chooseUserNumLabel = new Label("Choose number of users:");
+    chooseUserNumLabel.setFont(new Font("Verdana", 18));
+    chooseUserNumLabel.setStyle("-fx-text-fill: black");
 
-    ChoiceBox<Integer> choosePlayerNumChoiceBox = new ChoiceBox<>();
-    choosePlayerNumChoiceBox.setValue(numOfPlayers);
-    for (int num : numsOfPlayers) {
-      choosePlayerNumChoiceBox.getItems().add(num);
-    }
-    choosePlayerNumChoiceBox.setOnAction(e -> numOfPlayers = choosePlayerNumChoiceBox.getValue());
-    choosePlayerNumChoiceBox.setMinWidth(250);
-    choosePlayerNumChoiceBox.setCursor(Cursor.HAND);
-    choosePlayerNumChoiceBox.setStyle("-fx-font-size : 23px;");
+    TextField userNumberTextField = new TextField();
+    userNumberTextField.setMaxWidth(250);
+    userNumberTextField.setStyle("-fx-font-size : 18px;");
+
+    Label chooseBotNumLabel = new Label("Choose number of bots:");
+    chooseBotNumLabel.setFont(new Font("Verdana", 18));
+    chooseBotNumLabel.setStyle("-fx-text-fill: black");
+
+    TextField botNumberTextField = new TextField();
+    botNumberTextField.setMaxWidth(250);
+    botNumberTextField.setStyle("-fx-font-size : 18px;");
 
     // Add a TextField for user input
     Label numberInputLabel = new Label("Enter a number:");
-    numberInputLabel.setFont(new Font("Verdana", 23));
+    numberInputLabel.setFont(new Font("Verdana", 18));
     numberInputLabel.setStyle("-fx-text-fill: black");
 
     TextField numberInputField = new TextField();
     numberInputField.setPromptText("Enter a number...");
     numberInputField.setStyle("-fx-font-size : 18px;");
-    numberInputField.setMinWidth(250);
+    numberInputField.setMaxWidth(250);
 
 
     Button applyButton = new Button("APPLY");
     applyButton.setMinWidth(250);
     applyButton.setCursor(Cursor.HAND);
     applyButton.setTextFill(Color.WHITE);
-    applyButton.setFont(new Font("Verdana", 23));
+    applyButton.setFont(new Font("Verdana", 18));
     applyButton.setStyle("-fx-background-color: #1C2541;");
 
     applyButton.setOnAction(e -> {
       System.out.println("Chosen variant: " + chooseVariantChoiceBox.getValue());
       guiManager.setVariant(chooseVariantChoiceBox.getValue());
-      System.out.println("Chosen number of players: " + choosePlayerNumChoiceBox.getValue());
+      System.out.println("Chosen number of users: " + userNumberTextField.getText());
+      System.out.println("Chosen number of bots: " + botNumberTextField.getText());
 
-      String message = choosePlayerNumChoiceBox.getValue().toString() + "," + chooseVariantChoiceBox.getValue();
-
+      String numOfUsers = userNumberTextField.getText();
+      String numOfBots = botNumberTextField.getText();
+      if (numOfUsers.isEmpty()) {
+        numOfUsers = "0";
+      }
+      if (numOfBots.isEmpty()) {
+        numOfBots = "0";
+      }
+      String message = numOfUsers + "," + numOfBots + "," + chooseVariantChoiceBox.getValue();
 
       // Check if the number input field is not empty and valid
       String numberInput = numberInputField.getText();
@@ -146,11 +159,11 @@ public class FirstPlayerViewManager {
         }
       }
 
-      // Mamy tutaj variant
       System.out.println("message sent first panes: " + message);
       client.sendMessage(message);
     });
 
-    sideBox.getChildren().addAll(titleLabel, chooseVariantLabel, chooseVariantChoiceBox, choosePlayerNumLabel, choosePlayerNumChoiceBox, numberInputLabel, numberInputField, applyButton);
+    sideBox.getChildren().addAll(titleLabel, chooseVariantLabel, chooseVariantChoiceBox, chooseUserNumLabel, userNumberTextField,
+        chooseBotNumLabel, botNumberTextField, numberInputLabel, numberInputField, applyButton, serverMessageBox);
   }
 }

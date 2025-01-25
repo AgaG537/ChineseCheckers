@@ -1,9 +1,12 @@
-package org.client.Board;
+package org.client.Board.boardManagement;
 
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import javafx.scene.paint.Color;
+import org.client.Board.boardObjects.Cell;
+import org.client.Board.boardObjects.Pawn;
+import org.client.Board.utilityHandlers.ColorManager;
 
 /**
  * Abstract class representing the common functionality for managing different board types.

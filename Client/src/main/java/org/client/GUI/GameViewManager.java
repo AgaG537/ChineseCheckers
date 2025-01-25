@@ -12,7 +12,10 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import org.client.Board.*;
+import org.client.Board.boardManagement.Board;
+import org.client.Board.boardManagement.BoardFactory;
+import org.client.Board.boardObjects.Cell;
+import org.client.Board.utilityHandlers.ColorManager;
 import org.client.Client;
 
 /**

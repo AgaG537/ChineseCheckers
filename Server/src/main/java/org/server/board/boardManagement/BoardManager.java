@@ -1,4 +1,8 @@
-package org.server.board;
+package org.server.board.boardManagement;
+
+import org.server.board.boardObjects.Cell;
+import org.server.board.utilityHandlers.TargetPlayerHandler;
+import org.server.board.utilityHandlers.TargetZoneHandler;
 
 /**
  * Concrete implementation of AbstractBoardManager for standard gameplay.
@@ -49,5 +53,23 @@ public class BoardManager extends AbstractBoardManager {
   @Override
   protected int getTargetPlayer(int numOfPlayers, int zoneNum) {
     return TargetPlayerHandler.getOppositeTargetPlayerNum(numOfPlayers, zoneNum);
+  }
+
+  @Override
+  public int[] getDestinationPoint(int playerNum) {
+    int counter = 0;
+    int zoneNum = 0;
+    while (counter != playerNum) {
+      if (activeZoneNums[zoneNum] == 1) {
+        counter++;
+      }
+      zoneNum++;
+    }
+    return playerZonesEdgePoints[(zoneNum - 1 + 3) % 6];
+  }
+
+  @Override
+  public int getDestinationZoneNum(int playerNum) {
+    return TargetZoneHandler.getOppositeTargetZoneNum(numOfPlayers, playerNum);
   }
 }

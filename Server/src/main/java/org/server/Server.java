@@ -7,10 +7,12 @@ import java.net.Socket;
 import java.util.List;
 import java.util.Random;
 
-import org.server.board.Board;
-import org.server.board.BoardFactory;
+import org.server.board.boardManagement.Board;
+import org.server.board.boardManagement.BoardFactory;
 import org.server.board.MoveRecord;
 import org.server.board.MoveRecordRepository;
+import org.server.playerHandlers.ClientHandler;
+import org.server.playerHandlers.PlayerHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -58,30 +60,28 @@ public class Server {
       gameManager.setGameNum(moveRecordRepository.currentGameNum() + 1);
 
       while (!serverSocket.isClosed()) {
-        if (gameManager.getClientHandlers().size() < gameManager.getMaxUsers() || gameManager.getMaxUsers() == 0) {
+        if (gameManager.getPlayerHandlers().size() < gameManager.getMaxUsers() || gameManager.getMaxUsers() == 0) {
           Socket socket = serverSocket.accept();
-          int userNum = gameManager.getClientHandlers().size() + 1;
+          int userNum = gameManager.getPlayerHandlers().size() + 1;
           ClientHandler clientHandler = new ClientHandler(socket, gameManager, userNum);
           new Thread(clientHandler).start();
 //          System.out.println("max players: " + moveRecordRepository.getMaxUsersByGameNum(1));
 
-          if (gameManager.getClientHandlers().size() == gameManager.getMaxUsers()) {
-            gameManager.startGame();
-            if (gameManager.getBoard()==null) {
-              Board board = BoardFactory.createBoard(10, gameManager.getMaxUsers(), gameManager.getVariant(), seed);
+          if (gameManager.getPlayerHandlers().size() == gameManager.getMaxUsers()) {
+            if (gameManager.getBoard() == null) {
+              int numOfPlayers = gameManager.getMaxUsers() + gameManager.getMaxBots();
+              Board board = BoardFactory.createBoard(10, numOfPlayers, gameManager.getVariant(), seed);
               gameManager.setBoard(board);
             }
             gameManager.setMoveValidator(gameManager.getBoard().getCells());
-//            else {
-//              System.out.println("server else");
-//              gameManager.createFromDatabase();
-//            }
+            if (gameManager.getMaxBots() > 0) {
+              gameManager.initializeBots();
+            }
+            gameManager.startGame();
             gameManager.broadcastGameStarted();
-
-            while (!allSetup(gameManager.getClientHandlers())) {
+            while (!allSetup(gameManager.getPlayerHandlers())) {
               sleep(10);
             }
-
             gameManager.broadcastBoardCreate();
           }
         }
@@ -97,13 +97,15 @@ public class Server {
   /**
    * Checks if all connected clients have completed their setup.
    *
-   * @param clientHandlers The list of connected client handlers.
+   * @param playerHandlers The list of player handlers.
    * @return true if all clients have completed their setup; false otherwise.
    */
-  public boolean allSetup(List<ClientHandler> clientHandlers) {
-    for (ClientHandler clientHandler : clientHandlers) {
-      if (!clientHandler.getSetup()) {
-        return false;
+  public boolean allSetup(List<PlayerHandler> playerHandlers) {
+    for (PlayerHandler playerHandler : playerHandlers) {
+      if (playerHandler instanceof ClientHandler) {
+        if (!((ClientHandler)playerHandler).getSetup()) {
+          return false;
+        }
       }
     }
     return true;
