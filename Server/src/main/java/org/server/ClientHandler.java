@@ -10,7 +10,7 @@ import org.server.board.MaxUserHandler;
  * Each instance of this class manages one client connection,
  * including receiving input and sending messages.
  */
-public class ClientHandler implements Runnable {
+public class ClientHandler implements Runnable{
   private final Socket socket;
   private final BufferedReader bufferedReader;
   private final BufferedWriter bufferedWriter;
@@ -50,6 +50,7 @@ public class ClientHandler implements Runnable {
       gameManager.broadcastNumOfUsers();
     }
   }
+
 
   /**
    * Requests the maximum number of users from the client.
@@ -97,7 +98,9 @@ public class ClientHandler implements Runnable {
             case 0:
               System.out.println(message);
               System.out.println(userNum);
+              System.out.println("Broadcasting move");
               gameManager.broadcastMove(userNum, message);
+              System.out.println("advancing turn");
               gameManager.advanceTurn(gameManager.getClientHandlers().size());
               int playerCheckedForWin = gameManager.checkWin();
               if (playerCheckedForWin != 0) {
@@ -170,4 +173,5 @@ public class ClientHandler implements Runnable {
   public boolean getSetup() {
     return setup;
   }
+
 }

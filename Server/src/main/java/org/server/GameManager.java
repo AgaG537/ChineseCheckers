@@ -5,15 +5,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import org.server.board.Board;
-import org.server.board.Cell;
-import org.server.board.MoveValidator;
+
+import org.server.board.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * Manages the state of the game, including player turns, broadcasting messages,
  * and ensuring synchronization between connected clients.
  * Acts as a central hub for game-related logic.
  */
+@Component
 public class GameManager {
   private final List<ClientHandler> clientHandlers;
   private int maxUsers;
@@ -23,6 +25,11 @@ public class GameManager {
   private MoveValidator moveValidator;
   private String variant;
   private final ArrayList<Integer> finishedPlayers;
+  private Server server;
+
+  @Autowired
+  private MoveRecordRepository moveRecordRepository;
+
 
   /**
    * Constructs a GameManager.
@@ -33,7 +40,16 @@ public class GameManager {
     this.currTurn = 0;
     this.gameStarted = false;
     finishedPlayers = new ArrayList<>();
+//    moveRecordRepository = null;
   }
+
+  public void setServer(Server server) {
+    this.server = server;
+  }
+
+//  public void setMoveRecordRepository(MoveRecordRepository moveRecordRepository) {
+//    this.moveRecordRepository = moveRecordRepository;
+//  }
 
   /**
    * Sets the current board for the game.
@@ -234,6 +250,24 @@ public class GameManager {
     if (!gameStarted) {
       return;
     }
+    if (moveRecordRepository == null) {
+      System.out.println("MoveRecordRepository is null!");
+    } else {
+      System.out.println("MoveRecordRepository is ready!");
+    }
+
+    System.out.println("making move record");
+    MoveRecord mr = new MoveRecord(1);
+
+    // This doesn't work it throws no error or anything it simply doesn't save the values and get's stuck here, doesn't go further
+    try {
+      moveRecordRepository.save(mr);
+    }
+    catch (Exception e) {
+      System.out.println("Error in broadcastMove");
+      e.printStackTrace();
+    }
+    System.out.println("move record saved");
     String move = moveValidator.makeMove(input);
     for (ClientHandler clientHandler : clientHandlers) {
       try {
@@ -245,6 +279,7 @@ public class GameManager {
         clientHandler.sendMessage(move);
 
       } catch (Exception e) {
+        e.printStackTrace();
         clientHandler.closeEverything();
       }
     }
@@ -294,6 +329,7 @@ public class GameManager {
    * @return 0 if the move is valid, 1 if the move is invalid.
    */
   public int validateMove(int userNum, String input) {
+    System.out.println("received move");
     System.out.println(input);
     System.out.println(input.equals("SKIP"));
     if (input.equals("SKIP")) {
@@ -301,6 +337,7 @@ public class GameManager {
       return 2;
     }
     boolean valid = moveValidator.validateMove(userNum, input);
+    System.out.println("you've been validated");
     if (valid) {
       return 0;
     } else {

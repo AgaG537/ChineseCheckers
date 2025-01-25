@@ -1,44 +1,71 @@
 package org.server;
 
-
-import static java.lang.Thread.sleep;
-
+import jakarta.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.List;
 import java.util.Random;
+
 import org.server.board.Board;
 import org.server.board.BoardFactory;
+import org.server.board.MoveRecord;
+import org.server.board.MoveRecordRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import static java.lang.Thread.sleep;
 
 /**
  * The main server class responsible for accepting client connections
  * and managing the overall lifecycle of the game. It listens for client connections,
  * creates client handlers, and starts the game once all players are connected.
  */
+@Component
 public class Server {
+
   private final ServerSocket serverSocket;
   private final GameManager gameManager;
+  private final MoveRecordRepository moveRecordRepository;
   private final int seed;
 
   /**
    * Constructs a Server with the specified server socket.
    *
-   * @param serverSocket The server socket.
+   * @param gameManager         The game manager instance.
+   * @param moveRecordRepository The repository for saving move records.
    */
-  public Server(ServerSocket serverSocket) {
-    this.serverSocket = serverSocket;
-    this.gameManager = new GameManager();
+  @Autowired
+  public Server(GameManager gameManager, MoveRecordRepository moveRecordRepository) throws IOException {
+    this.serverSocket = new ServerSocket(1234); // Define the server socket port
+    this.gameManager = gameManager;
+    gameManager.setServer(this);
+    this.moveRecordRepository = moveRecordRepository;
     Random random = new Random();
-    seed = random.nextInt(1000000);
+    this.seed = random.nextInt(1000000);
   }
 
   /**
    * Starts the server to accept incoming client connections.
    */
+  @PostConstruct
   public void start() {
     try {
       System.out.println("Server is running...");
+      // this works and adds the record to the table
+      // Results in this message
+      //Hibernate:
+      //    /* insert for
+      //        org.server.board.MoveRecord */insert
+      //    into
+      //        move_record (move_number)
+      //    values
+      //        (?)
+      MoveRecord mr = new MoveRecord(2);
+      moveRecordRepository.save(mr);
+
+//      gameManager.setMoveRecordRepository(moveRecordRepository);
+
       while (!serverSocket.isClosed()) {
         if (gameManager.getClientHandlers().size() < gameManager.getMaxUsers() || gameManager.getMaxUsers() == 0) {
           Socket socket = serverSocket.accept();
@@ -52,9 +79,11 @@ public class Server {
             gameManager.setMoveValidator(board.getCells());
             gameManager.setBoard(board);
             gameManager.broadcastGameStarted();
+
             while (!allSetup(gameManager.getClientHandlers())) {
               sleep(10);
             }
+
             gameManager.broadcastBoardCreate();
           }
         }
@@ -65,6 +94,7 @@ public class Server {
       throw new RuntimeException(e);
     }
   }
+
 
   /**
    * Checks if all connected clients have completed their setup.
@@ -94,15 +124,9 @@ public class Server {
     }
   }
 
-  /**
-   * The main method to start the server.
-   *
-   * @param args Command-line arguments.
-   * @throws IOException If an I/O error occurs when creating the server socket.
-   */
-  public static void main(String[] args) throws IOException {
-    ServerSocket serverSocket = new ServerSocket(1234);
-    Server server = new Server(serverSocket);
-    server.start();
+  public void saveMoveRecord(MoveRecord mr) {
+    System.out.println("saving move record Server");
+    moveRecordRepository.save(mr);
+    System.out.println("saved move record server");
   }
 }
