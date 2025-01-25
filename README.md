@@ -20,6 +20,12 @@ git clone https://github.com/JinerX/ChineseCheckers.git
 cd ChineseCheckers
 git checkout secondIteration
 ```
+3. Make sure you have MariaDB setup:
+- database called "mytestdatabase"
+- user called "myuser"
+- password "password"
+- These can be changed by changing Server/resources/application.properties
+
 3. To start the Server, run commands in the terminal:
 ```
 cd Server
