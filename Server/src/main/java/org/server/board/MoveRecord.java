@@ -10,7 +10,15 @@ public class MoveRecord {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
   private int moveNumber;
+  private int gameNumber;
+  private int cellRowNumber;
+  private int cellColumnNumber;
+  private int cellPlayerNumber;
+  private int cellZoneNumber;
+  private String variant;
+  private int numOfPlayers;
 
   public MoveRecord() {}
 
@@ -28,5 +36,48 @@ public class MoveRecord {
 
   public void setMoveNumber(int moveNumber) {
     this.moveNumber = moveNumber;
+  }
+
+  public int getGameNumber() {
+    return gameNumber;
+  }
+  public void setGameNumber(int gameNumber) {
+    this.gameNumber = gameNumber;
+  }
+  public int getCellRowNumber() {
+    return cellRowNumber;
+  }
+  public void setCellRowNumber(int cellRowNumber) {
+    this.cellRowNumber = cellRowNumber;
+  }
+  public int getCellColumnNumber() {
+    return cellColumnNumber;
+  }
+  public void setCellColumnNumber(int cellColumnNumber) {
+    this.cellColumnNumber = cellColumnNumber;
+  }
+  public int getCellPlayerNumber() {
+    return cellPlayerNumber;
+  }
+  public void setCellPlayerNumber(int cellPlayerNumber) {
+    this.cellPlayerNumber = cellPlayerNumber;
+  }
+  public int getCellZoneNumber() {
+    return cellZoneNumber;
+  }
+  public void setCellZoneNumber(int cellZoneNumber) {
+    this.cellZoneNumber = cellZoneNumber;
+  }
+  public String getVariant() {
+    return variant;
+  }
+  public void setVariant(String variant) {
+    this.variant = variant;
+  }
+  public int getNumOfPlayers() {
+    return numOfPlayers;
+  }
+  public void setNumOfPlayers(int numOfPlayers) {
+    this.numOfPlayers = numOfPlayers;
   }
 }

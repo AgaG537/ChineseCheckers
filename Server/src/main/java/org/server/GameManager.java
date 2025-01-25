@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 import org.server.board.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,10 @@ public class GameManager {
   private String variant;
   private final ArrayList<Integer> finishedPlayers;
   private Server server;
+  private int moveNum;
+  private int gameNum;
+  private boolean fromDatabase;
+  public int gameNumCpy;
 
   @Autowired
   private MoveRecordRepository moveRecordRepository;
@@ -40,11 +45,18 @@ public class GameManager {
     this.currTurn = 0;
     this.gameStarted = false;
     finishedPlayers = new ArrayList<>();
+    moveNum = 0;
+    currentBoard = null;
+    fromDatabase = false;
 //    moveRecordRepository = null;
   }
 
   public void setServer(Server server) {
     this.server = server;
+  }
+
+  public void setGameNum(int gameNum) {
+    this.gameNum = gameNum;
   }
 
 //  public void setMoveRecordRepository(MoveRecordRepository moveRecordRepository) {
@@ -58,6 +70,10 @@ public class GameManager {
    */
   public void setBoard(Board board) {
     this.currentBoard = board;
+  }
+
+  public Board getBoard() {
+    return currentBoard;
   }
 
   /**
@@ -134,6 +150,9 @@ public class GameManager {
    * @return The maximum number of users.
    */
   public synchronized int getMaxUsers() {
+    if (fromDatabase) {
+      maxUsers = moveRecordRepository.getMaxUsersByGameNum(gameNumCpy);
+    }
     return maxUsers;
   }
 
@@ -239,6 +258,11 @@ public class GameManager {
     }
   }
 
+  public boolean isFromDatabase() {
+    System.out.println("fromDatabase: " + fromDatabase);
+    return fromDatabase;
+  }
+
 
   /**
    * Broadcasts a move made by a player to all clients.
@@ -256,18 +280,11 @@ public class GameManager {
       System.out.println("MoveRecordRepository is ready!");
     }
 
-    System.out.println("making move record");
-    MoveRecord mr = new MoveRecord(1);
+    saveRecords();
+//    System.out.println(1);
+//    printRecords();
+//    System.out.println(2);
 
-    // This doesn't work it throws no error or anything it simply doesn't save the values and get's stuck here, doesn't go further
-    try {
-      moveRecordRepository.save(mr);
-    }
-    catch (Exception e) {
-      System.out.println("Error in broadcastMove");
-      e.printStackTrace();
-    }
-    System.out.println("move record saved");
     String move = moveValidator.makeMove(input);
     for (ClientHandler clientHandler : clientHandlers) {
       try {
@@ -282,6 +299,43 @@ public class GameManager {
         e.printStackTrace();
         clientHandler.closeEverything();
       }
+    }
+  }
+
+  public void saveRecords() {
+    for (Cell[] cellRow : currentBoard.getCells()) {
+      for (Cell cell : cellRow) {
+        MoveRecord mr = new MoveRecord();
+        try {
+          mr.setGameNumber(gameNum);
+        } catch (Exception e) {
+          mr.setGameNumber(0);
+        }
+        mr.setMoveNumber(moveNum);
+        mr.setCellZoneNumber(cell.getZoneNum());
+        mr.setCellColumnNumber(cell.getCol());
+        mr.setCellRowNumber(cell.getRow());
+        mr.setVariant(variant);
+        mr.setNumOfPlayers(maxUsers);
+        try {
+          mr.setCellPlayerNumber(cell.getPawn().getPlayerNum());
+        } catch (NullPointerException e) {
+          mr.setCellPlayerNumber(0);
+        }
+        moveRecordRepository.save(mr);
+      }
+    }
+    moveNum++;
+  }
+
+  public void printRecords() {
+    List<MoveRecord> records = moveRecordRepository.findGamesWithMaxMoveByGameNum(1);
+    System.out.println("Records size: " + records.size());
+    for (MoveRecord record : records) {
+      System.out.printf("gameNum: %d, moveNum: %d\n", record.getGameNumber(), record.getMoveNumber());
+      System.out.printf("cellRow: %d, cellCol: %d\n", record.getCellRowNumber(), record.getCellColumnNumber());
+      System.out.printf("cellZoneNumber: %d\n", record.getCellZoneNumber());
+      System.out.printf("cellPlayerNumber: %d\n", record.getCellPlayerNumber());
     }
   }
 
@@ -382,5 +436,50 @@ public class GameManager {
         }
       }
     }
+  }
+
+  public void initFromDatabase(int gameNum) {
+    System.out.println("Init from database, gameNum: " + gameNum);
+    fromDatabase = true;
+    gameNumCpy = gameNum;
+  }
+
+  public void createFromDatabase(int gameNumCpy) {
+    Random random = new Random();
+    System.out.println("creating from database");
+    System.out.println("gameNum: " + gameNumCpy);
+    System.out.println("getting variant");
+    variant = moveRecordRepository.getVariantByGameNum(gameNumCpy);
+    System.out.println("variant: " + variant);
+    System.out.println("getting max users");
+    maxUsers = moveRecordRepository.getMaxUsersByGameNum(gameNumCpy);
+    System.out.println("maxUsers: " + maxUsers);
+    System.out.println("creating board");
+    Board board = BoardFactory.createBoard(10,maxUsers,variant, random.nextInt(1000000));
+    System.out.println("board created ");
+    board.removePawns();
+    Cell[][] cells = board.getCells();
+
+    System.out.println("gameNumCpy: " + gameNumCpy);
+    List<MoveRecord> moveRecords = moveRecordRepository.findGamesWithMaxMoveByGameNum(gameNumCpy);
+
+    System.out.printf("length of moveRecords: %d\n", moveRecords.size());
+    for (MoveRecord moveRecord : moveRecords) {
+      System.out.println("working...");
+      int playerNum = moveRecord.getCellPlayerNumber();
+      int cellRowNum = moveRecord.getCellRowNumber();
+      int cellColNum = moveRecord.getCellColumnNumber();
+      int cellZoneNum = moveRecord.getCellZoneNumber();
+
+      if (playerNum != 0) {
+        Pawn pawn = new Pawn(playerNum,cells[cellRowNum][cellColNum]);
+        cells[cellRowNum][cellColNum].pawnMoveIn(pawn);
+      }
+      cells[cellRowNum][cellColNum].setZoneNum(cellZoneNum);
+    }
+    board.setCells(cells);
+    System.out.println("setting board");
+    currentBoard = board;
+    System.out.println("board set");
   }
 }

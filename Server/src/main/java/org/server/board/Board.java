@@ -41,4 +41,7 @@ public interface Board {
    */
   Cell[][] getCells();
 
+  void setCells(Cell[][] cells);
+
+  void removePawns();
 }

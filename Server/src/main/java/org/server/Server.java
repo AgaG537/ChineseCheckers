@@ -52,19 +52,10 @@ public class Server {
   public void start() {
     try {
       System.out.println("Server is running...");
-      // this works and adds the record to the table
-      // Results in this message
-      //Hibernate:
-      //    /* insert for
-      //        org.server.board.MoveRecord */insert
-      //    into
-      //        move_record (move_number)
-      //    values
-      //        (?)
-      MoveRecord mr = new MoveRecord(2);
+      MoveRecord mr = new MoveRecord(-1);
       moveRecordRepository.save(mr);
 
-//      gameManager.setMoveRecordRepository(moveRecordRepository);
+      gameManager.setGameNum(moveRecordRepository.currentGameNum() + 1);
 
       while (!serverSocket.isClosed()) {
         if (gameManager.getClientHandlers().size() < gameManager.getMaxUsers() || gameManager.getMaxUsers() == 0) {
@@ -72,12 +63,19 @@ public class Server {
           int userNum = gameManager.getClientHandlers().size() + 1;
           ClientHandler clientHandler = new ClientHandler(socket, gameManager, userNum);
           new Thread(clientHandler).start();
+//          System.out.println("max players: " + moveRecordRepository.getMaxUsersByGameNum(1));
 
           if (gameManager.getClientHandlers().size() == gameManager.getMaxUsers()) {
             gameManager.startGame();
-            Board board = BoardFactory.createBoard(10, gameManager.getMaxUsers(), gameManager.getVariant(), seed);
-            gameManager.setMoveValidator(board.getCells());
-            gameManager.setBoard(board);
+            if (gameManager.getBoard()==null) {
+              Board board = BoardFactory.createBoard(10, gameManager.getMaxUsers(), gameManager.getVariant(), seed);
+              gameManager.setBoard(board);
+            }
+            gameManager.setMoveValidator(gameManager.getBoard().getCells());
+//            else {
+//              System.out.println("server else");
+//              gameManager.createFromDatabase();
+//            }
             gameManager.broadcastGameStarted();
 
             while (!allSetup(gameManager.getClientHandlers())) {

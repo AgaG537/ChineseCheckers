@@ -382,5 +382,19 @@ public abstract class AbstractBoardManager implements Board {
   public int[] getActiveZoneNums() {
     return activeZoneNums;
   }
+
+  @Override
+  public void removePawns() {
+    for (Cell[] cellRow : cells) {
+      for (Cell cell : cellRow) {
+        cell.pawnMoveOut();
+      }
+    }
+  }
+
+  @Override
+  public void setCells(Cell[][] cells) {
+    this.cells = cells;
+  }
 }
 

@@ -63,12 +63,19 @@ public class ClientHandler implements Runnable{
     do {
       try {
         String[] message = (bufferedReader.readLine()).split(",");
-        maxUsers = Integer.parseInt(message[0]);
-        variant = message[1];
-        maxUsers = MaxUserHandler.handleMaxUsers(maxUsers, variant);
+        if (message[0].equals("DB")) {
+//          gameManager.initFromDatabase(Integer.parseInt(message[1]));
+          gameManager.createFromDatabase(Integer.parseInt(message[1]));
+          maxUsers = 2;
+        }
+        else {
+          maxUsers = Integer.parseInt(message[0]);
+          variant = message[1];
+          maxUsers = MaxUserHandler.handleMaxUsers(maxUsers, variant);
 
-        gameManager.setMaxUsers(maxUsers);
-        gameManager.setVariant(variant);
+          gameManager.setMaxUsers(maxUsers);
+          gameManager.setVariant(variant);
+        }
       } catch (NumberFormatException e) {
         sendMessage("Wrong number of users!");
       }

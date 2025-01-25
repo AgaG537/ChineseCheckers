@@ -47,7 +47,6 @@ public class App  implements CommandLineRunner
         System.out.printf("gameNum: %d, moveNum: %d\n", game.getGameNum(), game.getMoveNum());
         System.out.printf("cellRow: %d, cellCol: %d\n", game.getCellRow(), game.getCellCol());
         System.out.printf("cellPlayer: %d, cellZone: %d\n", game.getCellPlayerNum(), game.getCellZoneNum());
-
       }
     }
 

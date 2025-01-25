@@ -5,6 +5,7 @@ import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -107,6 +108,17 @@ public class FirstPlayerViewManager {
     choosePlayerNumChoiceBox.setCursor(Cursor.HAND);
     choosePlayerNumChoiceBox.setStyle("-fx-font-size : 23px;");
 
+    // Add a TextField for user input
+    Label numberInputLabel = new Label("Enter a number:");
+    numberInputLabel.setFont(new Font("Verdana", 23));
+    numberInputLabel.setStyle("-fx-text-fill: black");
+
+    TextField numberInputField = new TextField();
+    numberInputField.setPromptText("Enter a number...");
+    numberInputField.setStyle("-fx-font-size : 18px;");
+    numberInputField.setMinWidth(250);
+
+
     Button applyButton = new Button("APPLY");
     applyButton.setMinWidth(250);
     applyButton.setCursor(Cursor.HAND);
@@ -121,10 +133,24 @@ public class FirstPlayerViewManager {
 
       String message = choosePlayerNumChoiceBox.getValue().toString() + "," + chooseVariantChoiceBox.getValue();
 
+
+      // Check if the number input field is not empty and valid
+      String numberInput = numberInputField.getText();
+      if (!numberInput.isEmpty()) {
+        try {
+          int number = Integer.parseInt(numberInput);
+          message = "DB" + "," +  number; // Override message with DB + number
+        } catch (NumberFormatException ex) {
+          System.err.println("Invalid number input: " + numberInput);
+          return; // Stop further processing if input is invalid
+        }
+      }
+
       // Mamy tutaj variant
+      System.out.println("message sent first panes: " + message);
       client.sendMessage(message);
     });
 
-    sideBox.getChildren().addAll(titleLabel, chooseVariantLabel, chooseVariantChoiceBox, choosePlayerNumLabel, choosePlayerNumChoiceBox, applyButton);
+    sideBox.getChildren().addAll(titleLabel, chooseVariantLabel, chooseVariantChoiceBox, choosePlayerNumLabel, choosePlayerNumChoiceBox, numberInputLabel, numberInputField, applyButton);
   }
 }
