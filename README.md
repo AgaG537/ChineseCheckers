@@ -15,10 +15,10 @@ Wroclaw University of Science and Technology group project for Programming Techn
 ```
 git clone https://github.com/JinerX/ChineseCheckers.git
 ```
-2. Go to the project folder and switch to the secondIteration branch:
+2. Go to the project folder and switch to the thirdIteration branch:
 ```
 cd ChineseCheckers
-git checkout secondIteration
+git checkout thirdIteration
 ```
 3. Make sure you have MariaDB setup:
 - database called "mytestdatabase"
