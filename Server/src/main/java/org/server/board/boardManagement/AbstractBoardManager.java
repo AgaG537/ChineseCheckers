@@ -1,11 +1,10 @@
 package org.server.board.boardManagement;
 
-import org.server.board.boardObjects.Cell;
-import org.server.board.boardObjects.Pawn;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.server.board.boardObjects.Cell;
+import org.server.board.boardObjects.Pawn;
 
 /**
  * Abstract class for managing board functionality, including board initialization,
@@ -70,6 +69,14 @@ public abstract class AbstractBoardManager implements Board {
     };
   }
 
+  /**
+   * Initializes the edge points for each player's zone on the board.
+   *
+   * @param boardWidth The width of the board.
+   * @param boardHeight The height of the board.
+   * @param playerZoneHeight The height of each player's zone.
+   * @return A 2D array representing the edge coordinates for each player's zone.
+   */
   public int[][] initializeZoneEdgePoints(int boardWidth, int boardHeight, int playerZoneHeight) {
     return new int[][]{
         {0, (boardWidth / 2)},                  // Upper zone
@@ -395,10 +402,18 @@ public abstract class AbstractBoardManager implements Board {
     return cells;
   }
 
+  /**
+   * Retrieves zone numbers where player pawns are placed before the game.
+   *
+   * @return active zones' numbers.
+   */
   public int[] getActiveZoneNums() {
     return activeZoneNums;
   }
 
+  /**
+   * Removes all pawns from the board by clearing their positions.
+   */
   @Override
   public void removePawns() {
     for (Cell[] cellRow : cells) {
@@ -408,14 +423,31 @@ public abstract class AbstractBoardManager implements Board {
     }
   }
 
+  /**
+   * Sets the game board with a new 2D array of cells.
+   *
+   * @param cells A 2D array of Cell objects representing the game board.
+   */
   @Override
   public void setCells(Cell[][] cells) {
     this.cells = cells;
   }
 
+  /**
+   * Retrieves the destination point for the given player.
+   *
+   * @param playerNum The player's number.
+   * @return An array representing the row and column of the player's destination point.
+   */
   @Override
   public abstract int[] getDestinationPoint(int playerNum);
 
+  /**
+   * Retrieves the destination zone number for the given player.
+   *
+   * @param playerNum The player's number.
+   * @return The destination zone number.
+   */
   @Override
   public abstract int getDestinationZoneNum(int playerNum);
 }

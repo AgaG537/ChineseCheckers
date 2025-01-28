@@ -1,9 +1,8 @@
 package org.server.board.boardManagement;
 
-import org.server.board.boardObjects.Cell;
-
 import java.util.Arrays;
 import java.util.Random;
+import org.server.board.boardObjects.Cell;
 
 /**
  * Specialized board manager for "Yin-Yang" game mode.
@@ -87,7 +86,12 @@ public class YinYangBoardManager extends AbstractBoardManager {
     return 0;
   }
 
-
+  /**
+   * Retrieves the destination point for the given player.
+   *
+   * @param playerNum The player's number.
+   * @return An array representing the row and column of the player's destination point.
+   */
   @Override
   public int[] getDestinationPoint(int playerNum) {
     if (playerNum == 1) {
@@ -97,6 +101,12 @@ public class YinYangBoardManager extends AbstractBoardManager {
     }
   }
 
+  /**
+   * Retrieves the destination zone number for the given player.
+   *
+   * @param playerNum The player's number.
+   * @return The destination zone number.
+   */
   @Override
   public int getDestinationZoneNum(int playerNum) {
     if (playerNum == 1) {

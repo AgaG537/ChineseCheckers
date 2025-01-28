@@ -29,6 +29,16 @@ class AbstractBoardManagerTest {
       protected int getTargetPlayer(int numOfPlayers, int zoneNum) {
         return (zoneNum % numOfPlayers) + 1;
       }
+
+      @Override
+      public int[] getDestinationPoint(int playerNum) {
+        return new int[0];
+      }
+
+      @Override
+      public int getDestinationZoneNum(int playerNum) {
+        return 0;
+      }
     };
   }
 

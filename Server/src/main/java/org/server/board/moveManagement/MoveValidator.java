@@ -1,10 +1,9 @@
 package org.server.board.moveManagement;
 
-import org.server.board.boardObjects.Cell;
-import org.server.board.boardObjects.Pawn;
-
 import java.util.ArrayList;
 import java.util.Arrays;
+import org.server.board.boardObjects.Cell;
+import org.server.board.boardObjects.Pawn;
 
 /**
  * Responsible for validating and executing moves in the game.

@@ -2,6 +2,10 @@ package org.server.board.utilityHandlers;
 
 import java.util.Map;
 
+/**
+ * Utility class for handling target zones in the game, including calculating
+ * both target and opposite target zones based on the number of players and player numbers.
+ */
 public class TargetZoneHandler {
 
   private static final Map<Integer, Map<Integer, Integer>> OPPOSITE_TARGET_ZONE_NUMBERS = Map.of(
@@ -56,10 +60,24 @@ public class TargetZoneHandler {
       )
   );
 
+  /**
+   * Retrieves the target zone number for a given player in a game with a specific number of players.
+   *
+   * @param numOfPlayers The total number of players in the game.
+   * @param playerNum The player's number.
+   * @return The target zone number for the player.
+   */
   public static int getTargetZoneNum(int numOfPlayers, int playerNum) {
     return TARGET_ZONE_NUMBERS.get(numOfPlayers).getOrDefault(playerNum, 0);
   }
 
+  /**
+   * Retrieves the opposite target zone number for a given player in a game with a specific number of players.
+   *
+   * @param numOfPlayers The total number of players in the game.
+   * @param playerNum The player's number.
+   * @return The opposite target zone number for the player.
+   */
   public static int getOppositeTargetZoneNum(int numOfPlayers, int playerNum) {
     return OPPOSITE_TARGET_ZONE_NUMBERS.get(numOfPlayers).getOrDefault(playerNum, 0);
   }

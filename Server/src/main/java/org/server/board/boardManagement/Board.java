@@ -43,11 +43,31 @@ public interface Board {
    */
   Cell[][] getCells();
 
+  /**
+   * Sets the game board with a new 2D array of cells.
+   *
+   * @param cells A 2D array of Cell objects representing the game board.
+   */
   void setCells(Cell[][] cells);
 
+  /**
+   * Retrieves the destination point for the given player.
+   *
+   * @param playerNum The player's number.
+   * @return An array representing the row and column of the player's destination point.
+   */
   int[] getDestinationPoint(int playerNum);
 
+  /**
+   * Retrieves the destination zone number for the given player.
+   *
+   * @param playerNum The player's number.
+   * @return The destination zone number.
+   */
   int getDestinationZoneNum(int playerNum);
 
+  /**
+   * Removes all pawns from the board by clearing their positions.
+   */
   void removePawns();
 }

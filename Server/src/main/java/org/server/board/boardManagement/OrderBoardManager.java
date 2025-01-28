@@ -3,7 +3,6 @@ package org.server.board.boardManagement;
 import org.server.board.boardObjects.Cell;
 import org.server.board.utilityHandlers.TargetPlayerHandler;
 import org.server.board.utilityHandlers.TargetZoneHandler;
-
 import java.util.Random;
 
 /**
@@ -82,6 +81,12 @@ public class OrderBoardManager extends AbstractBoardManager {
     return TargetPlayerHandler.getTargetPlayerNum(numOfPlayers, zoneNum);
   }
 
+  /**
+   * Retrieves the destination point for the given player.
+   *
+   * @param playerNum The player's number.
+   * @return An array representing the row and column of the player's destination point.
+   */
   @Override
   public int[] getDestinationPoint(int playerNum) {
     int counter = 0;
@@ -95,6 +100,12 @@ public class OrderBoardManager extends AbstractBoardManager {
     return playerZonesEdgePoints[zoneNum - 1];
   }
 
+  /**
+   * Retrieves the destination zone number for the given player.
+   *
+   * @param playerNum The player's number.
+   * @return The destination zone number.
+   */
   @Override
   public int getDestinationZoneNum(int playerNum) {
     return TargetZoneHandler.getTargetZoneNum(numOfPlayers, playerNum);
