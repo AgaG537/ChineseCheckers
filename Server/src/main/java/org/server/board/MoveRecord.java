@@ -19,6 +19,7 @@ public class MoveRecord {
   private int cellZoneNumber;
   private String variant;
   private int numOfPlayers;
+  private int numOfBots;
 
   public MoveRecord() {}
 
@@ -32,6 +33,13 @@ public class MoveRecord {
 
   public int getMoveNumber() {
     return moveNumber;
+  }
+
+  public int getNumOfBots() {
+    return numOfBots;
+  }
+  public void setNumOfBots(int numOfBots) {
+    this.numOfBots = numOfBots;
   }
 
   public void setMoveNumber(int moveNumber) {

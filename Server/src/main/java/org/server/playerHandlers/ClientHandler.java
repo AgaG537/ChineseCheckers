@@ -114,6 +114,7 @@ public class ClientHandler extends PlayerHandler implements Runnable {
         }
         if (gameManager.isGameStarted() && userNum == gameManager.getCurrTurn()) {
           int flag = gameManager.validateMove(userNum, message);
+          System.out.println(userNum + " " +  message);
           switch (flag) {
             case 0:
               System.out.println(message);
@@ -122,15 +123,21 @@ public class ClientHandler extends PlayerHandler implements Runnable {
               gameManager.broadcastMove(userNum, message);
               System.out.println("advancing turn");
               gameManager.advanceTurn(gameManager.getPlayerHandlers().size());
-              int playerCheckedForWin = gameManager.checkWin();
-              if (playerCheckedForWin != 0) {
-                gameManager.broadcastPlayerWon(playerCheckedForWin);
-                gameManager.addFinishedPlayer(playerCheckedForWin);
-              }
-              break;
+              System.out.println(gameManager.getCurrTurn());
+
+
+
+              // Zakomentowane chwilowo
+//              int playerCheckedForWin = gameManager.checkWin();
+//              if (playerCheckedForWin != 0) {
+//                gameManager.broadcastPlayerWon(playerCheckedForWin);
+//                gameManager.addFinishedPlayer(playerCheckedForWin);
+//              }
+//              break;
+
             case 1:
               sendMessage("Invalid move!");
-              System.out.println("wrong move");
+              System.out.println("wrong move dupa");
               break;
             case 2:
               gameManager.advanceTurn(gameManager.getPlayerHandlers().size());

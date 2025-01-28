@@ -327,6 +327,13 @@ public abstract class AbstractBoard implements Board {
     int col = positions[1];
     int player = positions[2];
     int numPlayers = positions[3];
+    System.out.println(
+        "row: " + row
+        + " col: " + col
+        + " player: " + player
+        + " numPlayers: " + numPlayers
+        + " color: " + Color.valueOf(ColorManager.getDefaultColorString(numPlayers,player))
+    );
     Color color = Color.valueOf(ColorManager.getDefaultColorString(numPlayers, player));
     setupPawn(player, color, cells[row][col]);
   }

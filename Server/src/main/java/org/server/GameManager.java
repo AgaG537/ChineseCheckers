@@ -58,6 +58,7 @@ public class GameManager {
     moveNum = 0;
     currentBoard = null;
     fromDatabase = false;
+    maxBots = 0;
 //    moveRecordRepository = null;
   }
 
@@ -319,10 +320,6 @@ public class GameManager {
       System.out.println("MoveRecordRepository is ready!");
     }
 
-    saveRecords();
-//    System.out.println(1);
-//    printRecords();
-//    System.out.println(2);
 
     String move = moveValidator.makeMove(input);
     for (PlayerHandler playerHandler : playerHandlers) {
@@ -342,6 +339,7 @@ public class GameManager {
         }
       }
     }
+    saveRecords();
   }
 
   public void saveRecords() {
@@ -359,6 +357,7 @@ public class GameManager {
         mr.setCellRowNumber(cell.getRow());
         mr.setVariant(variant);
         mr.setNumOfPlayers(maxUsers);
+        mr.setNumOfBots(maxBots);
         try {
           mr.setCellPlayerNumber(cell.getPawn().getPlayerNum());
         } catch (NullPointerException e) {
@@ -507,7 +506,21 @@ public class GameManager {
     maxUsers = moveRecordRepository.getMaxUsersByGameNum(gameNumCpy);
     System.out.println("maxUsers: " + maxUsers);
     System.out.println("creating board");
-    Board board = BoardFactory.createBoard(10,maxUsers,variant, random.nextInt(1000000));
+    try {
+      maxBots = moveRecordRepository.getMaxBotsByGameNum(gameNumCpy);
+    }
+    catch (Exception e) {
+      maxBots = 0;
+    }
+    System.out.println(
+        "-------------Creating from database----------------" +
+            "\ngameNum: " + gameNumCpy +
+            "\nvariant: " + variant +
+            "\nmaxUsers: " + maxUsers +
+            "\nmaxBots: " + maxBots
+    );
+
+    Board board = BoardFactory.createBoard(10,maxUsers+maxBots,variant, random.nextInt(1000000));
     System.out.println("board created ");
     board.removePawns();
     Cell[][] cells = board.getCells();
@@ -522,6 +535,11 @@ public class GameManager {
       int cellRowNum = moveRecord.getCellRowNumber();
       int cellColNum = moveRecord.getCellColumnNumber();
       int cellZoneNum = moveRecord.getCellZoneNumber();
+
+      System.out.println("playerNum: " + playerNum
+      + " cellRowNum: " + cellRowNum
+      + " cellColNum: " + cellColNum
+      + " cellZoneNum: " + cellZoneNum);
 
       if (playerNum != 0) {
         Pawn pawn = new Pawn(playerNum,cells[cellRowNum][cellColNum]);
