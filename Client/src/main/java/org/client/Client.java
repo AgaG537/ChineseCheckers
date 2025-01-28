@@ -97,7 +97,7 @@ public class Client {
           try {
             messageFromServer = bufferedReader.readLine();
             synchronized (this) {
-              handleLogicCommad(messageFromServer);
+              handleLogicCommand(messageFromServer);
             }
           } catch (IOException e) {
             closeEverything();
@@ -109,8 +109,13 @@ public class Client {
   }
 
 
-
-  private void handleLogicCommad(String messageFromServer) {
+  /**
+   * Handles messages received from the server. Does a specific action (like
+   * setting up the board) or delegates the message to the client app.
+   *
+   * @param messageFromServer The message received from the server.
+   */
+  private void handleLogicCommand(String messageFromServer) {
     if (messageFromServer.startsWith("[CMD]")) {
       board.handleCommand(messageFromServer);
     } else if (messageFromServer.startsWith("[CREATE]")) {
@@ -137,6 +142,11 @@ public class Client {
     }
   }
 
+  /**
+   * Retrieves current client setup status.
+   *
+   * @return setup information about setup - finished or not.
+   */
   public boolean getSetupStatus() {
     return setup;
   }

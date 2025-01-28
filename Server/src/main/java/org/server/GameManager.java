@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
-
 import org.server.board.*;
 import org.server.board.boardManagement.Board;
 import org.server.board.boardManagement.BoardFactory;
@@ -62,10 +61,20 @@ public class GameManager {
 //    moveRecordRepository = null;
   }
 
+  /**
+   * Sets the current server for the game.
+   *
+   * @param server The server instance to set.
+   */
   public void setServer(Server server) {
     this.server = server;
   }
 
+  /**
+   * Sets the current game number.
+   *
+   * @param gameNum The number of the current game.
+   */
   public void setGameNum(int gameNum) {
     this.gameNum = gameNum;
   }
@@ -298,17 +307,21 @@ public class GameManager {
     }
   }
 
+  /**
+   * Checks if the game is initialized from the database.
+   *
+   * @return true if the game is initialized from the database, false otherwise.
+   */
   public boolean isFromDatabase() {
     System.out.println("fromDatabase: " + fromDatabase);
     return fromDatabase;
   }
 
-
   /**
    * Broadcasts a move made by a player to all clients.
    *
-   * @param userNum       The username of the player making the move.
-   * @param input           The input made by the player.
+   * @param userNum The username of the player making the move.
+   * @param input The input made by the player.
    */
   public synchronized void broadcastMove(int userNum, String input) {
     if (!gameStarted) {
@@ -342,6 +355,9 @@ public class GameManager {
     saveRecords();
   }
 
+  /**
+   * Saves the current game records to the database.
+   */
   public void saveRecords() {
     for (Cell[] cellRow : currentBoard.getCells()) {
       for (Cell cell : cellRow) {
@@ -369,6 +385,9 @@ public class GameManager {
     moveNum++;
   }
 
+  /**
+   * Prints the saved game records to the console.
+   */
   public void printRecords() {
     List<MoveRecord> records = moveRecordRepository.findGamesWithMaxMoveByGameNum(1);
     System.out.println("Records size: " + records.size());
@@ -408,7 +427,9 @@ public class GameManager {
   }
 
   /**
-   * Broadcasts a message that the player has won.
+   * Broadcasts a message that a player has won.
+   *
+   * @param playerNum The user number of the player who won.
    */
   public synchronized void broadcastPlayerWon(int playerNum) {
     for (PlayerHandler playerHandler : playerHandlers) {
@@ -489,12 +510,22 @@ public class GameManager {
     }
   }
 
+  /**
+   * Initializes the game state from the database.
+   *
+   * @param gameNum The game number to initialize.
+   */
   public void initFromDatabase(int gameNum) {
     System.out.println("Init from database, gameNum: " + gameNum);
     fromDatabase = true;
     gameNumCpy = gameNum;
   }
 
+  /**
+   * Creates the game state from the database.
+   *
+   * @param gameNumCpy The game number used to fetch data for recreation.
+   */
   public void createFromDatabase(int gameNumCpy) {
     Random random = new Random();
     System.out.println("creating from database");
@@ -508,19 +539,18 @@ public class GameManager {
     System.out.println("creating board");
     try {
       maxBots = moveRecordRepository.getMaxBotsByGameNum(gameNumCpy);
-    }
-    catch (Exception e) {
+    } catch (Exception e) {
       maxBots = 0;
     }
     System.out.println(
-        "-------------Creating from database----------------" +
-            "\ngameNum: " + gameNumCpy +
-            "\nvariant: " + variant +
-            "\nmaxUsers: " + maxUsers +
-            "\nmaxBots: " + maxBots
+        "-------------Creating from database----------------"
+            + "\ngameNum: " + gameNumCpy
+            + "\nvariant: " + variant
+            + "\nmaxUsers: " + maxUsers
+            + "\nmaxBots: " + maxBots
     );
 
-    Board board = BoardFactory.createBoard(10,maxUsers+maxBots,variant, random.nextInt(1000000));
+    Board board = BoardFactory.createBoard(10, maxUsers + maxBots, variant, random.nextInt(1000000));
     System.out.println("board created ");
     board.removePawns();
     Cell[][] cells = board.getCells();
@@ -537,12 +567,12 @@ public class GameManager {
       int cellZoneNum = moveRecord.getCellZoneNumber();
 
       System.out.println("playerNum: " + playerNum
-      + " cellRowNum: " + cellRowNum
-      + " cellColNum: " + cellColNum
-      + " cellZoneNum: " + cellZoneNum);
+        + " cellRowNum: " + cellRowNum
+        + " cellColNum: " + cellColNum
+        + " cellZoneNum: " + cellZoneNum);
 
       if (playerNum != 0) {
-        Pawn pawn = new Pawn(playerNum,cells[cellRowNum][cellColNum]);
+        Pawn pawn = new Pawn(playerNum, cells[cellRowNum][cellColNum]);
         cells[cellRowNum][cellColNum].pawnMoveIn(pawn);
       }
       cells[cellRowNum][cellColNum].setZoneNum(cellZoneNum);
@@ -553,7 +583,9 @@ public class GameManager {
     System.out.println("board set");
   }
 
-
+  /**
+   * Initializes bots for the game to match the required number of players.
+   */
   public void initializeBots() {
     while (getPlayerHandlers().size() < maxUsers + maxBots) {
       int botNum = getPlayerHandlers().size() + 1;

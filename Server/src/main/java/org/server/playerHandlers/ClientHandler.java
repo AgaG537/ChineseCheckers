@@ -3,7 +3,6 @@ package org.server.playerHandlers;
 
 import java.io.*;
 import java.net.Socket;
-
 import org.server.GameManager;
 import org.server.board.utilityHandlers.MaxUserHandler;
 
@@ -71,8 +70,7 @@ public class ClientHandler extends PlayerHandler implements Runnable {
 //          gameManager.initFromDatabase(Integer.parseInt(message[1]));
         gameManager.createFromDatabase(Integer.parseInt(message[1]));
         //maxUsers = 2;
-      }
-      else {
+      } else {
         while (isNumOfPlayersInvalid(maxUsers, maxBots)) {
           maxUsers = Integer.parseInt(message[0]);
           maxBots = Integer.parseInt(message[1]);
@@ -92,6 +90,13 @@ public class ClientHandler extends PlayerHandler implements Runnable {
     }
   }
 
+  /**
+   * Checks if the given number of players is invalid.
+   *
+   * @param maxUsers number of users.
+   * @param maxBots number of bots.
+   * @return true if number of players is invalid, false otherwise.
+   */
   private boolean isNumOfPlayersInvalid(int maxUsers, int maxBots) {
     return (maxUsers + maxBots != 2 && maxUsers + maxBots != 3 && maxUsers + maxBots != 4 && maxUsers + maxBots != 6) || maxUsers < 1;
   }
@@ -124,6 +129,7 @@ public class ClientHandler extends PlayerHandler implements Runnable {
               System.out.println("advancing turn");
               gameManager.advanceTurn(gameManager.getPlayerHandlers().size());
               System.out.println(gameManager.getCurrTurn());
+              break;
 
 
 

@@ -6,7 +6,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.List;
 import java.util.Random;
-
 import org.server.board.boardManagement.Board;
 import org.server.board.boardManagement.BoardFactory;
 import org.server.board.MoveRecord;
@@ -103,7 +102,7 @@ public class Server {
   public boolean allSetup(List<PlayerHandler> playerHandlers) {
     for (PlayerHandler playerHandler : playerHandlers) {
       if (playerHandler instanceof ClientHandler) {
-        if (!((ClientHandler)playerHandler).getSetup()) {
+        if (!((ClientHandler) playerHandler).getSetup()) {
           return false;
         }
       }
@@ -124,6 +123,11 @@ public class Server {
     }
   }
 
+  /**
+   * Method for saving move record.
+   *
+   * @param mr move record.
+   */
   public void saveMoveRecord(MoveRecord mr) {
     System.out.println("saving move record Server");
     moveRecordRepository.save(mr);

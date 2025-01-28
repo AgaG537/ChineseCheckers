@@ -55,6 +55,12 @@ public class BoardManager extends AbstractBoardManager {
     return TargetPlayerHandler.getOppositeTargetPlayerNum(numOfPlayers, zoneNum);
   }
 
+  /**
+   * Retrieves the destination point for the given player.
+   *
+   * @param playerNum The player's number.
+   * @return An array representing the row and column of the player's destination point.
+   */
   @Override
   public int[] getDestinationPoint(int playerNum) {
     int counter = 0;
@@ -68,6 +74,12 @@ public class BoardManager extends AbstractBoardManager {
     return playerZonesEdgePoints[(zoneNum - 1 + 3) % 6];
   }
 
+  /**
+   * Retrieves the destination zone number for the given player.
+   *
+   * @param playerNum The player's number.
+   * @return The destination zone number.
+   */
   @Override
   public int getDestinationZoneNum(int playerNum) {
     return TargetZoneHandler.getOppositeTargetZoneNum(numOfPlayers, playerNum);
