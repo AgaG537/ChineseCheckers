@@ -13,7 +13,7 @@ Wroclaw University of Science and Technology group project for Programming Techn
 ### Start-up
 1. Clone the repository:
 ```
-git clone https://github.com/JinerX/ChineseCheckers.git
+git clone https://github.com/JinerX/ChineseCheckers.git -b thirdIteration
 ```
 2. Go to the project folder and switch to the thirdIteration branch:
 ```
@@ -24,7 +24,7 @@ git checkout thirdIteration
 - database called "mytestdatabase"
 - user called "myuser"
 - password "password"
-- These can be changed by changing Server/resources/application.properties
+- These default values can be changed by changing Server/resources/application.properties
 
 3. To start the Server, run commands in the terminal:
 ```
@@ -46,6 +46,7 @@ mvn clean install javafx:run
 1. When all clients are connected, one of them will be selected at random and asked to make a move. Then, the order of players' moves is determined clockwise.
 2. A player's movement can consist of individual moves or jumps over other pawns (their own or other players'). A player can also choose not to make a move by pressing the **SKIP TURN** button.
 3. When one of the players wins the game, an announcement is displayed. The remaining players can continue the game, competing for the remaining places (second, third, etc.).
+4. To load data from the database enter a number corresponding to the number of the game you want to load. By default the starting value is 1 and is updated every game (every server restart)
 ### Standard version
 All players start the game with their pawns in assigned zones. The task of each player is to move all their pawns to the opposite zone.
 ### Order Out Of Chaos
