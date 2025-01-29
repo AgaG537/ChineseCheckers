@@ -38,7 +38,7 @@ mvn clean install exec:java
 cd Client
 mvn clean install javafx:run
 ```
-&emsp;The JavaFX window with game options should appear. As a host, choose game variant, number of players and click the **APPLY** button.
+&emsp;The JavaFX window with game options should appear. As a host, choose game variant, number of users (human players), number of bots and click the **APPLY** button.
 
 5. Now you can run the Client program (commands for the Client folder given above) for the rest of the players, from separate terminals.
 
