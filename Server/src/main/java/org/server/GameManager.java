@@ -565,12 +565,6 @@ public class GameManager {
       int cellRowNum = moveRecord.getCellRowNumber();
       int cellColNum = moveRecord.getCellColumnNumber();
       int cellZoneNum = moveRecord.getCellZoneNumber();
-
-      System.out.println("playerNum: " + playerNum
-        + " cellRowNum: " + cellRowNum
-        + " cellColNum: " + cellColNum
-        + " cellZoneNum: " + cellZoneNum);
-
       if (playerNum != 0) {
         Pawn pawn = new Pawn(playerNum, cells[cellRowNum][cellColNum]);
         cells[cellRowNum][cellColNum].pawnMoveIn(pawn);

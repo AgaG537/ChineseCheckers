@@ -95,7 +95,6 @@ public class BotHandler extends PlayerHandler {
       String move = startRow + " " + startCol + " " + userNum + " " + endRow + " " + endCol + " 0";
       gameManager.advanceTurn(gameManager.getPlayerHandlers().size());
       System.out.println("bot turn: " + gameManager.getCurrTurn());
-      System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
       gameManager.broadcastMove(userNum, move);
 
       int playerCheckedForWin = gameManager.checkWin();
