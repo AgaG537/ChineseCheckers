@@ -3,68 +3,134 @@ package org.client;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.Scanner;
+import org.client.Board.boardManagement.Board;
 
 /**
- * Represents a client connecting to the server.
+ * Represents a client connecting to the server. Manages communication between
+ * the client and server, including message handling and game board updates.
  */
 public class Client {
   private Socket socket;
   private BufferedReader bufferedReader;
   private BufferedWriter bufferedWriter;
+  private ClientApp clientApp;
+  private Board board;
+  private boolean setup =  false;
 
   /**
-   * Constructs a Client with the specified socket.
+   * Constructs a Client with the specified socket and GUI.
    *
-   * @param socket The socket to connect to the server.
+   * @param socket    The socket to connect to the server.
+   * @param clientApp The GUI associated with this client.
    */
-  public Client(Socket socket) {
+  public Client(Socket socket, ClientApp clientApp) {
     try {
       this.socket = socket;
       this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
       this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+      this.clientApp = clientApp;
     } catch (IOException e) {
       closeEverything();
     }
   }
 
   /**
-   * Sends messages from the client to the server.
+   * Sends a message from the client to the server.
+   *
+   * @param message The message to send.
    */
-  public void sendMessage() {
+  public void sendMessage(String message) {
     try {
-      Scanner scanner = new Scanner(System.in);
-      while (socket.isConnected()) {
-        String messageToSend = scanner.nextLine();
-        bufferedWriter.write(messageToSend);
+      if (socket.isConnected()) {
+        bufferedWriter.write(message);
         bufferedWriter.newLine();
         bufferedWriter.flush();
       }
     } catch (IOException e) {
+      e.printStackTrace();
       closeEverything();
     }
   }
 
   /**
-   * Listens for messages from the server.
+   * Sets the current board.
+   *
+   * @param board The current board.
+   */
+  public void setBoard(Board board) {
+    this.board = board;
+  }
+
+
+  /**
+   * Retrieves the user's number assigned by the server upon connection.
+   * This number uniquely identifies the player within the game.
+   *
+   * @return The user number assigned by the server.
+   */
+  public int getUserNumFromServer() {
+    int userNum = -1;
+    if (socket.isConnected()) {
+      try {
+        String userNumString = bufferedReader.readLine();
+        userNum = Integer.parseInt(userNumString);
+      } catch (IOException e) {
+        closeEverything();
+      }
+    }
+    return userNum;
+  }
+
+
+  /**
+   * Listens for messages from the server on a separate thread. Processes these
+   * messages based on their content and updates the game state or GUI as needed.
    */
   public void listenForMessages() {
-    new Thread(() -> {
-      String messageFromServer;
+    new Thread(new Runnable() {
 
-      while (socket.isConnected()) {
-        try {
-          messageFromServer = bufferedReader.readLine();
-          System.out.println(messageFromServer);
-        } catch (IOException e) {
-          closeEverything();
+      @Override
+      public void run() {
+        String messageFromServer;
+
+        while (socket.isConnected()) {
+          try {
+            messageFromServer = bufferedReader.readLine();
+            synchronized (this) {
+              handleLogicCommand(messageFromServer);
+            }
+          } catch (IOException e) {
+            closeEverything();
+          }
         }
       }
+
     }).start();
   }
 
+
   /**
-   * Closes the socket and associated resources.
+   * Handles messages received from the server. Does a specific action (like
+   * setting up the board) or delegates the message to the client app.
+   *
+   * @param messageFromServer The message received from the server.
+   */
+  private void handleLogicCommand(String messageFromServer) {
+    if (messageFromServer.startsWith("[CMD]")) {
+      board.handleCommand(messageFromServer);
+    } else if (messageFromServer.startsWith("[CREATE]")) {
+      board.handleCreate(messageFromServer);
+    } else if (messageFromServer.equals("[SETUP]")) {
+      setup = true;
+    } else {
+      clientApp.handleMessageFromServer(messageFromServer);
+    }
+  }
+
+
+  /**
+   * Closes the socket and associated resources to terminate the connection
+   * with the server safely.
    */
   public void closeEverything() {
     try {
@@ -77,15 +143,11 @@ public class Client {
   }
 
   /**
-   * The entry point of the application to start the client.
+   * Retrieves current client setup status.
    *
-   * @param args Command-line arguments.
-   * @throws IOException If an I/O error occurs when creating the client socket.
+   * @return setup information about setup - finished or not.
    */
-  public static void main(String[] args) throws IOException {
-    Socket socket = new Socket("localhost", 1234);
-    Client client = new Client(socket);
-    client.listenForMessages();
-    client.sendMessage();
+  public boolean getSetupStatus() {
+    return setup;
   }
 }
