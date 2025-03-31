@@ -1,6 +1,13 @@
 # ChineseCheckers
 Wroclaw University of Science and Technology group project for Programming Technologies.
 
+## Introduction
+Chinese Checkers is a strategic board game for 2–6 players, where the goal is to move all of one's pieces to the opposite corner of the board by making single-step moves or jumping over other pieces. The game comes in various variants, including a two-player version or variations with additional rules for jumping and blocking opponents' moves.
+
+Game Settings | Start of the game
+:-------------------------:|:-------------------------:
+![chinese_checkers_start](https://github.com/user-attachments/assets/122d684c-14f8-4a93-b543-3d64b481076f) | ![chinese_checkers_board](https://github.com/user-attachments/assets/9a0d1908-723c-44db-a0cd-9e72ffd0ebe7)
+
 ## Project structure:
 - Server folder - contains the server project.
 - Client folder - contains the client project.
@@ -13,12 +20,11 @@ Wroclaw University of Science and Technology group project for Programming Techn
 ### Start-up
 1. Clone the repository:
 ```
-git clone https://github.com/JinerX/ChineseCheckers.git -b thirdIteration
+git clone https://github.com/JinerX/ChineseCheckers.git
 ```
-2. Go to the project folder and switch to the thirdIteration branch:
+2. Go to the project folder
 ```
 cd ChineseCheckers
-git checkout thirdIteration
 ```
 3. Make sure you have MariaDB setup:
 - database called "mytestdatabase"
